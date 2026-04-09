@@ -16,6 +16,26 @@ Any agent working on this project must assume skills, MCPs and hooks are availab
 
 ---
 
+## Architecture Decision Records
+
+All architectural and design decisions for this project are documented in [`ADRs/`](ADRs/).
+
+| ADR | Title | Status |
+|-----|-------|--------|
+| [000](ADRs/adr-000-template.md) | Template | template |
+| [001](ADRs/adr-001-glossary.md) | Glossary | ready |
+| [002](ADRs/adr-002-tech-stack.md) | Tech Stack | accepted |
+| [003](ADRs/adr-003-requirements.md) | Requirements | accepted |
+| [004](ADRs/adr-004-angular-patterns.md) | Angular Patterns | accepted |
+| [005](ADRs/adr-005-design-system.md) | Design System | accepted |
+| [006](ADRs/adr-006-dry-and-componentization.md) | DRY and Componentization | accepted |
+| [007](ADRs/adr-007-kiss.md) | KISS | accepted |
+| [008](ADRs/adr-008-no-comments.md) | No Comments | accepted |
+
+Before implementing any feature, read ADR-003 (requirements) and ADR-004 (patterns) at minimum.
+
+---
+
 ## Language rule
 
 **Code and documentation: English. Rendered content: Spanish.**
