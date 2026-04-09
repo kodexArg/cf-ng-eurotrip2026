@@ -111,3 +111,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 \#current-cloud-backend
+.wrangler/
