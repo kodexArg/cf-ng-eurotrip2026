@@ -23,6 +23,12 @@ INSERT INTO transport_legs (id, from_city, to_city, date, mode, label, duration,
   ('leg-vce-rom', 'vce', 'rom', '2026-05-04', 'train',
    'Frecciarossa Venezia Santa Lucia → Roma Termini', '~3h 45m', NULL, 0),
 
-  -- ✓ CONFIRMED: vuelo internacional vuelta (FCO → EZE, May 9 23:00 Iberia)
-  ('leg-rom-eze', 'rom', 'EZE', '2026-05-09', 'flight',
-   'Iberia FCO → EZE — salida 23:00', NULL, NULL, 1);
+  -- ✓ CONFIRMED: vuelo vuelta tramo 1 — IB0656 FCO → MAD (May 9)
+  -- Reserva KM99T · Billete 075-2533915149
+  ('leg-fco-mad', 'rom', 'MAD', '2026-05-09', 'flight',
+   'IB0656 FCO T1 → MAD — salida 20:25, llegada 23:00', '~2h 35m', NULL, 1),
+
+  -- ✓ CONFIRMED: vuelo vuelta tramo 2 — IB0105 MAD → EZE (May 10)
+  -- Reserva KM99T · Billete 075-2533915149
+  ('leg-mad-eze', 'MAD', 'EZE', '2026-05-10', 'flight',
+   'IB0105 MAD → EZE TIA — salida 08:45, llegada 16:25', '~13h 40m', NULL, 1);

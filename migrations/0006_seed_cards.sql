@@ -68,8 +68,8 @@ INSERT INTO cards (id, city_id, type, title, body, url) VALUES
    NULL),
 
   ('rom-card-vuelo-vuelta', 'rom', 'info',
-   'Vuelo de regreso — CONFIRMADO',
-   'Iberia FCO → EZE. Salida 9 may 23:00 desde Fiumicino (FCO). Llegar al aeropuerto ~20:30. Verificar terminal Iberia en FCO (generalmente T3).',
+   'Vuelo de regreso — CONFIRMADO (KM99T)',
+   'Reserva KM99T · Billete 075-2533915149. Tramo 1: IB0656 FCO T1 → MAD, 09 may 20:25–23:00. Tramo 2: IB0105 MAD → EZE TIA, 10 may 08:45–16:25. Escala en Madrid ~9h45m (noche en aeropuerto o hotel). Salir de Roma hacia FCO a más tardar 18:00.',
    NULL),
 
   ('rom-card-tren-venecia', 'rom', 'note',
