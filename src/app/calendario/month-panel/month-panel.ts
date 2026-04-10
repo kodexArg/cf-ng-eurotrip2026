@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ActivityTipo } from '../../shared/models/activity.model';
 import { toDateStr } from '../calendar-utils';
 import { DayCell } from '../day-cell/day-cell';
+
+type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean };
 
 @Component({
   selector: 'app-month-panel',
@@ -33,7 +36,7 @@ import { DayCell } from '../day-cell/day-cell';
 export class MonthPanel {
   readonly month = input.required<number>();
   readonly year = input.required<number>();
-  readonly activities = input<Array<{ date: string; description: string; confirmed: boolean }>>([]);
+  readonly activities = input<Array<{ date: string } & CalEvent>>([]);
 
   readonly dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
@@ -51,7 +54,7 @@ export class MonthPanel {
     const firstDay = new Date(year, month - 1, 1).getDay();
     const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
-    const cells: Array<{ key: string; day: number | null; dateStr: string; events: Array<{ description: string; confirmed: boolean }> }> = [];
+    const cells: Array<{ key: string; day: number | null; dateStr: string; events: CalEvent[] }> = [];
 
     for (let i = 0; i < startOffset; i++) {
       cells.push({ key: 'empty-' + i, day: null, dateStr: '', events: [] });
