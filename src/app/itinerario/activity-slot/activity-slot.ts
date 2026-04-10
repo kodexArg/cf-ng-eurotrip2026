@@ -5,7 +5,6 @@ import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 
 @Component({
   selector: 'app-activity-slot',
-  standalone: true,
   imports: [Tag, ConfirmedBadge],
   template: `
     <div class="flex items-start gap-2 py-1">

@@ -4,7 +4,6 @@ import { DayCell } from '../day-cell/day-cell';
 
 @Component({
   selector: 'app-month-panel',
-  standalone: true,
   imports: [DayCell],
   template: `
     <div>

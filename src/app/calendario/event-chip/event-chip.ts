@@ -3,7 +3,6 @@ import { Chip } from 'primeng/chip';
 
 @Component({
   selector: 'app-event-chip',
-  standalone: true,
   imports: [Chip],
   template: `
     <p-chip

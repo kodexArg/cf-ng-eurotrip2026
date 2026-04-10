@@ -16,17 +16,17 @@ interface City {
 
 interface Activity {
   id: string;
-  day_id: string;
-  time_slot: string;
+  dayId: string;
+  timeSlot: string;
   description: string;
-  cost_hint: string | null;
-  confirmed: number;
+  costHint: string | null;
+  confirmed: boolean;
   variant: string;
 }
 
 interface Day {
   id: string;
-  city_id: string;
+  cityId: string;
   date: string;
   label: string | null;
   variant: string;
@@ -35,14 +35,14 @@ interface Day {
 
 interface TransportLeg {
   id: string;
-  from_city: string;
-  to_city: string;
+  fromCity: string;
+  toCity: string;
   date: string;
   mode: string;
   label: string;
   duration: string | null;
-  cost_hint: string | null;
-  confirmed: number;
+  costHint: string | null;
+  confirmed: boolean;
 }
 
 interface CityBlock {
@@ -57,13 +57,13 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
       'SELECT id, name, slug, arrival, departure, nights, color, lat, lon FROM cities ORDER BY arrival ASC'
     ).all<City>(),
     ctx.env.DB.prepare(
-      'SELECT id, city_id, date, label, variant FROM days ORDER BY date ASC, id ASC'
+      'SELECT id, city_id AS cityId, date, label, variant FROM days ORDER BY date ASC, id ASC'
     ).all<Day>(),
     ctx.env.DB.prepare(
-      'SELECT id, day_id, time_slot, description, cost_hint, confirmed, variant FROM activities ORDER BY id ASC'
+      'SELECT id, day_id AS dayId, time_slot AS timeSlot, description, cost_hint AS costHint, confirmed, variant FROM activities ORDER BY id ASC'
     ).all<Activity>(),
     ctx.env.DB.prepare(
-      'SELECT id, from_city, to_city, date, mode, label, duration, cost_hint, confirmed FROM transport_legs ORDER BY date ASC'
+      'SELECT id, from_city AS fromCity, to_city AS toCity, date, mode, label, duration, cost_hint AS costHint, confirmed FROM transport_legs ORDER BY date ASC'
     ).all<TransportLeg>(),
   ]);
 
@@ -74,22 +74,22 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
 
   const activitiesByDay = new Map<string, Activity[]>();
   for (const act of activities) {
-    const list = activitiesByDay.get(act.day_id) ?? [];
-    list.push(act);
-    activitiesByDay.set(act.day_id, list);
+    const list = activitiesByDay.get(act.dayId) ?? [];
+    list.push({ ...act, confirmed: !!act.confirmed });
+    activitiesByDay.set(act.dayId, list);
   }
 
   const daysByCity = new Map<string, Day[]>();
   for (const day of days) {
-    const list = daysByCity.get(day.city_id) ?? [];
+    const list = daysByCity.get(day.cityId) ?? [];
     list.push({ ...day, activities: activitiesByDay.get(day.id) ?? [] });
-    daysByCity.set(day.city_id, list);
+    daysByCity.set(day.cityId, list);
   }
 
-  // Index legs by to_city for fast lookup (leg arriving INTO a city)
+  // Index legs by toCity for fast lookup (leg arriving INTO a city)
   const legByToCity = new Map<string, TransportLeg>();
   for (const leg of legs) {
-    legByToCity.set(leg.to_city, leg);
+    legByToCity.set(leg.toCity, { ...leg, confirmed: !!leg.confirmed });
   }
 
   const itinerary: CityBlock[] = cities.map((city) => ({

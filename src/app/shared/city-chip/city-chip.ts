@@ -4,7 +4,6 @@ import { CITY_MAP } from '../city-map';
 
 @Component({
   selector: 'app-city-chip',
-  standalone: true,
   imports: [Chip],
   template: `
     <p-chip

@@ -16,7 +16,7 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
   }
 
   const { results } = await ctx.env.DB.prepare(
-    'SELECT id, city_id, type, title, body, url, created_at FROM cards WHERE city_id = ? ORDER BY created_at ASC'
+    'SELECT id, city_id AS cityId, type, title, body, url, created_at AS createdAt FROM cards WHERE city_id = ? ORDER BY created_at ASC'
   )
     .bind(cityRow.id)
     .all();

@@ -3,7 +3,6 @@ import { Skeleton } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-loading-state',
-  standalone: true,
   imports: [Skeleton],
   template: `
     <div class="flex flex-col gap-2">

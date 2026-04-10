@@ -6,7 +6,6 @@ import type { City } from '../shared/models';
 
 @Component({
   selector: 'app-mapa',
-  standalone: true,
   imports: [MapContainer, MapLegend],
   template: `
     <div class="relative" style="height: calc(100vh - 60px)">

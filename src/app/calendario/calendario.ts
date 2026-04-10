@@ -6,7 +6,6 @@ import { MonthPanel } from './month-panel/month-panel';
 
 @Component({
   selector: 'app-calendario',
-  standalone: true,
   imports: [MonthPanel],
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-6">

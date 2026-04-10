@@ -5,7 +5,6 @@ import { DayBlock } from '../day-block/day-block';
 
 @Component({
   selector: 'app-city-block',
-  standalone: true,
   imports: [DatePipe, DayBlock],
   template: `
     <div class="mb-6">

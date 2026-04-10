@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { PhotoItem } from '../photo-item/photo-item';
 import { Photo } from '../../shared/models';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-photo-grid',
-  standalone: true,
   imports: [PhotoItem],
   template: `
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -13,10 +12,10 @@ import { environment } from '../../../environments/environment';
         <app-photo-item [photo]="photo" (select)="openLightbox(i)" />
       }
     </div>
-    @if (lightboxVisible) {
+    @if (lightboxVisible()) {
       <div
         class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
-        (click)="lightboxVisible = false"
+        (click)="lightboxVisible.set(false)"
       >
         <img
           [src]="currentPhotoUrl()"
@@ -36,14 +35,14 @@ import { environment } from '../../../environments/environment';
 export class PhotoGrid {
   readonly photos = input.required<Photo[]>();
 
-  lightboxVisible = false;
+  readonly lightboxVisible = signal(false);
   readonly activeIndex = signal(0);
 
-  readonly currentPhoto = () => this.photos()[this.activeIndex()];
-  readonly currentPhotoUrl = () => environment.r2BaseUrl + '/' + (this.currentPhoto()?.r2Key ?? '');
+  readonly currentPhoto = computed(() => this.photos()[this.activeIndex()]);
+  readonly currentPhotoUrl = computed(() => environment.r2BaseUrl + '/' + this.currentPhoto().r2Key);
 
   openLightbox(index: number): void {
     this.activeIndex.set(index);
-    this.lightboxVisible = true;
+    this.lightboxVisible.set(true);
   }
 }

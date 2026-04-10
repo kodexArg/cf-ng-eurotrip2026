@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-photo-item',
-  standalone: true,
   imports: [CityChip],
   template: `
     <div

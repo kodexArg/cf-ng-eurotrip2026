@@ -18,7 +18,6 @@ import { ErrorState } from '../shared/error-state/error-state';
 
 @Component({
   selector: 'app-itinerario',
-  standalone: true,
   imports: [FormsModule, SelectButton, CityBlock, TransportInline, LoadingState, ErrorState],
   template: `
     <div class="max-w-2xl mx-auto p-4">
@@ -67,7 +66,6 @@ export class ItinerarioPage {
     { label: 'Vuelo', value: 'main' },
   ];
 
-  readonly selectedVariant = computed(() => this.variantService.variant());
   currentVariant: 'main' | 'train' = this.variantService.variant();
 
   readonly filteredBlocks = computed(() => {
@@ -86,17 +84,15 @@ export class ItinerarioPage {
     }));
   });
 
-  constructor() {
-    effect(() => {
-      const d = this.date();
-      const blocks = this.itineraryResource.value();
-      if (d && blocks) {
-        setTimeout(() => {
-          document.getElementById('day-' + d)?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    });
-  }
+  private readonly _scrollEffect = effect(() => {
+    const d = this.date();
+    const blocks = this.itineraryResource.value();
+    if (d && blocks) {
+      setTimeout(() => {
+        document.getElementById('day-' + d)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  });
 
   onVariantChange(value: 'main' | 'train'): void {
     this.variantService.setVariant(value);

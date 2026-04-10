@@ -6,7 +6,6 @@ import { ActivitySlot } from '../activity-slot/activity-slot';
 
 @Component({
   selector: 'app-day-block',
-  standalone: true,
   imports: [DatePipe, TitleCasePipe, Tag, ActivitySlot],
   template: `
     <div class="p-3" [id]="'day-' + day().date">

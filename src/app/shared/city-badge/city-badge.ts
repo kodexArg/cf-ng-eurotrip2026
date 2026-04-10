@@ -4,7 +4,6 @@ import { CITY_MAP } from '../city-map';
 
 @Component({
   selector: 'app-city-badge',
-  standalone: true,
   imports: [Tag],
   template: `
     <div class="flex items-center gap-3 mb-2">

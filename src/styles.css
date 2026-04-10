@@ -3,3 +3,16 @@
 @import 'tailwindcss';
 @plugin 'tailwindcss-primeui';
 @import 'leaflet/dist/leaflet.css';
+
+/* City name labels on the map */
+.city-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  text-shadow: 0 1px 3px #fff, 0 -1px 3px #fff, 1px 0 3px #fff, -1px 0 3px #fff !important;
+  white-space: nowrap !important;
+}
+.city-label::before { display: none !important; }

@@ -21,35 +21,28 @@ const CITIES_PREVIEW: CityPreview[] = [
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [RouterLink, Card, Button],
   template: `
     <div class="max-w-4xl mx-auto p-4 flex flex-col gap-6">
 
-      <p-card>
-        <ng-template pTemplate="header">
-          <div class="p-6 text-center">
-            <h1 class="text-4xl font-bold mb-2" style="color: var(--p-surface-900)">
-              Gabriel &amp; Vanesa — Europa 2026
-            </h1>
-            <p class="text-lg mb-1" style="color: var(--p-surface-700)">
-              17 abril – 9 mayo · 22 días
-            </p>
-            <p class="text-sm" style="color: var(--p-surface-500)">
-              MAD → BCN → PAR → VCE → ROM
-            </p>
-          </div>
-        </ng-template>
-      </p-card>
+      <div class="rounded-xl border border-surface-200 bg-white shadow-sm p-8 text-center">
+        <h1 class="text-4xl font-bold mb-2" style="color: var(--p-surface-900)">
+          Gabriel &amp; Vanesa — Europa 2026
+        </h1>
+        <p class="text-lg mb-1" style="color: var(--p-surface-700)">
+          19 abril – 9 mayo · 21 días
+        </p>
+        <p class="text-sm" style="color: var(--p-surface-500)">
+          SCL → MAD → BCN → PAR → VCE → ROM → EZE
+        </p>
+      </div>
 
       <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
         @for (city of cities; track city.slug) {
           <a [routerLink]="'/' + city.slug" class="no-underline">
-            <p-card styleClass="h-full cursor-pointer hover:shadow-lg transition-shadow">
-              <ng-template pTemplate="header">
-                <div class="h-3 rounded-t-lg" [style.background-color]="city.color"></div>
-              </ng-template>
-              <div class="text-center flex flex-col gap-1">
+            <div class="rounded-xl border border-surface-200 bg-white shadow-sm h-full cursor-pointer hover:shadow-md transition-shadow overflow-hidden">
+              <div class="h-2" [style.background-color]="city.color"></div>
+              <div class="p-4 text-center flex flex-col gap-1">
                 <span class="text-base font-semibold" style="color: var(--p-surface-800)">
                   {{ city.name }}
                 </span>
@@ -58,7 +51,7 @@ const CITIES_PREVIEW: CityPreview[] = [
                   {{ city.nights }} noches
                 </span>
               </div>
-            </p-card>
+            </div>
           </a>
         }
       </div>
@@ -66,7 +59,7 @@ const CITIES_PREVIEW: CityPreview[] = [
       <p-card>
         <div class="flex flex-wrap justify-center gap-4">
           <div class="text-center">
-            <span class="text-2xl font-bold" style="color: var(--p-surface-900)">22</span>
+            <span class="text-2xl font-bold" style="color: var(--p-surface-900)">21</span>
             <p class="text-sm" style="color: var(--p-surface-500)">días</p>
           </div>
           <div class="text-center">
@@ -74,8 +67,8 @@ const CITIES_PREVIEW: CityPreview[] = [
             <p class="text-sm" style="color: var(--p-surface-500)">ciudades</p>
           </div>
           <div class="text-center">
-            <span class="text-2xl font-bold" style="color: var(--p-surface-900)">3</span>
-            <p class="text-sm" style="color: var(--p-surface-500)">tramos</p>
+            <span class="text-2xl font-bold" style="color: var(--p-surface-900)">6</span>
+            <p class="text-sm" style="color: var(--p-surface-500)">traslados</p>
           </div>
         </div>
       </p-card>

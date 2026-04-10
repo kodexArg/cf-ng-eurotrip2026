@@ -75,22 +75,9 @@ Every distinct piece of UI is its own component. Components compose other compon
 
 ## Pages & features
 
-### 1. Map
+### 1. Calendar
 
-A visual representation of the route across Europe.
-
-- Static route drawn between all cities in order: MAD → BCN → PAR → VCE → ROM
-- Each city is a labeled pin with dates
-- Future: interactive — tapping a pin navigates to that city's detail page
-- Future: geolocation — shows the traveler's current position on the map (opt-in, mobile)
-
-The map in `context/` is the reference for style and feel.
-
----
-
-### 2. Calendar
-
-A month-view calendar covering the full trip: April 17 – May 9, 2026.
+A month-view calendar covering the full trip: April 17 – May 9, 2026. This is the default landing page (`/calendario`).
 
 - Spans two months (April + May) shown as a single continuous view or two adjacent month panels
 - Each day cell is color-coded by city (same palette as the Itinerary: Madrid amber, Barcelona coral, París indigo, Venecia teal, Roma rose); travel days get a gradient between the origin and destination colors
@@ -103,7 +90,7 @@ Source of truth: same D1 data as Itinerary.
 
 ---
 
-### 3. Itinerary
+### 2. Itinerary
 
 A single scrollable vertical timeline of the full trip.
 
@@ -122,9 +109,22 @@ Source of truth: D1, seeded from `context/`.
 
 ---
 
-### 4. City detail pages
+### 3. Map
 
-One page per city: `/madrid`, `/barcelona`, `/paris`, `/venecia`, `/roma`.
+A visual representation of the route across Europe.
+
+- Static route drawn between all cities in order: MAD → BCN → PAR → VCE → ROM
+- Each city is a labeled pin with dates
+- Future: interactive — tapping a pin navigates to that city's detail page
+- Future: geolocation — shows the traveler's current position on the map (opt-in, mobile)
+
+The map in `context/` is the reference for style and feel.
+
+---
+
+### 4. Sites (city detail pages)
+
+One page per city: `/madrid`, `/barcelona`, `/paris`, `/venecia`, `/roma`. Grouped under the "Sitios" nav item.
 
 Each page contains cards for activities in that city. Card types:
 
@@ -141,7 +141,7 @@ Cards can be added at any time before or during the trip. No public editing — 
 
 ### 5. Photos
 
-A gallery section at `/photos`, plus inline photos on city pages.
+A gallery section at `/fotos`, plus inline photos on city pages.
 
 - Photos are uploaded to **Cloudflare R2**
 - Each photo record in D1 stores: filename, R2 key, caption, city, date taken, uploader note

@@ -5,7 +5,6 @@ import { EventChip } from '../event-chip/event-chip';
 
 @Component({
   selector: 'app-day-cell',
-  standalone: true,
   imports: [EventChip, RouterLink],
   template: `
     <a

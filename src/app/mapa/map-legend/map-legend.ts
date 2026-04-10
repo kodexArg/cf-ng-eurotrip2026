@@ -3,7 +3,6 @@ import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-map-legend',
-  standalone: true,
   imports: [Card],
   template: `
     <p-card styleClass="text-xs shadow-lg">

@@ -8,7 +8,6 @@ import type { Card } from '../../shared/models';
 
 @Component({
   selector: 'app-card-list',
-  standalone: true,
   imports: [Message, InfoCard, LinkCard, NoteCard, PhotoCard],
   template: `
     @if (cards().length === 0) {

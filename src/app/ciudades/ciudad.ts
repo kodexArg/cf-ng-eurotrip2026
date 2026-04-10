@@ -8,7 +8,6 @@ import type { Card } from '../shared/models';
 
 @Component({
   selector: 'app-ciudad',
-  standalone: true,
   imports: [CityBadge, CardList, LoadingState, ErrorState],
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-4">

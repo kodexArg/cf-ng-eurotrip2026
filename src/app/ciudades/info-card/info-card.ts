@@ -5,7 +5,6 @@ import type { Card as CardModel } from '../../shared/models';
 
 @Component({
   selector: 'app-info-card',
-  standalone: true,
   imports: [Card, Button],
   template: `
     <p-card [header]="card().title">

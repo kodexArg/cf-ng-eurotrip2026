@@ -7,7 +7,6 @@ import { Photo } from '../shared/models';
 
 @Component({
   selector: 'app-fotos',
-  standalone: true,
   imports: [PhotoGrid, Message, Skeleton],
   template: `
     <div class="max-w-5xl mx-auto p-4">

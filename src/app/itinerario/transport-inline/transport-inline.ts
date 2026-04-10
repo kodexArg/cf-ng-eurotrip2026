@@ -4,7 +4,6 @@ import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 
 @Component({
   selector: 'app-transport-inline',
-  standalone: true,
   imports: [ConfirmedBadge],
   template: `
     <div class="flex items-center gap-3 py-3 px-4 my-3 rounded-lg border"

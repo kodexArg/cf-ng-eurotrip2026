@@ -121,7 +121,7 @@ INSERT INTO activities (id, day_id, time_slot, description, cost_hint, confirmed
 -- May 6: Vaticano
 INSERT INTO activities (id, day_id, time_slot, description, cost_hint, confirmed, variant) VALUES
   ('rom-act-may06-morning',   'rom-day-may06', 'morning',   'Museos Vaticanos + Capilla Sixtina', '~17 pp', 0, 'both'),
-  ('rom-act-may06-afternoon', 'rom-day-may06', 'afternoon', 'Basílica San Pedro (gratis, cúpula ~8 pp). Castel Sant\'Angelo.', 'cúpula ~8 pp', 0, 'both');
+  ('rom-act-may06-afternoon', 'rom-day-may06', 'afternoon', 'Basílica San Pedro (gratis, cúpula ~8 pp). Castel Sant''Angelo.', 'cúpula ~8 pp', 0, 'both');
 
 -- May 7: Pompeya excursion
 INSERT INTO activities (id, day_id, time_slot, description, cost_hint, confirmed, variant) VALUES
