@@ -31,6 +31,7 @@ All architectural and design decisions for this project are documented in [`ADRs
 | [006](ADRs/adr-006-dry-and-componentization.md) | DRY and Componentization | accepted |
 | [007](ADRs/adr-007-kiss.md) | KISS | accepted |
 | [008](ADRs/adr-008-no-comments.md) | No Comments | accepted |
+| [009](ADRs/adr-009-routing.md) | Routing System | accepted |
 
 Before implementing any feature, read ADR-003 (requirements) and ADR-004 (patterns) at minimum.
 
@@ -87,7 +88,22 @@ The map in `context/` is the reference for style and feel.
 
 ---
 
-### 2. Itinerary
+### 2. Calendar
+
+A month-view calendar covering the full trip: April 17 – May 9, 2026.
+
+- Spans two months (April + May) shown as a single continuous view or two adjacent month panels
+- Each day cell is color-coded by city (same palette as the Itinerary: Madrid amber, Barcelona coral, París indigo, Venecia teal, Roma rose); travel days get a gradient between the origin and destination colors
+- Confirmed events (flights, Sagrada Família, etc.) appear as labeled chips inside the day cell
+- Tapping a day navigates to that day's entry in the Itinerary
+- Read only. No editing from the UI.
+- Optimized for mobile — day cells are large enough to tap comfortably
+
+Source of truth: same D1 data as Itinerary.
+
+---
+
+### 3. Itinerary
 
 A single scrollable vertical timeline of the full trip.
 
@@ -106,7 +122,7 @@ Source of truth: D1, seeded from `context/`.
 
 ---
 
-### 3. City detail pages
+### 4. City detail pages
 
 One page per city: `/madrid`, `/barcelona`, `/paris`, `/venecia`, `/roma`.
 
@@ -123,7 +139,7 @@ Cards can be added at any time before or during the trip. No public editing — 
 
 ---
 
-### 4. Photos
+### 5. Photos
 
 A gallery section at `/photos`, plus inline photos on city pages.
 

@@ -2,3 +2,4 @@
 
 @import 'tailwindcss';
 @plugin 'tailwindcss-primeui';
+@import 'leaflet/dist/leaflet.css';

@@ -1,0 +1,13 @@
+{
+  // Cloudflare Pages + D1 config for eurotrip2026
+  "name": "eurotrip2026",
+  "compatibility_date": "2024-09-23",
+  "pages_build_output_dir": "./dist/angular-21-csr-primeng/browser",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "eurotrip2026",
+      "database_id": "PLACEHOLDER_RUN_wrangler_d1_create_eurotrip2026"
+    }
+  ]
+}
