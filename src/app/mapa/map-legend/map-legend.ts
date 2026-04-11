@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Card } from 'primeng/card';
+import type { MapPoi } from '../../shared/models';
 
 @Component({
   selector: 'app-map-legend',
@@ -20,10 +21,10 @@ import { Card } from 'primeng/card';
           <span>Vuelo</span>
         </div>
         <div class="font-semibold mt-1 mb-0.5">Ciudades</div>
-        @for (city of cities; track city.slug) {
+        @for (poi of cityPois(); track poi.id) {
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full inline-block" [style.background-color]="city.color"></span>
-            <span>{{ city.name }}</span>
+            <span class="w-3 h-3 rounded-full inline-block" [style.background-color]="poi.color"></span>
+            <span>{{ poi.name }}</span>
           </div>
         }
       </div>
@@ -32,11 +33,6 @@ import { Card } from 'primeng/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapLegend {
-  readonly cities = [
-    { slug: 'madrid', name: 'Madrid', color: '#e8a74e' },
-    { slug: 'barcelona', name: 'Barcelona', color: '#e07b5a' },
-    { slug: 'paris', name: 'París', color: '#7e8cc4' },
-    { slug: 'venecia', name: 'Venecia', color: '#0d9488' },
-    { slug: 'roma', name: 'Roma', color: '#c27ba0' },
-  ];
+  readonly pois = input<MapPoi[]>([]);
+  readonly cityPois = computed(() => this.pois().filter((p) => p.type === 'city'));
 }

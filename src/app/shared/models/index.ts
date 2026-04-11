@@ -5,3 +5,5 @@ export * from './transport-leg.model';
 export * from './card.model';
 export * from './photo.model';
 export * from './city-block.model';
+export * from './map-poi.model';
+export * from './map-route.model';
