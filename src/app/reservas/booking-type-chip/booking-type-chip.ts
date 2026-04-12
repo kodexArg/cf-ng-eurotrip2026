@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Tag } from 'primeng/tag';
-import { BookingType } from '../../shared/models';
+import { EventType } from '../../shared/models/event.model';
 
 type TagSeverity = 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | null | undefined;
 
-const TYPE_CONFIG: Record<BookingType, { icon: string; severity: TagSeverity; label: string }> = {
-  hito:      { icon: 'pi pi-flag',  severity: 'warn',    label: 'Hito' },
-  viaje:     { icon: 'pi pi-send',  severity: 'info',    label: 'Viaje' },
-  hospedaje: { icon: 'pi pi-home',  severity: 'secondary', label: 'Hospedaje' },
+const TYPE_CONFIG: Record<EventType, { icon: string; severity: TagSeverity; label: string }> = {
+  hito:     { icon: 'pi pi-flag',  severity: 'warn',      label: 'Hito' },
+  traslado: { icon: 'pi pi-send',  severity: 'info',      label: 'Viaje' },
+  estadia:  { icon: 'pi pi-home',  severity: 'secondary', label: 'Hospedaje' },
 };
 
 @Component({
@@ -20,7 +20,7 @@ const TYPE_CONFIG: Record<BookingType, { icon: string; severity: TagSeverity; la
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingTypeChip {
-  readonly type = input.required<BookingType>();
+  readonly type = input.required<EventType>();
 
   readonly config = computed(() => TYPE_CONFIG[this.type()]);
 }

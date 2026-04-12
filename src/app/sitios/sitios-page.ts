@@ -16,7 +16,6 @@ import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import type { City, Card } from '../shared/models';
 
-// Inner component: lazy-loads cards only when the tab is active.
 @Component({
   selector: 'app-city-tab-content',
   imports: [CityCardList, LoadingState, ErrorState],
@@ -53,7 +52,6 @@ export class CityTabContent {
   });
 }
 
-// Main page component.
 @Component({
   selector: 'app-sitios-page',
   imports: [Tabs, TabList, Tab, TabPanels, TabPanel, CityTabContent, LoadingState, ErrorState],

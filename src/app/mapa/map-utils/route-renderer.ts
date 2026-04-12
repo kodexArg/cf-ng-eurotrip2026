@@ -9,16 +9,9 @@ const TRASLADO_STYLES: Record<string, import('leaflet').PolylineOptions> = {
   ferry:  { color: '#0891b2', weight: 2.0, dashArray: '8,5',  opacity: 0.75 },
 };
 
-const TRASLADO_COLORS: Record<string, string> = {
-  flight: '#3b82f6',
-  train:  '#16a34a',
-  ferry:  '#0891b2',
-};
-
 const MARKER_COLORS = {
   hito:    '#f59e0b',
   estadia: '#10b981',
-  traslado: '#3b82f6',
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -110,8 +103,7 @@ export function renderEventsOnMap(
       const midPt  = pts[midIdx];
       const nextPt = pts[midIdx + 1];
       const deg    = bearing(midPt, nextPt);
-      const color  = TRASLADO_COLORS[subtype] ?? TRASLADO_COLORS['flight'];
-      const icon   = makeArrowIcon(L, deg, color);
+      const icon   = makeArrowIcon(L, deg, opts.color as string);
       L.marker(midPt as import('leaflet').LatLngExpression, { icon, interactive: false }).addTo(group);
 
     } else if (type === 'estadia') {
