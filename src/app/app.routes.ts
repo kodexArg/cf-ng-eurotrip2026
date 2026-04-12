@@ -73,10 +73,6 @@ export const routes: Routes = [
     canActivate: [ownerGuard],
   },
   {
-    path: 'admin',
-    loadComponent: () => import('./admin/admin').then((m) => m.AdminPage),
-  },
-  {
     path: '**',
     loadComponent: () => import('./not-found/not-found').then((m) => m.NotFound),
   },
