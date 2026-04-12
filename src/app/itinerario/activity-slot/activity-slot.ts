@@ -17,12 +17,6 @@ import { InfoRow } from '../info-row/info-row';
       [text]="activity().description"
       [class.opacity-60]="!activity().confirmed"
     >
-      @if (activity().confirmed) {
-        <app-confirmed-badge
-          [editable]="auth.isOwner()"
-          (toggle)="onToggleConfirmed()"
-        />
-      }
       @if (activity().cardId && !hideInfoButton()) {
         <button
           type="button"
@@ -40,6 +34,12 @@ import { InfoRow } from '../info-row/info-row';
           (click)="editDialog().open(activity())"
           title="Editar actividad"
         ></button>
+      }
+      @if (activity().confirmed) {
+        <app-confirmed-badge
+          [editable]="auth.isOwner()"
+          (toggle)="onToggleConfirmed()"
+        />
       }
     </app-info-row>
     <app-activity-edit-dialog (saved)="onSaved($event)" />
