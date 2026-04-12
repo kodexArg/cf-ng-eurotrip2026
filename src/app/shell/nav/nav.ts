@@ -1,39 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { Button } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
-import { AuthService } from '../../shared/services/auth.service';
-import { LoginDialog } from '../../shared/login-dialog/login-dialog';
 
 @Component({
   selector: 'app-nav',
-  imports: [Menubar, Button, RouterLink, RouterLinkActive, LoginDialog],
+  imports: [Menubar, Button, RouterLink, RouterLinkActive],
   template: `
     <nav class="hidden md:block">
       <div class="flex items-center">
         <p-menubar [model]="menuItems" styleClass="flex-1" />
-        @if (auth.isOwner()) {
-          <a routerLink="/admin" routerLinkActive="text-primary" class="no-underline">
-            <p-button icon="pi pi-cog" [text]="true" size="small" />
-          </a>
-        }
-        @if (auth.isAuthenticated()) {
-          <p-button
-            [label]="auth.userName() ?? ''"
-            icon="pi pi-lock-open"
-            [text]="true"
-            size="small"
-            (onClick)="auth.logout()"
-          />
-        } @else {
-          <p-button
-            icon="pi pi-lock"
-            [text]="true"
-            size="small"
-            (onClick)="loginDialog().open()"
-          />
-        }
+        <a routerLink="/admin" routerLinkActive="text-primary" class="no-underline">
+          <p-button icon="pi pi-cog" [text]="true" size="small" />
+        </a>
       </div>
     </nav>
 
@@ -56,26 +36,15 @@ import { LoginDialog } from '../../shared/login-dialog/login-dialog';
       <a routerLink="/reservas" routerLinkActive="text-primary">
         <p-button icon="pi pi-wallet" label="Reservas" [text]="true" size="small" />
       </a>
-      @if (auth.isOwner()) {
-        <a routerLink="/admin" routerLinkActive="text-primary">
-          <p-button icon="pi pi-cog" [text]="true" size="small" />
-        </a>
-      }
-      @if (auth.isAuthenticated()) {
-        <p-button icon="pi pi-lock-open" [text]="true" size="small" (onClick)="auth.logout()" />
-      } @else {
-        <p-button icon="pi pi-lock" [text]="true" size="small" (onClick)="loginDialog().open()" />
-      }
+      <a routerLink="/admin" routerLinkActive="text-primary">
+        <p-button icon="pi pi-cog" [text]="true" size="small" />
+      </a>
     </nav>
-
-    <app-login-dialog />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Nav {
   private router = inject(Router);
-  readonly auth = inject(AuthService);
-  readonly loginDialog = viewChild.required(LoginDialog);
 
   readonly menuItems: MenuItem[] = [
     { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },
