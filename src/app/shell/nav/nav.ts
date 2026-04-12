@@ -1,15 +1,35 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { Button } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
+import { AuthService } from '../../shared/services/auth.service';
+import { LoginDialog } from '../../shared/login-dialog/login-dialog';
 
 @Component({
   selector: 'app-nav',
-  imports: [Menubar, Button, RouterLink, RouterLinkActive],
+  imports: [Menubar, Button, RouterLink, RouterLinkActive, LoginDialog],
   template: `
     <nav class="hidden md:block">
-      <p-menubar [model]="menuItems" />
+      <div class="flex items-center">
+        <p-menubar [model]="menuItems" styleClass="flex-1" />
+        @if (auth.isAuthenticated()) {
+          <p-button
+            [label]="auth.userName() ?? ''"
+            icon="pi pi-lock-open"
+            [text]="true"
+            size="small"
+            (onClick)="auth.logout()"
+          />
+        } @else {
+          <p-button
+            icon="pi pi-lock"
+            [text]="true"
+            size="small"
+            (onClick)="loginDialog().open()"
+          />
+        }
+      </div>
     </nav>
 
     <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around bg-white border-t border-surface-200 py-1">
@@ -28,12 +48,25 @@ import { MenuItem } from 'primeng/api';
       <a routerLink="/fotos" routerLinkActive="text-primary">
         <p-button icon="pi pi-images" label="Fotos" [text]="true" size="small" />
       </a>
+      @if (auth.isAuthenticated()) {
+        <p-button icon="pi pi-lock-open" [text]="true" size="small" (onClick)="auth.logout()" />
+      } @else {
+        <p-button icon="pi pi-lock" [text]="true" size="small" (onClick)="loginDialog().open()" />
+      }
     </nav>
+
+    <app-login-dialog />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Nav {
+export class Nav implements OnInit {
   private router = inject(Router);
+  readonly auth = inject(AuthService);
+  readonly loginDialog = viewChild.required(LoginDialog);
+
+  ngOnInit(): void {
+    this.auth.checkAuth();
+  }
 
   readonly menuItems: MenuItem[] = [
     { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },

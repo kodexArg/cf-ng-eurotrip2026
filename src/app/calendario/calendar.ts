@@ -13,9 +13,9 @@ import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-6">
       <h1 class="text-2xl font-bold text-center text-surface-800">Calendario del viaje</h1>
+      <app-event-type-legend />
       <app-calendar-month [month]="4" [year]="2026" [activities]="confirmedActivities()" [cities]="cities()" (selectDate)="openDay($event)" />
       <app-calendar-month [month]="5" [year]="2026" [activities]="confirmedActivities()" [cities]="cities()" (selectDate)="openDay($event)" />
-      <app-event-type-legend />
     </div>
     @if (selectedDayData(); as data) {
       <div
