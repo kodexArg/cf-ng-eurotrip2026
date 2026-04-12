@@ -10,6 +10,8 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
        subtype,
        title,
        date,
+       icon,
+       confirmed,
        city_in   AS cityIn,
        city_out  AS cityOut,
        origin_lat      AS originLat,

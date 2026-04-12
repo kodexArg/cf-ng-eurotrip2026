@@ -1,3 +1,4 @@
+import type { City } from '../../shared/models/city.model';
 import type { TripEventBase } from '../../shared/models/event.model';
 import { greatCirclePoints } from './great-circle';
 
@@ -46,41 +47,51 @@ function makeArrowIcon(L: typeof import('leaflet'), deg: number, color: string):
 }
 
 /**
- * Creates a small circle marker for hito or estadia events.
+ * Creates a PrimeIcon badge marker (colored circle with icon glyph inside).
  */
-function makeCircleIcon(L: typeof import('leaflet'), color: string, size = 10): import('leaflet').DivIcon {
+function makeIconBadge(L: typeof import('leaflet'), color: string, iconClass: string, size = 22): import('leaflet').DivIcon {
+  const glyph = size * 0.55;
   return L.divIcon({
     html: `<div style="
       width:${size}px; height:${size}px;
       background:${color};
       border-radius:50%;
       border:2px solid #fff;
-      box-shadow:0 1px 4px rgba(0,0,0,0.25);
-      opacity:0.9;
-    "></div>`,
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff;
+    "><i class="pi ${iconClass}" style="font-size:${glyph}px;line-height:1"></i></div>`,
     className: '',
     iconSize:   [size, size],
     iconAnchor: [size / 2, size / 2],
   });
 }
 
+/** True if the event's origin matches its city's center (i.e. fallback coords). */
+function isCityCenterFallback(ev: TripEventBase, cityIndex: Map<string, City>): boolean {
+  const city = cityIndex.get(ev.cityIn);
+  if (!city) return false;
+  return ev.originLat === city.lat && ev.originLon === city.lon;
+}
+
 // ─── Main renderer ──────────────────────────────────────────────────────────
 
 /**
- * Renders all events onto a Leaflet LayerGroup.
+ * Renders events onto a Leaflet LayerGroup.
  *
  * - traslado: great-circle polyline from origin to destination + direction arrow.
- * - estadia:  circle marker at origin coords.
- * - hito:     circle marker at origin coords; optional second marker if destination present.
- *
- * Events with NULL required coords are silently skipped.
+ * - hito/estadia: PrimeIcon badge at origin — ONLY if coords are precise (not a
+ *   city-center fallback). Fallback-coord events are silently skipped so they
+ *   don't stack under the city marker; they still appear in the city hover popup.
  */
 export function renderEventsOnMap(
   L: typeof import('leaflet'),
   map: import('leaflet').Map,
-  events: TripEventBase[]
+  events: TripEventBase[],
+  cities: City[]
 ): import('leaflet').LayerGroup {
   const group = L.layerGroup();
+  const cityIndex = new Map<string, City>(cities.map((c) => [c.id, c]));
 
   for (const ev of events) {
     const { type, subtype, originLat, originLon, destinationLat, destinationLon } = ev;
@@ -93,12 +104,10 @@ export function renderEventsOnMap(
       if (destinationLat == null || destinationLon == null) continue;
       const dest: [number, number] = [destinationLat, destinationLon];
 
-      // Use great-circle arc so long-haul flights curve on the map.
       const pts = greatCirclePoints(origin, dest, 30);
       const opts = TRASLADO_STYLES[subtype] ?? TRASLADO_STYLES['flight'];
       L.polyline(pts, opts).addTo(group);
 
-      // Directional arrow at midpoint.
       const midIdx = Math.floor((pts.length - 1) / 2);
       const midPt  = pts[midIdx];
       const nextPt = pts[midIdx + 1];
@@ -106,26 +115,17 @@ export function renderEventsOnMap(
       const icon   = makeArrowIcon(L, deg, opts.color as string);
       L.marker(midPt as import('leaflet').LatLngExpression, { icon, interactive: false }).addTo(group);
 
-    } else if (type === 'estadia') {
-      const icon = makeCircleIcon(L, MARKER_COLORS.estadia, 10);
-      L.marker(origin as import('leaflet').LatLngExpression, { icon, interactive: false })
-        .bindTooltip(ev.title, { direction: 'top', offset: [0, -6] })
-        .addTo(group);
-
-    } else if (type === 'hito') {
-      const icon = makeCircleIcon(L, MARKER_COLORS.hito, 8);
-      L.marker(origin as import('leaflet').LatLngExpression, { icon, interactive: false })
-        .bindTooltip(ev.title, { direction: 'top', offset: [0, -5] })
-        .addTo(group);
-
-      // If the hito has a distinct closing point, draw a small marker + short line.
-      if (destinationLat != null && destinationLon != null) {
-        const dest: [number, number] = [destinationLat, destinationLon];
-        L.polyline([origin, dest], { color: MARKER_COLORS.hito, weight: 1.5, dashArray: '4,4', opacity: 0.6 }).addTo(group);
-        const endIcon = makeCircleIcon(L, MARKER_COLORS.hito, 6);
-        L.marker(dest as import('leaflet').LatLngExpression, { icon: endIcon, interactive: false }).addTo(group);
-      }
+      continue;
     }
+
+    // hito / estadia — skip unless we have precise (non city-center) coordinates.
+    if (isCityCenterFallback(ev, cityIndex)) continue;
+
+    const color = type === 'hito' ? MARKER_COLORS.hito : MARKER_COLORS.estadia;
+    const icon  = makeIconBadge(L, color, ev.icon || 'pi-map-marker');
+    L.marker(origin as import('leaflet').LatLngExpression, { icon })
+      .bindTooltip(ev.title, { direction: 'top', offset: [0, -12] })
+      .addTo(group);
   }
 
   group.addTo(map);
