@@ -10,7 +10,7 @@ import { Photo } from '../shared/models';
   imports: [PhotoGrid, Message, Skeleton],
   template: `
     <div class="max-w-5xl mx-auto p-4">
-      <h1 class="text-2xl font-bold mb-4 text-surface-800">Fotos del viaje</h1>
+      <h1 class="text-2xl font-bold mb-4 text-surface-800 select-none">Fotos del viaje</h1>
       @if (photosResource.isLoading()) {
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
           @for (i of [1,2,3,4,5,6]; track i) {

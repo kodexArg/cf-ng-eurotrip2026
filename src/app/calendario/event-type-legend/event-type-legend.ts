@@ -7,7 +7,7 @@ import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
   imports: [Card],
   template: `
     <p-card>
-      <div class="flex flex-wrap gap-2 justify-center">
+      <div class="flex flex-wrap gap-2 justify-center select-none">
         @for (entry of tipos; track entry[0]) {
           <span
             class="text-[11px] px-2 py-0.5 rounded-full font-medium"

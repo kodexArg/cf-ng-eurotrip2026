@@ -7,13 +7,14 @@ type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirme
 @Component({
   selector: 'app-calendar-day',
   imports: [EventChip],
+  host: { class: 'block h-full overflow-hidden' },
   template: `
     @if (inactive()) {
       <div class="rounded-md h-full opacity-20" style="background-color: var(--p-surface-200)"></div>
     } @else {
       <div
         (click)="events().length ? selectDate.emit(dateStr()) : null"
-        class="block rounded-md h-full p-1 transition-opacity no-underline overflow-hidden"
+        class="block rounded-md h-full p-1 transition-opacity no-underline overflow-hidden select-none"
         [class.cursor-pointer]="events().length"
         [class.hover:opacity-90]="events().length"
         [style]="cellStyle()"

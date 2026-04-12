@@ -21,10 +21,10 @@ type CellData = {
   imports: [CalendarDay],
   template: `
     <div>
-      <h2 class="text-lg font-semibold text-center mb-3 capitalize">{{ monthName() }} {{ year() }}</h2>
+      <h2 class="text-lg font-semibold text-center mb-3 capitalize select-none">{{ monthName() }} {{ year() }}</h2>
       <div class="grid grid-cols-7 gap-1 mb-1">
         @for (d of dayNames; track d) {
-          <div class="text-center text-xs font-medium text-surface-400 py-1">{{ d }}</div>
+          <div class="text-center text-xs font-medium text-surface-400 py-1 select-none">{{ d }}</div>
         }
       </div>
       <div class="grid grid-cols-7 auto-rows-[5rem] gap-1">
@@ -76,7 +76,7 @@ export class CalendarMonth {
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = toDateStr(year, month, d);
-      const events  = acts.filter(a => a.date === dateStr);
+      const events  = acts.filter(a => a.date === dateStr).sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
       const gradient = getTravelGradientFromCities(dateStr, cities);
       let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
       if (!bgColor && !gradient && events.some(e => e.confirmed)) {

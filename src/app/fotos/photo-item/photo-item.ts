@@ -17,7 +17,7 @@ import { environment } from '../../../environments/environment';
         loading="lazy"
         class="w-full h-48 object-cover"
       />
-      <div class="p-2 flex flex-col gap-1">
+      <div class="p-2 flex flex-col gap-1 select-none">
         @if (photo().caption) {
           <p class="text-xs text-surface-700 m-0">{{ photo().caption }}</p>
         }
