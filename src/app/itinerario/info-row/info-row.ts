@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   selector: 'app-info-row',
   template: `
     <div class="flex items-start gap-2 py-0.5">
-      <span class="inline-flex items-center shrink-0" style="height: 1.25rem">
+      <span class="inline-flex items-center shrink-0 select-none" style="height: 1.25rem">
         <i [class]="'pi ' + icon() + ' text-sm'" [style.color]="iconColor()"></i>
       </span>
       <span class="text-sm leading-5 flex-1 min-w-0" [style.color]="textColor()">{{ text() }}</span>

@@ -24,7 +24,7 @@ const CITY_NAMES: Record<string, string> = {
          style="background-color: var(--p-surface-50); border-color: var(--p-surface-200)">
       <div class="flex items-center gap-3">
         <i [class]="modeIcon()" style="color: var(--p-primary-color); font-size: 1.125rem"></i>
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 select-none">
           <div class="flex items-center gap-2 text-sm font-semibold flex-wrap"
                style="color: var(--p-surface-800)">
             <span>{{ originName() }}</span>
@@ -56,7 +56,7 @@ const CITY_NAMES: Record<string, string> = {
           }
         </div>
         @if (leg().costHint || leg().fare) {
-          <span class="text-xs shrink-0" style="color: var(--p-surface-500)">{{ leg().fare || leg().costHint }}</span>
+          <span class="text-xs shrink-0 select-none" style="color: var(--p-surface-500)">{{ leg().fare || leg().costHint }}</span>
         }
         @if (auth.isOwner()) {
           <i class="pi pi-pencil text-xs opacity-40 hover:opacity-100 cursor-pointer transition-opacity shrink-0"
