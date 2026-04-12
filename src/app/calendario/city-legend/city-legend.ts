@@ -5,7 +5,7 @@ const CITY_EMOJI: Record<string, string> = {
   madrid:    '🇪🇸',
   barcelona: '🇪🇸',
   palma:     '🇪🇸',
-  paris:     '🇫🇷',
+  londres:   '🇬🇧',
   roma:      '🇮🇹',
 };
 

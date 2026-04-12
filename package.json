@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "pages:dev": "npm run build && wrangler pages dev dist/angular-21-csr-primeng/browser"
+    "db": "wrangler d1 execute eurotrip2026 --remote"
   },
   "private": true,
   "packageManager": "npm@10.8.2",

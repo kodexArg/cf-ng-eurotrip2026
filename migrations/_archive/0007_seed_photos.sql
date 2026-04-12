@@ -1,3 +1,0 @@
--- Seed: photos
--- No placeholder photos — only real uploaded photos go here.
--- Rows will be inserted as photos are taken and uploaded to R2 during the trip.

@@ -52,14 +52,16 @@ Both are configured in `.mcp.json`:
 
 - **Passengers**: 2 adults (seniors)
 - **Luggage**: carry-on only, 10 kg each — no checked bags
-- **Confirmed flights**: SCL → MAD (departure), ROM → EZE (return)
-- **Fixed dates**: Madrid Apr 20–24, Roma departure May 9
+- **Route**: SCL → MAD → BCN → PMI → LON → ROM → MAD → EZE (Apr 19 – May 10, 2026)
+- **Confirmed flights**: SCL → MAD (Apr 19), MAD → BCN AVE (Apr 24), BCN → PMI Vueling (Apr 28), FCO → MAD IB0656 (May 9), MAD → EZE IB0105 (May 10)
+- **Fixed dates**: Madrid Apr 20–24, Roma departure May 9 evening
 
 ## Workflow rules
 
-- **Fast iterations**: push to prod without asking, execute SQL migrations (local + remote) without asking
-- **D1 migrations**: always run on both local SQLite AND remote (`--remote`) when deploying
-- **SQL is free**: create, modify, delete data at will — the DB is a scratch pad during development
+- **Fast iterations**: push to prod without asking.
+- **D1 is production-only**: no local DB, no migrations folder. All data changes go straight to the remote via `npm run db -- --command "…"` or `wrangler d1 execute eurotrip2026 --remote`. See [`docs/db-workflow.md`](docs/db-workflow.md).
+- **SQL is free**: create, modify, delete data at will — the DB is a scratch pad.
+- **Markdown fallback**: `VIAJE.md` and `PRD.md` are the canonical trip-data fallback. When you change data in D1 that is also reflected in those files, update them in the same commit.
 
 ## Key rules (summary)
 
