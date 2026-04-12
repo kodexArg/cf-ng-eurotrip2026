@@ -19,7 +19,7 @@ const CITY_NAMES: Record<string, string> = {
   selector: 'app-transport-inline',
   imports: [ConfirmedBadge, TransportEditDialog],
   template: `
-    <div class="py-3 px-4 my-3 rounded-lg border"
+    <div class="py-3 px-4 my-3 rounded-lg border" [class.opacity-60]="!leg().confirmed"
          style="background-color: var(--p-surface-50); border-color: var(--p-surface-200)">
       <div class="flex items-center gap-3">
         <i [class]="modeIcon()" style="color: var(--p-primary-color); font-size: 1.125rem"></i>

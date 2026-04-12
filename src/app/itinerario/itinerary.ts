@@ -56,20 +56,7 @@ export class ItineraryPage {
   readonly itineraryResource = httpResource<CityBlockModel[]>(() => '/api/itinerary');
 
   readonly filteredBlocks = computed(() => {
-    const blocks = this.itineraryResource.value() ?? [];
-    const showAll = this.authService.isAuthenticated();
-    return blocks
-      .map(block => ({
-        ...block,
-        transportLeg: block.transportLeg && (showAll || block.transportLeg.confirmed) ? block.transportLeg : null,
-        days: block.days
-          .map(day => ({
-            ...day,
-            activities: day.activities.filter(
-              act => showAll || act.confirmed
-            ),
-          })),
-      }));
+    return this.itineraryResource.value() ?? [];
   });
 
   private readonly _scrollEffect = effect(() => {

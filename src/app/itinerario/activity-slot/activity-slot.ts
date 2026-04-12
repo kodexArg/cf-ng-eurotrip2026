@@ -10,7 +10,7 @@ import { EditService } from '../../shared/services/edit.service';
   standalone: true,
   imports: [ConfirmedBadge, ActivityEditDialog],
   template: `
-    <div class="flex items-start gap-2 py-1">
+    <div class="flex items-start gap-2 py-1" [class.opacity-60]="!activity().confirmed">
       <i
         class="pi {{ tipoIcon().icon }} text-sm mt-0.5 shrink-0"
         [style.color]="tipoIcon().color"
