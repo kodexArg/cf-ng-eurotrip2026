@@ -20,5 +20,5 @@ import { Button } from 'primeng/button';
 export class ExternalLink {
   readonly url = input.required<string>();
   readonly label = input.required<string>();
-  readonly severity = input<string>('secondary');
+  readonly severity = input<'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'contrast'>('secondary');
 }

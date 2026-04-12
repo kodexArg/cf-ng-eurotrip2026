@@ -21,6 +21,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransportDetails {
-  readonly company = input<string | undefined>();
-  readonly duration = input<string | undefined>();
+  readonly company = input<string | null>();
+  readonly duration = input<string | null>();
 }
