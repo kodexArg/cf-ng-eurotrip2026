@@ -51,7 +51,7 @@ This applies without exception. When in doubt: if a human reads it in the browse
 
 ## What is this
 
-A personal travel companion site for Gabriel & Vanesa's Europe trip — 22 days, April 17 to May 9, 2026. Route: Buenos Aires → Madrid → Barcelona → París → Venecia → Roma → Buenos Aires.
+A personal travel companion site for Gabriel & Vanesa's Europe trip — April 19 to May 10, 2026. Route: Santiago de Chile → Madrid → Barcelona → Palma de Mallorca → Londres → Roma → Madrid (escala nocturna) → Buenos Aires.
 
 Public to anyone with the link. No login. No accounts.
 
@@ -80,7 +80,7 @@ Every distinct piece of UI is its own component. Components compose other compon
 A month-view calendar covering the full trip: April 17 – May 9, 2026. This is the default landing page (`/calendario`).
 
 - Spans two months (April + May) shown as a single continuous view or two adjacent month panels
-- Each day cell is color-coded by city (same palette as the Itinerary: Madrid amber, Barcelona coral, París indigo, Venecia teal, Roma rose); travel days get a gradient between the origin and destination colors
+- Each day cell is color-coded by city (same palette as the Itinerary: Madrid amber, Barcelona coral, Palma gold, Londres blue, Roma rose); travel days get a gradient between the origin and destination colors
 - Confirmed events (flights, Sagrada Família, etc.) appear as labeled chips inside the day cell
 - Tapping a day navigates to that day's entry in the Itinerary
 - Read only. No editing from the UI.
@@ -95,7 +95,7 @@ Source of truth: same D1 data as Itinerary.
 A single scrollable vertical timeline of the full trip.
 
 Hierarchy (three levels):
-1. **City block** — city name, total nights, date range, color-coded (Madrid amber, Barcelona coral, París indigo, Venecia teal, Roma rose)
+1. **City block** — city name, total nights, date range, color-coded (Madrid amber, Barcelona coral, Palma gold, Londres blue, Roma rose)
 2. **Day** — date, optional label (e.g. *"Aniversario"*, *"Toledo — día completo"*)
 3. **Activity** — morning / afternoon / evening slot, short description, optional cost hint
 
@@ -113,7 +113,7 @@ Source of truth: D1, seeded from `context/`.
 
 A visual representation of the route across Europe.
 
-- Static route drawn between all cities in order: MAD → BCN → PAR → VCE → ROM
+- Static route drawn between all cities in order: SCL → MAD → BCN → PMI → LON → ROM → MAD → EZE
 - Each city is a labeled pin with dates
 - Future: interactive — tapping a pin navigates to that city's detail page
 - Future: geolocation — shows the traveler's current position on the map (opt-in, mobile)
@@ -124,7 +124,7 @@ The map in `context/` is the reference for style and feel.
 
 ### 4. Sites (city detail pages)
 
-One page per city: `/madrid`, `/barcelona`, `/paris`, `/venecia`, `/roma`. Grouped under the "Sitios" nav item.
+One page per city: `/madrid`, `/barcelona`, `/palma`, `/londres`, `/roma`. Grouped under the "Sitios" nav item.
 
 Each page contains cards for activities in that city. Card types:
 
@@ -169,20 +169,31 @@ No external services. No third-party databases.
 
 ## Seed data
 
-Cities and confirmed dates:
+Cities and confirmed dates (source of truth: Cloudflare D1 `cities` table):
 
 | City | Arrival | Departure | Nights |
 |------|---------|-----------|--------|
 | Madrid | Apr 20 | Apr 24 | 4 |
-| Barcelona | Apr 24 | Apr 30 | 6 |
-| París | Apr 30 | May 2 | 2 |
-| Venecia | May 2 | May 4 | 2 |
-| Roma | May 4 | May 9 | 5 |
+| Barcelona | Apr 24 | Apr 28 | 4 |
+| Palma de Mallorca | Apr 28 | May 2 | 4 |
+| Londres | May 2 | May 5 | 3 |
+| Roma | May 5 | May 9 | 4 |
+| Madrid (escala nocturna) | May 9 (night) | May 10 (morning) | 0 |
 
-Confirmed bookings:
-- ✓ Flight SCL → MAD — Apr 19, 06:40
-- ✓ Sagrada Família ticket — Sun Apr 27
-- ✓ Flight FCO → EZE — May 9, 23:00 (Iberia)
+Confirmed bookings (source of truth: D1 `events` table, `confirmed = 1`):
+- ✓ Flight SCL → MAD — Iberia, Apr 19 06:40 — USD 1609
+- ✓ AirBNB Madrid, Lavapiés (C. del Ave María 42) — Apr 20 → Apr 24 — USD 468.84 (paid)
+- ✓ AVE Madrid Atocha → Barcelona Sants — Renfe, Apr 24 08:57
+- ✓ Airbnb Barcelona, Poble Sec — Apr 24 → Apr 28 — USD 675.39
+- ✓ Park Güell (zona monumental + Casa Museo Gaudí, 2 pax) — Sun Apr 26 — USD 59
+- ✓ Sagrada Família (acceso básico + Torre del Nacimiento, 2 pax) — Mon Apr 27 17:00 — ~€36 p/p
+- ✓ Vueling BCN → PMI — Apr 28 09:05 — USD 95, locator UMSDND
+- ✓ Ryanair FR28 PMI → Londres Stansted — May 2 06:00 — €15.99
+- ✓ Ryanair FR2455 Londres Stansted → Roma Ciampino — May 5 06:15 — £23.99
+- ✓ Iberia IB0656 FCO T1 → MAD — May 9 20:25 — booking ref KM99T
+- ✓ Iberia IB0105 MAD → EZE — May 10 08:45 — booking ref KM99T (physical ticket 075-2533915149)
+
+Accommodations still to confirm (Palma, Londres, Roma, Madrid escala).
 
 ---
 

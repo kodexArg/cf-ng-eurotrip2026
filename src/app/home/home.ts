@@ -8,8 +8,8 @@ const CITIES_PREVIEW: CityPreview[] = [
   { slug: 'madrid', name: 'Madrid', color: '#e8a74e', dates: '20–24 abr', nights: 4 },
   { slug: 'barcelona', name: 'Barcelona', color: '#e07b5a', dates: '24–28 abr', nights: 4 },
   { slug: 'palma', name: 'Palma', color: '#f59e0b', dates: '28 abr – 2 may', nights: 4 },
-  { slug: 'paris', name: 'París', color: '#7e8cc4', dates: '2–6 may', nights: 4 },
-  { slug: 'roma', name: 'Roma', color: '#c27ba0', dates: '6–9 may', nights: 3 },
+  { slug: 'londres', name: 'Londres', color: '#5b7fb5', dates: '2–5 may', nights: 3 },
+  { slug: 'roma', name: 'Roma', color: '#c27ba0', dates: '5–9 may', nights: 4 },
 ];
 
 @Component({

@@ -34,8 +34,8 @@ describe('Home', () => {
     const text = fixture.nativeElement.textContent;
     expect(text).toContain('Madrid');
     expect(text).toContain('Barcelona');
-    expect(text).toContain('París');
-    expect(text).toContain('Venecia');
+    expect(text).toContain('Palma');
+    expect(text).toContain('Londres');
     expect(text).toContain('Roma');
   });
 });

@@ -49,8 +49,8 @@ export const routes: Routes = [
   },
   { path: 'madrid', redirectTo: '/sitios?c=madrid' },
   { path: 'barcelona', redirectTo: '/sitios?c=barcelona' },
-  { path: 'paris', redirectTo: '/sitios?c=paris' },
-  { path: 'palma', redirectTo: '/sitios' },
+  { path: 'palma', redirectTo: '/sitios?c=palma' },
+  { path: 'londres', redirectTo: '/sitios?c=londres' },
   { path: 'roma', redirectTo: '/sitios?c=roma' },
   {
     path: '**',

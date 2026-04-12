@@ -33,15 +33,17 @@ export class MapContainer {
 
   private readonly _renderCities = effect(() => {
     const cities = this.cities();
+    const events = this.events();
     if (this.mapReady() && cities.length > 0) {
-      this.renderCities(cities);
+      this.renderCities(cities, events);
     }
   });
 
   private readonly _renderEvents = effect(() => {
     const events = this.events();
-    if (this.mapReady() && events.length > 0) {
-      this.renderEvents(events);
+    const cities = this.cities();
+    if (this.mapReady() && events.length > 0 && cities.length > 0) {
+      this.renderEvents(events, cities);
     }
   });
 
@@ -62,25 +64,34 @@ export class MapContainer {
 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    this.citiesLayer = L.layerGroup().addTo(map);
+    // Events added first, cities second → cities render on top in DOM order.
     this.eventsLayer = L.layerGroup().addTo(map);
+    this.citiesLayer = L.layerGroup().addTo(map);
 
     map.fitBounds([[39.9, -4.2], [48.9, 12.6]], { padding: [48, 48] });
   }
 
-  private renderCities(cities: City[]): void {
+  private renderCities(cities: City[], events: TripEventBase[]): void {
     if (!this.citiesLayer) return;
     this.citiesLayer.clearLayers();
+    const hitosByCity = new Map<string, TripEventBase[]>();
+    for (const ev of events) {
+      if (ev.type !== 'hito' || !ev.confirmed) continue;
+      const list = hitosByCity.get(ev.cityIn) ?? [];
+      list.push(ev);
+      hitosByCity.set(ev.cityIn, list);
+    }
     cities.forEach((city) => {
-      createCityMarker(L, city, (slug) => this.router.navigate(['/', slug]))
+      const confirmedHitos = hitosByCity.get(city.id) ?? [];
+      createCityMarker(L, city, confirmedHitos, (slug) => this.router.navigate(['/', slug]))
         .addTo(this.citiesLayer!);
     });
   }
 
-  private renderEvents(events: TripEventBase[]): void {
+  private renderEvents(events: TripEventBase[], cities: City[]): void {
     if (!this.map || !this.eventsLayer) return;
     this.eventsLayer.clearLayers();
-    renderEventsOnMap(L, this.map, events).getLayers()
+    renderEventsOnMap(L, this.map, events, cities).getLayers()
       .forEach((layer) => this.eventsLayer!.addLayer(layer));
   }
 }

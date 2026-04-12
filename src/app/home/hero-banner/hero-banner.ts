@@ -9,10 +9,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         Gabriel &amp; Vanesa — Europa 2026
       </h1>
       <p class="text-lg mb-1" style="color: var(--p-surface-700)">
-        19 abril – 9 mayo · 21 días
+        19 abril – 10 mayo · 22 días
       </p>
       <p class="text-sm" style="color: var(--p-surface-500)">
-        SCL → MAD → BCN → PMI → PAR → ROM → EZE
+        SCL → MAD → BCN → PMI → LON → ROM → EZE
       </p>
     </div>
   `,
