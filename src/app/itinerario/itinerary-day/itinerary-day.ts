@@ -34,7 +34,7 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
         </span>
       </div>
 
-      <div class="flex-1 flex flex-col py-2 px-3 min-w-0">
+      <div class="flex-1 flex items-center py-2 px-3 min-w-0">
         <div class="flex flex-col gap-1 flex-1">
           @if (day().label) {
             <app-info-row
@@ -55,10 +55,12 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
           @for (activity of displayActivities(); track activity.id) {
             <app-activity-slot [activity]="activity" />
           }
-        </div>
-        <div class="flex items-center justify-end gap-0.5 mt-0.5">
-          <i [class]="'pi ' + weatherIcon()" style="font-size: 0.6rem" [style.color]="weatherIconColor()"></i>
-          <span class="text-xxs leading-none" [style.color]="weatherTextColor()">{{ weatherTempText() }}</span>
+          @if (showUnconfirmed() && weather()) {
+            <div class="flex items-center gap-0.5 mt-0.5">
+              <i [class]="'pi ' + weatherIcon()" style="font-size: 0.6rem" [style.color]="weatherIconColor()"></i>
+              <span class="text-xxs leading-none" [style.color]="weatherTextColor()">{{ weatherTempText() }}</span>
+            </div>
+          }
         </div>
       </div>
     </div>
