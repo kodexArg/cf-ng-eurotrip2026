@@ -14,11 +14,15 @@ import { EditService } from '../../shared/services/edit.service';
   template: `
     <div class="flex items-start gap-2 py-1">
       <p-tag [value]="slotLabel()" severity="secondary" styleClass="text-xs min-w-16" />
-      <div class="flex-1 flex items-start gap-1.5">
-        <app-activity-type-chip [tipo]="activity().tipo" />
-        <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-start gap-1.5">
+          <app-activity-type-chip [tipo]="activity().tipo" />
+          <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
+        </div>
         @if (activity().costHint) {
-          <span class="text-xs ml-1" style="color: var(--p-surface-400)">{{ activity().costHint }}</span>
+          <div class="mt-0.5 ml-6">
+            <span class="text-xs" style="color: var(--p-surface-400)">{{ activity().costHint }}</span>
+          </div>
         }
       </div>
       @if (activity().confirmed) {
