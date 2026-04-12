@@ -44,4 +44,13 @@ export class AdminService {
       )
     );
   }
+
+  invite(name: string, email?: string) {
+    return firstValueFrom(
+      this.http.post<{ success: boolean; magic_link: string }>(
+        '/api/admin/invite',
+        { name, email: email || '' }
+      )
+    );
+  }
 }

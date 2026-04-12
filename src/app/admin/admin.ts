@@ -20,6 +20,53 @@ import { AuthService } from '../shared/services/auth.service';
       @if (!auth.isOwner()) {
         <p class="text-center py-8" style="color: var(--p-surface-500)">Acceso restringido al propietario.</p>
       } @else {
+        <!-- Generar invitación -->
+        <p-card styleClass="mb-4">
+          <ng-template #header>
+            <div class="px-4 pt-4">
+              <span class="font-bold text-lg" style="color: var(--p-surface-800)">Generar invitación</span>
+            </div>
+          </ng-template>
+
+          <div class="flex flex-col gap-3 max-w-sm">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium" style="color: var(--p-surface-700)">Nombre *</label>
+              <input
+                pInputText
+                type="text"
+                placeholder="Nombre del invitado"
+                [(ngModel)]="inviteName"
+                (keydown.enter)="generateInvite()"
+                class="w-full"
+              />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-sm font-medium" style="color: var(--p-surface-700)">
+                Email
+                <span class="font-normal ml-1" style="color: var(--p-surface-400)">(opcional, solo referencia)</span>
+              </label>
+              <input
+                pInputText
+                type="email"
+                placeholder="Para tu referencia"
+                [(ngModel)]="inviteEmail"
+                (keydown.enter)="generateInvite()"
+                class="w-full"
+              />
+            </div>
+            @if (inviteError()) {
+              <small class="text-red-500">{{ inviteError() }}</small>
+            }
+            <p-button
+              label="Generar link"
+              icon="pi pi-link"
+              [loading]="generatingInvite()"
+              [disabled]="!inviteName.trim()"
+              (onClick)="generateInvite()"
+            />
+          </div>
+        </p-card>
+
         <!-- Access Requests -->
         <p-card styleClass="mb-4">
           <ng-template #header>
@@ -168,8 +215,12 @@ export class AdminPage implements OnInit {
   readonly loadingSessions = signal(false);
   readonly generatedLink = signal('');
   readonly linkCopied = signal(false);
+  readonly generatingInvite = signal(false);
+  readonly inviteError = signal('');
 
   showLinkDialog = false;
+  inviteName = '';
+  inviteEmail = '';
 
   ngOnInit(): void {
     if (this.auth.isOwner()) {
@@ -231,6 +282,26 @@ export class AdminPage implements OnInit {
       await this.loadSessions();
     } catch {
       // silently handle
+    }
+  }
+
+  async generateInvite(): Promise<void> {
+    if (!this.inviteName.trim()) return;
+    this.generatingInvite.set(true);
+    this.inviteError.set('');
+    try {
+      const res = await this.adminService.invite(this.inviteName.trim(), this.inviteEmail.trim() || undefined);
+      if (res.success && res.magic_link) {
+        this.generatedLink.set(res.magic_link);
+        this.linkCopied.set(false);
+        this.showLinkDialog = true;
+        this.inviteName = '';
+        this.inviteEmail = '';
+      }
+    } catch {
+      this.inviteError.set('No se pudo generar el link. Intentá de nuevo.');
+    } finally {
+      this.generatingInvite.set(false);
     }
   }
 
