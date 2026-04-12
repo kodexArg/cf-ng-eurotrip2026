@@ -4,11 +4,12 @@ import { ActivityTipo } from '../shared/models/activity.model';
 import { City, CityBlock } from '../shared/models';
 import { CalendarMonth } from './calendar-month/calendar-month';
 import { EventTypeLegend } from './event-type-legend/event-type-legend';
+import { CityLegend } from './city-legend/city-legend';
 import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CalendarMonth, EventTypeLegend, ItineraryDay],
+  imports: [CalendarMonth, EventTypeLegend, CityLegend, ItineraryDay],
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-6">
       <div class="flex items-center justify-between">
@@ -26,9 +27,12 @@ import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
           ></i>
         </button>
       </div>
-      <app-event-type-legend />
+      @if (cities().length) {
+        <app-city-legend [cities]="cities()" />
+      }
       <app-calendar-month [month]="4" [year]="2026" [activities]="visibleActivities()" [cities]="cities()" (selectDate)="openDay($event)" />
       <app-calendar-month [month]="5" [year]="2026" [activities]="visibleActivities()" [cities]="cities()" (selectDate)="openDay($event)" />
+      <app-event-type-legend />
     </div>
     @if (selectedDayData(); as data) {
       <div
