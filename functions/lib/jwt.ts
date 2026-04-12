@@ -32,10 +32,10 @@ export async function signJwt(payload: object, secret: string): Promise<string> 
   return `${signingInput}.${base64urlEncode(signature)}`;
 }
 
-export async function verifyJwt(
+export async function verifyJwt<T = { name: string; role: string; session_id: string }>(
   token: string,
   secret: string
-): Promise<{ name: string; role: string; session_id: string } | null> {
+): Promise<(T & { exp: number }) | null> {
   const parts = token.split('.');
   if (parts.length !== 3) return null;
 
@@ -62,7 +62,7 @@ export async function verifyJwt(
 
   if (!valid) return null;
 
-  let parsed: { name: string; role: string; session_id: string; exp: number };
+  let parsed: T & { exp: number };
   try {
     parsed = JSON.parse(b64decode(payload));
   } catch {
@@ -71,7 +71,7 @@ export async function verifyJwt(
 
   if (!parsed.exp || Date.now() / 1000 > parsed.exp) return null;
 
-  return { name: parsed.name, role: parsed.role, session_id: parsed.session_id };
+  return parsed;
 }
 
 export async function timingSafeEqual(a: string, b: string): Promise<boolean> {

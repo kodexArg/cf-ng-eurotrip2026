@@ -15,6 +15,7 @@ const ALLOWLISTED: Set<string> = new Set([
   'POST /api/auth/logout',
   'GET /api/auth/me',
   'POST /api/access-requests',
+  'GET /api/auth/magic-link',
 ]);
 
 export const onRequest: PagesFunction<Env> = async (ctx) => {
