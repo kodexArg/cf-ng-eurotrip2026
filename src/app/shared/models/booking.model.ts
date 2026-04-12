@@ -1,3 +1,6 @@
+// TODO Phase 2: This model will be superseded by the unified Event model once
+// events-based mutations are implemented. Kept in place because reservas.ts,
+// booking-card, booking-dialog, and booking-type-chip still reference it.
 export type BookingType = 'hito' | 'viaje' | 'hospedaje';
 
 export interface Booking {

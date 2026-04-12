@@ -3,13 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { httpResource } from '@angular/common/http';
 import { SelectButton } from 'primeng/selectbutton';
 import { Button } from 'primeng/button';
-import { Booking, BookingType } from '../shared/models';
+import { TripEvent, EventType } from '../shared/models/event.model';
+import { Booking } from '../shared/models';
 import { AuthService } from '../shared/services/auth.service';
 import { EditService, BookingPatch } from '../shared/services/edit.service';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from './booking-card/booking-card';
 import { BookingDialog } from './booking-dialog/booking-dialog';
+
+type FilterValue = EventType | 'all';
 
 @Component({
   selector: 'app-reservas',
@@ -36,20 +39,20 @@ import { BookingDialog } from './booking-dialog/booking-dialog';
         <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
       </div>
 
-      @if (bookingsResource.isLoading()) { <app-loading-state /> }
-      @if (bookingsResource.error()) {
-        <app-error-state message="No se pudieron cargar las reservas." (retry)="bookingsResource.reload()" />
+      @if (reservasResource.isLoading()) { <app-loading-state /> }
+      @if (reservasResource.error()) {
+        <app-error-state message="No se pudieron cargar las reservas." (retry)="reservasResource.reload()" />
       }
 
-      @if (bookingsResource.value()) {
-        @for (booking of filteredBookings(); track booking.id) {
+      @if (reservasResource.value()) {
+        @for (event of filteredEvents(); track event.id) {
           <div class="mb-2">
             <app-booking-card
-              [booking]="booking"
+              [booking]="event"
               [editable]="auth.isOwner()"
-              (edit)="openEdit(booking)"
-              (remove)="deleteBooking(booking)"
-              (toggleConfirmed)="toggleConfirmed(booking)"
+              (edit)="openEdit(event)"
+              (remove)="deleteEvent(event)"
+              (toggleConfirmed)="toggleConfirmed(event)"
             />
           </div>
         } @empty {
@@ -66,53 +69,55 @@ export class ReservasPage {
   readonly auth = inject(AuthService);
   private readonly editService = inject(EditService);
 
-  readonly bookingsResource = httpResource<Booking[]>(() => '/api/bookings');
+  readonly reservasResource = httpResource<{ events: TripEvent[] }>(() => '/api/reservas');
   readonly bookingDialog = viewChild.required(BookingDialog);
 
-  readonly typeFilter = signal<BookingType | 'all'>('all');
+  readonly typeFilter = signal<FilterValue>('all');
 
   readonly filterOptions = [
-    { label: 'Todos', value: 'all' },
-    { label: 'Hitos', value: 'hito' },
-    { label: 'Viajes', value: 'viaje' },
-    { label: 'Hospedaje', value: 'hospedaje' },
+    { label: 'Todos',     value: 'all' },
+    { label: 'Hitos',     value: 'hito' },
+    { label: 'Viajes',    value: 'traslado' },
+    { label: 'Hospedaje', value: 'estadia' },
   ];
 
-  readonly filteredBookings = computed(() => {
-    const bookings = this.bookingsResource.value() ?? [];
+  readonly filteredEvents = computed(() => {
+    const response = this.reservasResource.value();
+    const events = response?.events ?? [];
     const filter = this.typeFilter();
-    if (filter === 'all') return bookings;
-    return bookings.filter((b) => b.type === filter);
+    if (filter === 'all') return events;
+    return events.filter((e) => e.type === filter);
   });
 
-  openEdit(booking: Booking): void {
-    this.bookingDialog().openEdit(booking);
+  openEdit(event: TripEvent): void {
+    // BookingDialog still uses the legacy Booking shape — parallel worker owns cleanup.
+    this.bookingDialog().openEdit(event as unknown as Booking);
   }
 
-  onSaved(event: { id?: string; data: Record<string, unknown> }): void {
-    if (event.id) {
-      this.editService.patchBooking(event.id, event.data as BookingPatch).subscribe(() => {
-        this.bookingsResource.reload();
+  onSaved(saved: { id?: string; data: Record<string, unknown> }): void {
+    if (saved.id) {
+      this.editService.patchBooking(saved.id, saved.data as BookingPatch).subscribe(() => {
+        this.reservasResource.reload();
       });
     } else {
-      this.editService.createBooking(event.data as BookingPatch).subscribe(() => {
-        this.bookingsResource.reload();
+      this.editService.createBooking(saved.data as BookingPatch).subscribe(() => {
+        this.reservasResource.reload();
       });
     }
   }
 
-  deleteBooking(booking: Booking): void {
-    if (!confirm(`¿Eliminar "${booking.description}"?`)) return;
-    this.editService.deleteBooking(booking.id).subscribe(() => {
-      this.bookingsResource.reload();
+  deleteEvent(event: TripEvent): void {
+    if (!confirm(`¿Eliminar "${event.title}"?`)) return;
+    this.editService.deleteBooking(event.id).subscribe(() => {
+      this.reservasResource.reload();
     });
   }
 
-  toggleConfirmed(booking: Booking): void {
+  toggleConfirmed(event: TripEvent): void {
     this.editService
-      .patchBooking(booking.id, { confirmed: !booking.confirmed })
+      .patchBooking(event.id, { confirmed: !event.confirmed })
       .subscribe(() => {
-        this.bookingsResource.reload();
+        this.reservasResource.reload();
       });
   }
 }

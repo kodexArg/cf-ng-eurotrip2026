@@ -145,8 +145,8 @@ const EMPTY_DRAFT: BookingDraft = {
       </div>
 
       <ng-template pTemplate="footer">
-        <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="visible = false" />
-        <p-button label="Guardar" icon="pi pi-check" (onClick)="onSave()" [disabled]="!draft.description || !draft.sort_date" />
+        <p-button label="Cerrar" severity="secondary" [text]="true" (onClick)="visible = false" />
+        <!-- Phase 2: POST to /api/events — Save/Delete buttons removed until events-based mutations are implemented -->
       </ng-template>
     </p-dialog>
   `,
