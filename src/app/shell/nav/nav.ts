@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { Button } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
@@ -29,7 +29,7 @@ import { MenuItem } from 'primeng/api';
       <a routerLink="/mapa" routerLinkActive="text-primary">
         <p-button icon="pi pi-map" label="Mapa" [text]="true" size="small" />
       </a>
-      <a routerLink="/madrid" routerLinkActive="text-primary">
+      <a routerLink="/sitios" routerLinkActive="text-primary">
         <p-button icon="pi pi-building" label="Sitios" [text]="true" size="small" />
       </a>
       <a routerLink="/fotos" routerLinkActive="text-primary">
@@ -48,23 +48,11 @@ import { MenuItem } from 'primeng/api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Nav {
-  private router = inject(Router);
-
   readonly menuItems: MenuItem[] = [
     { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },
     { label: 'Itinerario', icon: 'pi pi-list', routerLink: '/itinerario' },
     { label: 'Mapa', icon: 'pi pi-map', routerLink: '/mapa' },
-    {
-      label: 'Sitios',
-      icon: 'pi pi-building',
-      items: [
-        { label: 'Madrid', command: () => this.router.navigate(['/madrid']) },
-        { label: 'Barcelona', command: () => this.router.navigate(['/barcelona']) },
-        { label: 'París', command: () => this.router.navigate(['/paris']) },
-        { label: 'Palma', command: () => this.router.navigate(['/palma']) },
-        { label: 'Roma', command: () => this.router.navigate(['/roma']) },
-      ],
-    },
+    { label: 'Sitios', icon: 'pi pi-building', routerLink: '/sitios' },
     { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
     { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
   ];
