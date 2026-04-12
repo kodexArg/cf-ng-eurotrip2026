@@ -76,7 +76,7 @@ export class CalendarMonth {
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = toDateStr(year, month, d);
-      const events  = acts.filter(a => a.date === dateStr);
+      const events  = acts.filter(a => a.date === dateStr).sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
       const gradient = getTravelGradientFromCities(dateStr, cities);
       let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
       if (!bgColor && !gradient && events.some(e => e.confirmed)) {
