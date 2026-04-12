@@ -48,6 +48,10 @@ export const routes: Routes = [
     loadComponent: () => import('./fotos/gallery').then((m) => m.GalleryPage),
   },
   {
+    path: 'reservas',
+    loadComponent: () => import('./reservas/reservas').then((m) => m.ReservasPage),
+  },
+  {
     path: '**',
     loadComponent: () => import('./not-found/not-found').then((m) => m.NotFound),
   },

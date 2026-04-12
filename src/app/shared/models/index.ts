@@ -7,3 +7,4 @@ export * from './photo.model';
 export * from './city-block.model';
 export * from './map-poi.model';
 export * from './map-route.model';
+export * from './booking.model';

@@ -48,6 +48,9 @@ import { LoginDialog } from '../../shared/login-dialog/login-dialog';
       <a routerLink="/fotos" routerLinkActive="text-primary">
         <p-button icon="pi pi-images" label="Fotos" [text]="true" size="small" />
       </a>
+      <a routerLink="/reservas" routerLinkActive="text-primary">
+        <p-button icon="pi pi-wallet" label="Reservas" [text]="true" size="small" />
+      </a>
       @if (auth.isAuthenticated()) {
         <p-button icon="pi pi-lock-open" [text]="true" size="small" (onClick)="auth.logout()" />
       } @else {
@@ -84,5 +87,6 @@ export class Nav implements OnInit {
       ],
     },
     { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
+    { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
   ];
 }
