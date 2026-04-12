@@ -4,6 +4,14 @@
 -- leg-bcn-pmi already exists (seeded 0019, updated to flight in 0022)
 
 -- ─────────────────────────────────────────────────────
+-- 0. DAYS — ensure bcn-day-apr28 exists
+-- (was seeded in 0003 but removed by 0017; 0019 did not re-add it)
+-- ─────────────────────────────────────────────────────
+
+INSERT OR IGNORE INTO days (id, city_id, date, label, variant) VALUES
+  ('bcn-day-apr28', 'bcn', '2026-04-28', NULL, 'both');
+
+-- ─────────────────────────────────────────────────────
 -- 1. DAYS — update labels to reflect flight (not ferry)
 -- ─────────────────────────────────────────────────────
 
