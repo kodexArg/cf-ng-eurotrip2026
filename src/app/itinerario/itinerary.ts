@@ -8,23 +8,17 @@ import {
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { CityBlock as CityBlockModel } from '../shared/models';
-import { VariantService } from '../shared/services/variant.service';
 import { AuthService } from '../shared/services/auth.service';
 import { ItineraryCity } from './itinerary-city/itinerary-city';
 import { TransportInline } from './transport-inline/transport-inline';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
-import { VariantSelector } from './variant-selector/variant-selector';
 
 @Component({
   selector: 'app-itinerary',
-  imports: [ItineraryCity, TransportInline, LoadingState, ErrorState, VariantSelector],
+  imports: [ItineraryCity, TransportInline, LoadingState, ErrorState],
   template: `
     <div class="max-w-2xl mx-auto p-4">
-      <div class="mb-4 flex justify-center">
-        <app-variant-selector />
-      </div>
-
       @if (itineraryResource.isLoading()) {
         <app-loading-state />
       }
@@ -49,7 +43,6 @@ import { VariantSelector } from './variant-selector/variant-selector';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryPage {
-  private readonly variantService = inject(VariantService);
   private readonly authService = inject(AuthService);
 
   readonly date = input<string>();
@@ -58,18 +51,16 @@ export class ItineraryPage {
 
   readonly filteredBlocks = computed(() => {
     const blocks = this.itineraryResource.value() ?? [];
-    const v = this.variantService.variant();
     const showAll = this.authService.isAuthenticated();
     return blocks
       .map(block => ({
         ...block,
         transportLeg: block.transportLeg && (showAll || block.transportLeg.confirmed) ? block.transportLeg : null,
         days: block.days
-          .filter(day => day.variant === 'both' || day.variant === v)
           .map(day => ({
             ...day,
             activities: day.activities.filter(
-              act => (act.variant === 'both' || act.variant === v) && (showAll || act.confirmed)
+              act => showAll || act.confirmed
             ),
           })),
       }));
