@@ -1,23 +1,22 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Activity, Booking, Card, TransportLeg } from '../models';
+import { Booking, Card } from '../models';
 
-export type ActivityPatch = Partial<Pick<Activity, 'description' | 'timeSlot' | 'confirmed' | 'costHint' | 'tag' | 'tipo'>>;
-export type TransportPatch = Partial<Pick<TransportLeg, 'label' | 'duration' | 'confirmed' | 'fare' | 'company' | 'departureTime' | 'arrivalTime' | 'costHint'>>;
 export type CardPatch = Partial<Pick<Card, 'title' | 'body' | 'url'>>;
 export type BookingPatch = Partial<Pick<Booking, 'type' | 'sortDate' | 'time' | 'description' | 'origin' | 'destination' | 'mode' | 'carrier' | 'checkoutDate' | 'accommodation' | 'costUsd' | 'confirmed' | 'notes'>>;
 
+/**
+ * Centralised HTTP mutation API used by the owner-only edit dialogs.
+ *
+ * The legacy `patchActivity` / `patchTransport` helpers were removed when
+ * the itinerary switched to the unified events model — their consumers
+ * (activity-slot, transport-inline, activity-edit-dialog,
+ * transport-edit-dialog) are all gone. New editing workflows will hit a
+ * future `/api/events` endpoint.
+ */
 @Injectable({ providedIn: 'root' })
 export class EditService {
   private readonly http = inject(HttpClient);
-
-  patchActivity(id: string, changes: ActivityPatch) {
-    return this.http.patch<Activity>(`/api/activities/${id}`, changes);
-  }
-
-  patchTransport(id: string, changes: TransportPatch) {
-    return this.http.patch<TransportLeg>(`/api/transport/${id}`, changes);
-  }
 
   patchCard(id: string, changes: CardPatch) {
     return this.http.patch<Card>(`/api/cards/${id}`, changes);

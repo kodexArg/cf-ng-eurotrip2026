@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Activity, Day, DayWeather } from '../../shared/models';
-import { ActivitySlot } from '../activity-slot/activity-slot';
+import { City, DayWeather, TripEvent } from '../../shared/models';
+import { EventSlot } from '../event-slot/event-slot';
 import { InfoRow } from '../info-row/info-row';
 
 interface SpecialEvent {
@@ -19,9 +19,20 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
   '06-06': { text: 'Aniversario del Día D', icon: 'pi-star' },
 };
 
+export interface ItineraryDayInput {
+  date: string;
+  events: TripEvent[];
+  cityId: string;
+}
+
+/**
+ * Renders one calendar day within a city block. Accepts a bag of
+ * events belonging to that date (already scoped to this city) and
+ * a flat cities list so downstream event-slot pipes can resolve IDs.
+ */
 @Component({
   selector: 'app-itinerary-day',
-  imports: [DatePipe, TitleCasePipe, ActivitySlot, InfoRow],
+  imports: [DatePipe, TitleCasePipe, EventSlot, InfoRow],
   template: `
     <div class="flex" [id]="'day-' + day().date">
       <div class="w-16 shrink-0 flex flex-col items-center justify-center py-3 select-none"
@@ -36,24 +47,20 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
 
       <div class="flex-1 flex items-center py-2 px-3 min-w-0">
         <div class="flex flex-col gap-1 flex-1">
-          @if (day().label) {
+          @if (specialEvent(); as sp) {
             <app-info-row
-              [icon]="dayLabelIcon().icon"
-              [iconColor]="dayLabelIcon().color"
-              [text]="day().label!"
-              [textColor]="dayLabelIcon().color"
-            />
-          }
-          @if (specialEvent()) {
-            <app-info-row
-              [icon]="specialEvent()!.icon"
+              [icon]="sp.icon"
               iconColor="var(--p-surface-400)"
-              [text]="specialEvent()!.text"
+              [text]="sp.text"
               textColor="var(--p-surface-400)"
             />
           }
-          @for (activity of displayActivities(); track activity.id) {
-            <app-activity-slot [activity]="activity" (openInfo)="openActivityInfo.emit(activity)" />
+          @for (event of displayEvents(); track event.id) {
+            <app-event-slot
+              [event]="event"
+              [cities]="cities()"
+              (openInfo)="openEventInfo.emit(event)"
+            />
           }
           @if (showUnconfirmed() && weather()) {
             <div class="flex items-center gap-0.5 mt-0.5 select-none">
@@ -71,17 +78,20 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryDay {
-  readonly day = input.required<Day>();
+  readonly day = input.required<ItineraryDayInput>();
+  readonly cities = input<readonly City[]>([]);
   readonly weather = input<DayWeather | null>(null);
   readonly isLast = input(false);
   readonly showUnconfirmed = input(false);
-  readonly openActivityInfo = output<Activity>();
+  readonly openEventInfo = output<TripEvent>();
 
-  protected readonly displayActivities = computed(() =>
-    this.day().activities.filter(a =>
-      a.confirmed || this.showUnconfirmed()
-    )
-  );
+  protected readonly displayEvents = computed(() => {
+    const show = this.showUnconfirmed();
+    const events = [...this.day().events].sort((a, b) =>
+      a.timestampIn.localeCompare(b.timestampIn)
+    );
+    return show ? events : events.filter((e) => e.confirmed);
+  });
 
   protected readonly weatherIcon = computed(() => {
     const code = this.weather()?.weatherCode ?? -1;
@@ -111,15 +121,7 @@ export class ItineraryDay {
   );
 
   protected readonly specialEvent = computed((): SpecialEvent | null => {
-    const monthDay = this.day().date.slice(5); // MM-DD
+    const monthDay = this.day().date.slice(5);
     return SPECIAL_EVENTS[monthDay] ?? null;
-  });
-
-  protected readonly dayLabelIcon = computed((): { icon: string; color: string } => {
-    const label = this.day().label?.toLowerCase() ?? '';
-    if (label === 'aniversario') return { icon: 'pi-heart', color: 'var(--p-surface-700)' };
-    if (label.includes('llegada')) return { icon: 'pi-map-marker', color: 'var(--p-surface-600)' };
-    if (label.includes('salida')) return { icon: 'pi-send', color: 'var(--p-surface-600)' };
-    return { icon: 'pi-info-circle', color: 'var(--p-surface-500)' };
   });
 }

@@ -1,3 +1,14 @@
+/**
+ * Activity tipo lookup.
+ *
+ * NOTE: The `Activity` / `Day` / `TransportLeg` / `CityBlock` interfaces
+ * were removed when the DB moved to the unified `events` table. This
+ * module now only exposes the visual tipo catalog so calendar-side
+ * components (calendar-month, event-chip, event-type-legend) keep
+ * rendering their category chips. All inbound data is now TripEvent
+ * (see event.model.ts).
+ */
+
 export type ActivityTipo = 'visit' | 'food' | 'transport' | 'hotel' | 'leisure' | 'event';
 
 export const TIPO_CONFIG: Record<ActivityTipo, { bg: string; text: string; label: string; icon: string }> = {
@@ -8,19 +19,3 @@ export const TIPO_CONFIG: Record<ActivityTipo, { bg: string; text: string; label
   food:      { bg: 'rgba(254,243,199,0.25)',  text: '#92400e', label: 'Comida',      icon: 'pi-receipt' },
   leisure:   { bg: 'rgba(240,253,244,0.25)',  text: '#065f46', label: 'Ocio',        icon: 'pi-heart' },
 };
-
-export type TimeSlot = 'morning' | 'afternoon' | 'evening' | 'all-day';
-export type Variant = 'main' | 'train' | 'both';
-
-export interface Activity {
-  id: string;
-  dayId: string;
-  timeSlot: TimeSlot;
-  description: string;
-  tipo: ActivityTipo;
-  tag: string;
-  costHint: string | null;
-  confirmed: boolean;
-  variant: Variant;
-  cardId: string | null;
-}
