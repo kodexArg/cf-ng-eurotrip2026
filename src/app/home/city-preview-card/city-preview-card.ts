@@ -16,7 +16,7 @@ export interface CityPreview {
     <a [routerLink]="'/' + city().slug" class="no-underline">
       <div class="rounded-xl border border-surface-200 bg-white shadow-sm h-full cursor-pointer hover:shadow-md transition-shadow overflow-hidden">
         <div class="h-2" [style.background-color]="city().color"></div>
-        <div class="p-4 text-center flex flex-col gap-1">
+        <div class="p-4 text-center flex flex-col gap-1 select-none">
           <span class="text-base font-semibold" style="color: var(--p-surface-800)">
             {{ city().name }}
           </span>

@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-hero-banner',
   imports: [],
   template: `
-    <div class="rounded-xl border border-surface-200 bg-white shadow-sm p-8 text-center">
+    <div class="rounded-xl border border-surface-200 bg-white shadow-sm p-8 text-center select-none">
       <h1 class="text-4xl font-bold mb-2" style="color: var(--p-surface-900)">
         Gabriel &amp; Vanesa — Europa 2026
       </h1>

@@ -6,7 +6,7 @@ import { Card } from 'primeng/card';
   imports: [Card],
   template: `
     <p-card>
-      <div class="flex flex-wrap justify-center gap-4">
+      <div class="flex flex-wrap justify-center gap-4 select-none">
         <div class="text-center">
           <span class="text-2xl font-bold" style="color: var(--p-surface-900)">21</span>
           <p class="text-sm" style="color: var(--p-surface-500)">días</p>

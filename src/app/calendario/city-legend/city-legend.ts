@@ -13,7 +13,7 @@ const CITY_EMOJI: Record<string, string> = {
   selector: 'app-city-legend',
   imports: [],
   template: `
-    <div class="flex flex-wrap gap-2 justify-center">
+    <div class="flex flex-wrap gap-2 justify-center select-none">
       @for (city of uniqueCities(); track city.id) {
         <div
           class="flex items-center gap-1.5 rounded-md px-2 py-1 border-2 text-sm font-medium"

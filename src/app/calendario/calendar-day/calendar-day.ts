@@ -14,7 +14,7 @@ type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirme
     } @else {
       <div
         (click)="events().length ? selectDate.emit(dateStr()) : null"
-        class="block rounded-md h-full p-1 transition-opacity no-underline overflow-hidden"
+        class="block rounded-md h-full p-1 transition-opacity no-underline overflow-hidden select-none"
         [class.cursor-pointer]="events().length"
         [class.hover:opacity-90]="events().length"
         [style]="cellStyle()"

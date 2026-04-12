@@ -24,7 +24,7 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
   imports: [DatePipe, TitleCasePipe, ActivitySlot, InfoRow],
   template: `
     <div class="flex" [id]="'day-' + day().date">
-      <div class="w-16 shrink-0 flex flex-col items-center justify-center py-3"
+      <div class="w-16 shrink-0 flex flex-col items-center justify-center py-3 select-none"
            style="background-color: var(--p-surface-50); border-right: 1px solid var(--p-surface-200)">
         <span class="text-xs uppercase tracking-wide" style="color: var(--p-surface-400)">
           {{ day().date | date:'EEE' | titlecase }}
@@ -56,7 +56,7 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
             <app-activity-slot [activity]="activity" (openInfo)="openActivityInfo.emit(activity)" />
           }
           @if (showUnconfirmed() && weather()) {
-            <div class="flex items-center gap-0.5 mt-0.5">
+            <div class="flex items-center gap-0.5 mt-0.5 select-none">
               <i [class]="'pi ' + weatherIcon()" style="font-size: 0.6rem" [style.color]="weatherIconColor()"></i>
               <span class="text-xxs leading-none" [style.color]="weatherTextColor()">{{ weatherTempText() }}</span>
             </div>

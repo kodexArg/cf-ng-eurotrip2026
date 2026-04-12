@@ -12,8 +12,8 @@ import { WeatherService } from '../../shared/services/weather.service';
       <div class="rounded-lg overflow-hidden border border-surface-200">
         <div class="p-4 text-white flex items-start justify-between" [style.background-color]="city().color">
           <div>
-            <h2 class="text-xl font-bold m-0">{{ city().name }}</h2>
-            <p class="text-sm m-0" style="opacity: 0.9">
+            <h2 class="text-xl font-bold m-0 select-none">{{ city().name }}</h2>
+            <p class="text-sm m-0 select-none" style="opacity: 0.9">
               @if (firstDay() === lastDay()) {
                 {{ firstDay() | date:'d MMM' }} · {{ nightCount() }} noche
               } @else {
