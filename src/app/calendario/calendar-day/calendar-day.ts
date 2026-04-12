@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ActivityTipo } from '../../shared/models/activity.model';
 import { EventChip } from '../event-chip/event-chip';
 
@@ -7,15 +6,16 @@ type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirme
 
 @Component({
   selector: 'app-calendar-day',
-  imports: [EventChip, RouterLink],
+  imports: [EventChip],
   template: `
     @if (inactive()) {
       <div class="rounded-md h-full opacity-20" style="background-color: var(--p-surface-200)"></div>
     } @else {
-      <a
-        [routerLink]="['/itinerario']"
-        [queryParams]="{ date: dateStr() }"
-        class="block rounded-md h-full p-1 cursor-pointer hover:opacity-90 transition-opacity no-underline overflow-hidden"
+      <div
+        (click)="events().length ? selectDate.emit(dateStr()) : null"
+        class="block rounded-md h-full p-1 transition-opacity no-underline overflow-hidden"
+        [class.cursor-pointer]="events().length"
+        [class.hover:opacity-90]="events().length"
         [style]="cellStyle()"
       >
         <span class="text-xs font-semibold block" [class]="dayNumberClass()">{{ dayNumber() }}</span>
@@ -24,7 +24,7 @@ type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirme
             <app-event-chip [label]="event.tag" [tipo]="event.tipo" [confirmed]="event.confirmed" />
           }
         </div>
-      </a>
+      </div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,6 +44,8 @@ export class CalendarDay {
     if (c) return { 'background-color': c, opacity: '0.85' };
     return { 'background-color': 'var(--p-surface-100)' };
   });
+
+  readonly selectDate = output<string>();
 
   readonly dayNumberClass = computed(() =>
     (this.gradient() || this.bgColor()) ? 'text-white' : 'text-surface-600'

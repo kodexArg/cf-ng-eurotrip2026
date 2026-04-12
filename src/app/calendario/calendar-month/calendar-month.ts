@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ActivityTipo } from '../../shared/models/activity.model';
 import { City } from '../../shared/models';
 import { getDayColorFromCities, getTravelGradientFromCities, toDateStr } from '../calendar-utils';
@@ -36,6 +36,7 @@ type CellData = {
             [bgColor]="cell.bgColor"
             [gradient]="cell.gradient"
             [inactive]="cell.inactive"
+            (selectDate)="selectDate.emit($event)"
           />
         }
       </div>
@@ -49,6 +50,7 @@ export class CalendarMonth {
   readonly activities = input<Array<{ date: string } & CalEvent>>([]);
   readonly cities     = input<City[]>([]);
 
+  readonly selectDate = output<string>();
   readonly dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
   readonly monthName = computed(() => {
