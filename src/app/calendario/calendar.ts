@@ -2,7 +2,6 @@ import { httpResource } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivityTipo } from '../shared/models/activity.model';
 import { City, CityBlock, Day } from '../shared/models';
-import { VariantService } from '../shared/services/variant.service';
 import { AuthService } from '../shared/services/auth.service';
 import { CalendarMonth } from './calendar-month/calendar-month';
 import { EventTypeLegend } from './event-type-legend/event-type-legend';
@@ -39,7 +38,6 @@ import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarPage {
-  private readonly variantService = inject(VariantService);
   private readonly authService = inject(AuthService);
   readonly itineraryResource = httpResource<CityBlock[]>(() => '/api/itinerary');
 
@@ -53,17 +51,14 @@ export class CalendarPage {
     const date = this.selectedDate();
     if (!date) return null;
     const blocks = this.itineraryResource.value() ?? [];
-    const v = this.variantService.variant();
     const showAll = this.authService.isAuthenticated();
     for (const block of blocks) {
       for (const day of block.days) {
-        if (day.date === date && (day.variant === 'both' || day.variant === v)) {
+        if (day.date === date) {
           return {
             day: {
               ...day,
-              activities: day.activities.filter(a =>
-                (a.variant === 'both' || a.variant === v) && (showAll || a.confirmed)
-              ),
+              activities: day.activities.filter(a => showAll || a.confirmed),
             },
             cityName: block.city.name,
             cityColor: block.city.color,
@@ -76,13 +71,12 @@ export class CalendarPage {
 
   readonly confirmedActivities = computed((): Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean }> => {
     const blocks = this.itineraryResource.value() ?? [];
-    const v = this.variantService.variant();
     const showAll = this.authService.isAuthenticated();
     const result: Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean }> = [];
     for (const block of blocks) {
       for (const day of block.days) {
         for (const act of day.activities) {
-          if ((act.variant === 'both' || act.variant === v) && (showAll || act.confirmed)) {
+          if (showAll || act.confirmed) {
             result.push({ date: day.date, description: act.description, tipo: act.tipo, tag: act.tag, confirmed: act.confirmed });
           }
         }
