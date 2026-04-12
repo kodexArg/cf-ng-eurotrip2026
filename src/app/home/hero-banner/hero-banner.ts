@@ -12,7 +12,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         19 abril – 9 mayo · 21 días
       </p>
       <p class="text-sm" style="color: var(--p-surface-500)">
-        SCL → MAD → BCN → PAR → VCE → ROM → EZE
+        SCL → MAD → BCN → PMI → PAR → ROM → EZE
       </p>
     </div>
   `,

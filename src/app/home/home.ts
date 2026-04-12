@@ -6,10 +6,10 @@ import { QuickNav } from './quick-nav/quick-nav';
 
 const CITIES_PREVIEW: CityPreview[] = [
   { slug: 'madrid', name: 'Madrid', color: '#e8a74e', dates: '20–24 abr', nights: 4 },
-  { slug: 'barcelona', name: 'Barcelona', color: '#e07b5a', dates: '24–30 abr', nights: 6 },
-  { slug: 'paris', name: 'París', color: '#7e8cc4', dates: '30 abr – 2 may', nights: 2 },
-  { slug: 'venecia', name: 'Venecia', color: '#0d9488', dates: '2–4 may', nights: 2 },
-  { slug: 'roma', name: 'Roma', color: '#c27ba0', dates: '4–9 may', nights: 5 },
+  { slug: 'barcelona', name: 'Barcelona', color: '#e07b5a', dates: '24–28 abr', nights: 4 },
+  { slug: 'palma', name: 'Palma', color: '#f59e0b', dates: '28 abr – 2 may', nights: 4 },
+  { slug: 'paris', name: 'París', color: '#7e8cc4', dates: '2–6 may', nights: 4 },
+  { slug: 'roma', name: 'Roma', color: '#c27ba0', dates: '6–9 may', nights: 3 },
 ];
 
 @Component({

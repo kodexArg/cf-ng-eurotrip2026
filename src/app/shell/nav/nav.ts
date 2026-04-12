@@ -79,7 +79,7 @@ export class Nav implements OnInit {
         { label: 'Madrid', command: () => this.router.navigate(['/madrid']) },
         { label: 'Barcelona', command: () => this.router.navigate(['/barcelona']) },
         { label: 'París', command: () => this.router.navigate(['/paris']) },
-        { label: 'Venecia', command: () => this.router.navigate(['/venecia']) },
+        { label: 'Palma', command: () => this.router.navigate(['/palma']) },
         { label: 'Roma', command: () => this.router.navigate(['/roma']) },
       ],
     },
