@@ -4,6 +4,10 @@
 @plugin 'tailwindcss-primeui';
 @import 'leaflet/dist/leaflet.css';
 
+@theme {
+  --text-xxs: 0.625rem;
+}
+
 /* City name labels on the map */
 .city-label {
   background: transparent !important;

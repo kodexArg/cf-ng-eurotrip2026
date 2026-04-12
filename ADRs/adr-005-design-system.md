@@ -24,6 +24,10 @@ No other UI library or template is permitted.
 
 Use `rem` for all values. `px` is not permitted, except for single-pixel borders (`1px`).
 
+### Typography scale
+
+Use Tailwind's named text sizes: `text-xs`, `text-sm`, `text-base`, etc. Arbitrary values like `text-[0.625rem]` are not permitted. If a size smaller than `xs` is needed, use `text-xxs` — defined in `styles.css` via `@theme`.
+
 ### Testing
 
 Every component wrapping PrimeNG has a Vitest test covering rendering and interaction logic.
