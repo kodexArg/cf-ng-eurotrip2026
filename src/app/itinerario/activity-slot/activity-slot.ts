@@ -23,6 +23,15 @@ import { InfoRow } from '../info-row/info-row';
           (toggle)="onToggleConfirmed()"
         />
       }
+      @if (activity().cardId) {
+        <button
+          type="button"
+          class="pi pi-lightbulb text-xs opacity-60 hover:opacity-100 transition-opacity ml-1 bg-transparent border-none cursor-pointer"
+          style="height: 1.25rem; color: var(--p-primary-color)"
+          (click)="openInfo.emit()"
+          title="Ver informacion del sitio"
+        ></button>
+      }
       @if (auth.isOwner()) {
         <button
           type="button"
@@ -40,6 +49,7 @@ import { InfoRow } from '../info-row/info-row';
 export class ActivitySlot {
   readonly activity = input.required<Activity>();
   readonly updated = output<void>();
+  readonly openInfo = output<void>();
 
   protected readonly auth = inject(AuthService);
   private readonly editService = inject(EditService);

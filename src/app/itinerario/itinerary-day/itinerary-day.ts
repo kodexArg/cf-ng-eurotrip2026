@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Day, DayWeather } from '../../shared/models';
+import { Activity, Day, DayWeather } from '../../shared/models';
 import { ActivitySlot } from '../activity-slot/activity-slot';
 import { InfoRow } from '../info-row/info-row';
 
@@ -53,7 +53,7 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
             />
           }
           @for (activity of displayActivities(); track activity.id) {
-            <app-activity-slot [activity]="activity" />
+            <app-activity-slot [activity]="activity" (openInfo)="openActivityInfo.emit(activity)" />
           }
           @if (showUnconfirmed() && weather()) {
             <div class="flex items-center gap-0.5 mt-0.5">
@@ -75,6 +75,7 @@ export class ItineraryDay {
   readonly weather = input<DayWeather | null>(null);
   readonly isLast = input(false);
   readonly showUnconfirmed = input(false);
+  readonly openActivityInfo = output<Activity>();
 
   protected readonly displayActivities = computed(() =>
     this.day().activities.filter(a =>

@@ -17,6 +17,7 @@ const mockActivity: Activity = {
   costHint: '~15 pp',
   confirmed: false,
   variant: 'both',
+  cardId: null,
 };
 
 describe('ActivitySlot', () => {

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { City, Day, DayWeather } from '../../shared/models';
+import { Activity, City, Day, DayWeather } from '../../shared/models';
 import { ItineraryDay } from '../itinerary-day/itinerary-day';
 import { WeatherService } from '../../shared/services/weather.service';
 
@@ -38,7 +38,13 @@ import { WeatherService } from '../../shared/services/weather.service';
         </div>
         <div>
           @for (day of days(); track day.id; let last = $last) {
-            <app-itinerary-day [day]="day" [weather]="getWeatherForDay(day.date)" [isLast]="last" [showUnconfirmed]="showSuggestions()" />
+            <app-itinerary-day
+              [day]="day"
+              [weather]="getWeatherForDay(day.date)"
+              [isLast]="last"
+              [showUnconfirmed]="showSuggestions()"
+              (openActivityInfo)="openActivityInfo.emit({ activity: $event, day: day })"
+            />
           }
         </div>
       </div>
@@ -54,6 +60,7 @@ export class ItineraryCity {
   readonly firstDay = input.required<string>();
   readonly lastDay = input.required<string>();
   readonly nightCount = input.required<number>();
+  readonly openActivityInfo = output<{ activity: Activity; day: Day }>();
 
   readonly showSuggestions = signal(false);
 

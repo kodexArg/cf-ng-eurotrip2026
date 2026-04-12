@@ -5,11 +5,11 @@ import { City, CityBlock } from '../shared/models';
 import { CalendarMonth } from './calendar-month/calendar-month';
 import { EventTypeLegend } from './event-type-legend/event-type-legend';
 import { CityLegend } from './city-legend/city-legend';
-import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
+import { SiteInfoModal } from '../shared/site-info-modal/site-info-modal';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CalendarMonth, EventTypeLegend, CityLegend, ItineraryDay],
+  imports: [CalendarMonth, EventTypeLegend, CityLegend, SiteInfoModal],
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-6">
       <div class="flex items-center justify-between">
@@ -35,21 +35,13 @@ import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
       <app-event-type-legend />
     </div>
     @if (selectedDayData(); as data) {
-      <div
-        class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
-        (click)="closeDay()"
-      >
-        <div
-          class="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-y-auto"
-          (click)="$event.stopPropagation()"
-        >
-          <div class="flex items-center justify-between px-4 pt-4">
-            <span class="text-sm font-medium" [style.color]="data.cityColor">{{ data.cityName }}</span>
-            <button class="text-surface-400 hover:text-surface-700 text-xl leading-none" (click)="closeDay()">✕</button>
-          </div>
-          <app-itinerary-day [day]="data.day" [isLast]="true" />
-        </div>
-      </div>
+      <app-site-info-modal
+        [day]="data.day"
+        [cityName]="data.cityName"
+        [cityColor]="data.cityColor"
+        [citySlug]="data.citySlug"
+        (close)="closeDay()"
+      />
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,6 +67,7 @@ export class CalendarPage {
             day,
             cityName: block.city.name,
             cityColor: block.city.color,
+            citySlug: block.city.slug,
           };
         }
       }
