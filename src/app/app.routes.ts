@@ -34,8 +34,8 @@ export const routes: Routes = [
     loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {
-    path: 'venecia',
-    data: { slug: 'venecia' },
+    path: 'palma',
+    data: { slug: 'palma' },
     loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {

@@ -48,6 +48,13 @@ Both are configured in `.mcp.json`:
 - **Angular CLI** — `list_projects`, `build`, `test`, `get_best_practices`
 - **Cloudflare** — Pages, D1, R2, Workers
 
+## Trip constraints
+
+- **Passengers**: 2 adults (seniors)
+- **Luggage**: carry-on only, 10 kg each — no checked bags
+- **Confirmed flights**: SCL → MAD (departure), ROM → EZE (return)
+- **Fixed dates**: Madrid Apr 20–24, Roma departure May 9
+
 ## Key rules (summary)
 
 - Code and docs: **English**. Rendered UI: **Spanish**.
