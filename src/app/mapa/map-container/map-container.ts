@@ -30,19 +30,20 @@ export class MapContainer {
     const pois = this.pois();
     const cities = this.cities();
     if (this.mapReady() && pois.length > 0) {
-      import('leaflet').then((L) => this.renderPois(L, pois, cities));
+      import('leaflet').then((mod) => this.renderPois(mod.default ?? mod, pois, cities));
     }
   });
 
   private readonly _renderRoutes = effect(() => {
     const routes = this.routes();
     if (this.mapReady() && routes.length > 0) {
-      import('leaflet').then((L) => this.renderRoutesLayer(L, routes));
+      import('leaflet').then((mod) => this.renderRoutesLayer(mod.default ?? mod, routes));
     }
   });
 
   private async initMap(): Promise<void> {
-    const L = await import('leaflet');
+    const mod = await import('leaflet');
+    const L = (mod as any).default ?? mod;
 
     this.map = L.map('leaflet-map', {
       center: [46, 10],
