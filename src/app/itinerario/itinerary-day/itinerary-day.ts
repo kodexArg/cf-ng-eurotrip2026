@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Tag } from 'primeng/tag';
 import { Day } from '../../shared/models';
 import { ActivitySlot } from '../activity-slot/activity-slot';
 
 @Component({
   selector: 'app-itinerary-day',
-  imports: [DatePipe, TitleCasePipe, Tag, ActivitySlot],
+  imports: [DatePipe, TitleCasePipe, ActivitySlot],
   template: `
     <div class="flex" [id]="'day-' + day().date">
       <!-- Date sidebar -->
@@ -23,8 +22,10 @@ import { ActivitySlot } from '../activity-slot/activity-slot';
       <!-- Activities panel -->
       <div class="flex-1 flex flex-col py-2 px-3 min-w-0">
         @if (day().label) {
-          <div class="mb-1">
-            <p-tag [value]="day().label!" severity="secondary" styleClass="text-xs" />
+          <div class="flex items-center gap-1 mb-1">
+            <i [class]="'pi ' + dayLabelIcon().icon + ' text-xs'"
+               [style.color]="dayLabelIcon().color"></i>
+            <span class="text-xs font-medium" [style.color]="dayLabelIcon().color">{{ day().label }}</span>
           </div>
         }
         <div class="flex flex-col gap-1 flex-1">
@@ -56,4 +57,12 @@ export class ItineraryDay {
       .map(a => a.costHint)
       .filter((hint): hint is string => hint !== null && hint !== '')
   );
+
+  protected readonly dayLabelIcon = computed((): { icon: string; color: string } => {
+    const label = this.day().label?.toLowerCase() ?? '';
+    if (label === 'aniversario') return { icon: 'pi-heart', color: '#e11d48' };
+    if (label.includes('llegada')) return { icon: 'pi-map-marker', color: '#059669' };
+    if (label.includes('salida')) return { icon: 'pi-send', color: '#2563eb' };
+    return { icon: 'pi-info-circle', color: 'var(--p-surface-500)' };
+  });
 }

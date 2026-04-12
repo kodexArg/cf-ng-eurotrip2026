@@ -83,7 +83,7 @@ export class TransportInline {
   readonly modeIcon = computed(() => {
     const icons: Record<string, string> = {
       flight: 'pi pi-send',
-      train: 'pi pi-arrow-right-arrow-left',
+      train: 'pi pi-directions',
       daytrip: 'pi pi-map-marker',
       ferry: 'pi pi-compass',
     };

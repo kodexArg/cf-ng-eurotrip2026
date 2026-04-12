@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, viewChild } from '@angular/core';
-import { Activity } from '../../shared/models';
+import { Activity, TIPO_CONFIG } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
-import { ActivityTypeChip } from '../activity-type-chip/activity-type-chip';
 import { ActivityEditDialog } from '../activity-edit-dialog/activity-edit-dialog';
 import { AuthService } from '../../shared/services/auth.service';
 import { EditService } from '../../shared/services/edit.service';
@@ -9,18 +8,15 @@ import { EditService } from '../../shared/services/edit.service';
 @Component({
   selector: 'app-activity-slot',
   standalone: true,
-  imports: [ConfirmedBadge, ActivityTypeChip, ActivityEditDialog],
+  imports: [ConfirmedBadge, ActivityEditDialog],
   template: `
     <div class="flex items-start gap-2 py-1">
       <i
-        class="pi {{ slotIcon().icon }} text-sm mt-0.5 shrink-0"
-        [style.color]="slotIcon().color"
-        [title]="slotIcon().title"
+        class="pi {{ tipoIcon().icon }} text-sm mt-0.5 shrink-0"
+        [style.color]="tipoIcon().color"
+        [title]="tipoIcon().label"
       ></i>
-      <div class="flex-1 flex items-start gap-1.5">
-        @if (activity().tipo !== 'visit') {
-          <app-activity-type-chip [tipo]="activity().tipo" />
-        }
+      <div class="flex-1 min-w-0">
         <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
       </div>
       @if (activity().confirmed) {
@@ -51,14 +47,9 @@ export class ActivitySlot {
 
   protected readonly editDialog = viewChild.required(ActivityEditDialog);
 
-  readonly slotIcon = computed((): { icon: string; color: string; title: string } => {
-    const icons: Record<string, { icon: string; color: string; title: string }> = {
-      morning:   { icon: 'pi-sun',      color: '#f59e0b', title: 'Mañana' },
-      afternoon: { icon: 'pi-sun',      color: '#f97316', title: 'Tarde' },
-      evening:   { icon: 'pi-moon',     color: '#6366f1', title: 'Noche' },
-      'all-day': { icon: 'pi-calendar', color: 'var(--p-surface-500)', title: 'Todo el día' },
-    };
-    return icons[this.activity().timeSlot] ?? { icon: 'pi-calendar', color: 'var(--p-surface-500)', title: this.activity().timeSlot };
+  readonly tipoIcon = computed(() => {
+    const cfg = TIPO_CONFIG[this.activity().tipo];
+    return { icon: cfg.icon, color: cfg.text, label: cfg.label };
   });
 
   protected onToggleConfirmed(): void {
