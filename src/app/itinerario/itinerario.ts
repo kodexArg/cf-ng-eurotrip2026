@@ -6,29 +6,22 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { httpResource } from '@angular/common/http';
-import { SelectButton } from 'primeng/selectbutton';
 import { CityBlock as CityBlockModel } from '../shared/models';
 import { VariantService } from '../shared/services/variant.service';
 import { CityBlock } from './city-block/city-block';
 import { TransportInline } from './transport-inline/transport-inline';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
+import { VariantSelector } from './variant-selector/variant-selector';
 
 @Component({
   selector: 'app-itinerario',
-  imports: [FormsModule, SelectButton, CityBlock, TransportInline, LoadingState, ErrorState],
+  imports: [CityBlock, TransportInline, LoadingState, ErrorState, VariantSelector],
   template: `
     <div class="max-w-2xl mx-auto p-4">
       <div class="mb-4 flex justify-center">
-        <p-selectbutton
-          [options]="variantOptions"
-          [(ngModel)]="currentVariant"
-          optionLabel="label"
-          optionValue="value"
-          (onChange)="onVariantChange($event.value)"
-        />
+        <app-variant-selector />
       </div>
 
       @if (itineraryResource.isLoading()) {
@@ -61,13 +54,6 @@ export class ItinerarioPage {
 
   readonly itineraryResource = httpResource<CityBlockModel[]>(() => '/api/itinerary');
 
-  readonly variantOptions = [
-    { label: 'Tren', value: 'train' },
-    { label: 'Vuelo', value: 'main' },
-  ];
-
-  currentVariant: 'main' | 'train' = this.variantService.variant();
-
   readonly filteredBlocks = computed(() => {
     const blocks = this.itineraryResource.value() ?? [];
     const v = this.variantService.variant();
@@ -93,8 +79,4 @@ export class ItinerarioPage {
       }, 100);
     }
   });
-
-  onVariantChange(value: 'main' | 'train'): void {
-    this.variantService.setVariant(value);
-  }
 }

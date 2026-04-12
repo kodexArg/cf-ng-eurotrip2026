@@ -10,4 +10,6 @@ export interface TransportLeg {
   duration: string | null;
   costHint: string | null;
   confirmed: boolean;
+  fare: string | null;
+  company: string | null;
 }

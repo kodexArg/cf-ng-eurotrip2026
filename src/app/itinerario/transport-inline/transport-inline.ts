@@ -11,12 +11,22 @@ import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
       <i [class]="modeIcon()" style="color: var(--p-primary-color); font-size: 1.125rem"></i>
       <div class="flex-1">
         <span class="text-sm font-medium" style="color: var(--p-surface-700)">{{ leg().label }}</span>
-        @if (leg().duration) {
-          <span class="text-xs ml-2" style="color: var(--p-surface-400)">{{ leg().duration }}</span>
+        @if (leg().company || leg().duration) {
+          <div class="text-xs" style="color: var(--p-surface-400)">
+            @if (leg().company) {
+              <span>{{ leg().company }}</span>
+            }
+            @if (leg().company && leg().duration) {
+              <span> • </span>
+            }
+            @if (leg().duration) {
+              <span>{{ leg().duration }}</span>
+            }
+          </div>
         }
       </div>
-      @if (leg().costHint) {
-        <span class="text-xs" style="color: var(--p-surface-500)">{{ leg().costHint }}</span>
+      @if (leg().costHint || leg().fare) {
+        <span class="text-xs" style="color: var(--p-surface-500)">{{ leg().fare || leg().costHint }}</span>
       }
       @if (leg().confirmed) {
         <app-confirmed-badge />
