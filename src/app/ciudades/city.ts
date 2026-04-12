@@ -10,7 +10,7 @@ import type { Card } from '../shared/models';
   selector: 'app-city',
   imports: [CityBadge, CityCardList, LoadingState, ErrorState],
   template: `
-    <div class="max-w-3xl mx-auto p-4 flex flex-col gap-4">
+    <div class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
       <app-city-badge [slug]="slug()" />
       @if (cardsResource.isLoading()) {
         <app-loading-state />
