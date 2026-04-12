@@ -12,7 +12,11 @@ import { ItineraryDay } from '../itinerary-day/itinerary-day';
         <div class="p-4 text-white" [style.background-color]="city().color">
           <h2 class="text-xl font-bold m-0">{{ city().name }}</h2>
           <p class="text-sm m-0" style="opacity: 0.9">
-            {{ city().arrival | date:'d MMM' }} – {{ city().departure | date:'d MMM' }} · {{ city().nights }} noches
+            @if (firstDay() === lastDay()) {
+              {{ firstDay() | date:'d MMM' }} · {{ nightCount() }} noche
+            } @else {
+              {{ firstDay() | date:'d MMM' }} – {{ lastDay() | date:'d MMM' }} · {{ nightCount() }} noches
+            }
           </p>
         </div>
         <div>
@@ -28,4 +32,7 @@ import { ItineraryDay } from '../itinerary-day/itinerary-day';
 export class ItineraryCity {
   readonly city = input.required<City>();
   readonly days = input.required<Day[]>();
+  readonly firstDay = input.required<string>();
+  readonly lastDay = input.required<string>();
+  readonly nightCount = input.required<number>();
 }

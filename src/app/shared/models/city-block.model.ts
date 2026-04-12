@@ -6,4 +6,7 @@ export interface CityBlock {
   city: City;
   days: Day[];
   transportLeg: TransportLeg | null;
+  firstDay: string;
+  lastDay: string;
+  nightCount: number;
 }

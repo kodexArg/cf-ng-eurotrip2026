@@ -53,6 +53,9 @@ interface CityBlock {
   city: City;
   days: Day[];
   transportLeg: TransportLeg | null;
+  firstDay: string;
+  lastDay: string;
+  nightCount: number;
 }
 
 export const onRequest: PagesFunction<Env> = async (ctx) => {
@@ -154,6 +157,9 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
         city,
         days: cluster,
         transportLeg: bestLeg,
+        firstDay: cluster[0].date,
+        lastDay: cluster[cluster.length - 1].date,
+        nightCount: cluster.length,
       });
     }
   }

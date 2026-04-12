@@ -35,7 +35,13 @@ import { ErrorState } from '../shared/error-state/error-state';
           @if (block.transportLeg) {
             <app-transport-inline [leg]="block.transportLeg" />
           }
-          <app-itinerary-city [city]="block.city" [days]="block.days" />
+          <app-itinerary-city
+            [city]="block.city"
+            [days]="block.days"
+            [firstDay]="block.firstDay"
+            [lastDay]="block.lastDay"
+            [nightCount]="block.nightCount"
+          />
         }
       }
     </div>
