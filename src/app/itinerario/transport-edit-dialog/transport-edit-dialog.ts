@@ -6,7 +6,7 @@ import { InputText } from 'primeng/inputtext';
 import { Checkbox } from 'primeng/checkbox';
 import { TransportLeg } from '../../shared/models';
 
-type EditableFields = Pick<TransportLeg, 'label' | 'company' | 'duration' | 'fare' | 'costHint' | 'confirmed'>;
+type EditableFields = Pick<TransportLeg, 'label' | 'company' | 'duration' | 'fare' | 'costHint' | 'confirmed' | 'departureTime' | 'arrivalTime'>;
 
 @Component({
   selector: 'app-transport-edit-dialog',
@@ -27,6 +27,16 @@ type EditableFields = Pick<TransportLeg, 'label' | 'company' | 'duration' | 'far
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Compañía</label>
           <input pInputText [(ngModel)]="draft.company" class="w-full text-sm" />
+        </div>
+        <div class="flex gap-3">
+          <div class="flex flex-col gap-1 flex-1">
+            <label class="text-xs font-medium" style="color: var(--p-surface-600)">Hora salida</label>
+            <input pInputText [(ngModel)]="draft.departureTime" placeholder="06:40" class="w-full text-sm" />
+          </div>
+          <div class="flex flex-col gap-1 flex-1">
+            <label class="text-xs font-medium" style="color: var(--p-surface-600)">Hora llegada</label>
+            <input pInputText [(ngModel)]="draft.arrivalTime" placeholder="09:15" class="w-full text-sm" />
+          </div>
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Duración</label>
@@ -68,6 +78,8 @@ export class TransportEditDialog {
     fare: null,
     costHint: null,
     confirmed: false,
+    departureTime: null,
+    arrivalTime: null,
   };
 
   draft: EditableFields = { ...this.original };
@@ -81,6 +93,8 @@ export class TransportEditDialog {
       fare: leg.fare,
       costHint: leg.costHint,
       confirmed: leg.confirmed,
+      departureTime: leg.departureTime,
+      arrivalTime: leg.arrivalTime,
     };
     this.draft = { ...this.original };
     this.visible = true;

@@ -2,17 +2,31 @@ interface Env {
   DB: D1Database;
 }
 
+const FIELD_MAP: Record<string, string> = {
+  label: 'label',
+  duration: 'duration',
+  cost_hint: 'cost_hint',
+  costHint: 'cost_hint',
+  confirmed: 'confirmed',
+  fare: 'fare',
+  company: 'company',
+  departure_time: 'departure_time',
+  departureTime: 'departure_time',
+  arrival_time: 'arrival_time',
+  arrivalTime: 'arrival_time',
+};
+
 export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
   const id = ctx.params.id as string;
   const body = await ctx.request.json() as Record<string, unknown>;
 
-  const ALLOWED = ['label', 'duration', 'cost_hint', 'confirmed', 'fare', 'company'];
   const sets: string[] = [];
   const vals: unknown[] = [];
 
   for (const [key, val] of Object.entries(body)) {
-    if (ALLOWED.includes(key)) {
-      sets.push(`${key} = ?`);
+    const col = FIELD_MAP[key];
+    if (col) {
+      sets.push(`${col} = ?`);
       vals.push(val);
     }
   }

@@ -12,4 +12,6 @@ export interface TransportLeg {
   confirmed: boolean;
   fare: string | null;
   company: string | null;
+  departureTime: string | null;
+  arrivalTime: string | null;
 }
