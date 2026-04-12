@@ -19,21 +19,10 @@ import { WeatherService } from '../../shared/services/weather.service';
               {{ firstDay() | date:'d MMM' }} – {{ lastDay() | date:'d MMM' }} · {{ nightCount() }} noches
             }
           </p>
-          @if (cityWeather()) {
-            <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2" style="opacity: 0.85">
-              @for (day of filteredForecast(); track day.date) {
-                <span class="text-xs flex items-center gap-1">
-                  {{ wmoEmoji(day.weatherCode) }}
-                  {{ day.date | date:'d MMM' }}
-                  {{ day.tempMin }}°–{{ day.tempMax }}°
-                </span>
-              }
-            </div>
-          }
         </div>
         <div>
           @for (day of days(); track day.id; let last = $last) {
-            <app-itinerary-day [day]="day" [isLast]="last" />
+            <app-itinerary-day [day]="day" [weather]="getWeatherForDay(day.date)" [isLast]="last" />
           }
         </div>
       </div>
@@ -60,15 +49,7 @@ export class ItineraryCity {
     return weather.daily.filter((d) => d.date >= first && d.date <= last);
   });
 
-  wmoEmoji(code: number): string {
-    if (code === 0) return '☀️';
-    if (code <= 3) return '⛅';
-    if (code === 45 || code === 48) return '🌫️';
-    if (code >= 51 && code <= 67) return '🌧️';
-    if (code >= 71 && code <= 77) return '🌨️';
-    if (code >= 80 && code <= 82) return '🌦️';
-    if (code === 85 || code === 86) return '🌨️';
-    if (code === 95 || code === 96 || code === 99) return '⛈️';
-    return '🌡️';
+  getWeatherForDay(date: string): DayWeather | null {
+    return this.filteredForecast()?.find(w => w.date === date) ?? null;
   }
 }

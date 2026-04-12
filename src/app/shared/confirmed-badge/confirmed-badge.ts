@@ -7,9 +7,10 @@ import { Tag } from 'primeng/tag';
   imports: [Tag],
   template: `
     <p-tag
-      value="✓ Confirmado"
+      value="✓"
       severity="success"
-      styleClass="text-xs"
+      [rounded]="true"
+      styleClass="text-xxs"
       [class.cursor-pointer]="editable()"
       (click)="onClick()"
     />
