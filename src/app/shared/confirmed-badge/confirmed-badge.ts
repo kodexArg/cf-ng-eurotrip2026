@@ -1,19 +1,15 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-confirmed-badge',
   standalone: true,
-  imports: [Tag],
   template: `
-    <p-tag
-      value="✓"
-      severity="success"
-      [rounded]="true"
-      styleClass="text-xxs"
+    <i
+      class="pi pi-check text-xs ml-1"
+      style="color: var(--p-green-500)"
       [class.cursor-pointer]="editable()"
       (click)="onClick()"
-    />
+    ></i>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
