@@ -23,6 +23,7 @@ interface Activity {
   tag: string;
   costHint: string | null;
   confirmed: boolean;
+  cardId: string | null;
 }
 
 interface Day {
@@ -67,7 +68,7 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
       'SELECT id, city_id AS cityId, date, label FROM days ORDER BY date ASC, id ASC'
     ).all<Day>(),
     ctx.env.DB.prepare(
-      'SELECT id, day_id AS dayId, time_slot AS timeSlot, description, tipo, tag, cost_hint AS costHint, confirmed FROM activities ORDER BY id ASC'
+      'SELECT id, day_id AS dayId, time_slot AS timeSlot, description, tipo, tag, cost_hint AS costHint, confirmed, card_id AS cardId FROM activities ORDER BY id ASC'
     ).all<Activity>(),
     ctx.env.DB.prepare(
       'SELECT id, from_city AS fromCity, to_city AS toCity, date, mode, label, duration, cost_hint AS costHint, confirmed, fare, company, departure_time AS departureTime, arrival_time AS arrivalTime FROM transport_legs ORDER BY date ASC'

@@ -22,4 +22,5 @@ export interface Activity {
   costHint: string | null;
   confirmed: boolean;
   variant: Variant;
+  cardId: string | null;
 }
