@@ -6,7 +6,7 @@ import { PhotoGrid } from './photo-grid/photo-grid';
 import { Photo } from '../shared/models';
 
 @Component({
-  selector: 'app-fotos',
+  selector: 'app-gallery',
   imports: [PhotoGrid, Message, Skeleton],
   template: `
     <div class="max-w-5xl mx-auto p-4">
@@ -30,6 +30,6 @@ import { Photo } from '../shared/models';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FotosPage {
+export class GalleryPage {
   readonly photosResource = httpResource<Photo[]>(() => '/api/photos');
 }

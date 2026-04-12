@@ -7,7 +7,7 @@ import { PhotoCard } from '../photo-card/photo-card';
 import type { Card } from '../../shared/models';
 
 @Component({
-  selector: 'app-card-list',
+  selector: 'app-city-card-list',
   imports: [Message, InfoCard, LinkCard, NoteCard, PhotoCard],
   template: `
     @if (cards().length === 0) {
@@ -27,6 +27,6 @@ import type { Card } from '../../shared/models';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardList {
+export class CityCardList {
   readonly cards = input.required<Card[]>();
 }

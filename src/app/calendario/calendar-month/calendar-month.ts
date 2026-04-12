@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { ActivityTipo } from '../../shared/models/activity.model';
 import { City } from '../../shared/models';
 import { getDayColorFromCities, getTravelGradientFromCities, toDateStr } from '../calendar-utils';
-import { DayCell } from '../day-cell/day-cell';
+import { CalendarDay } from '../calendar-day/calendar-day';
 
 type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean };
 
@@ -17,8 +17,8 @@ type CellData = {
 };
 
 @Component({
-  selector: 'app-month-panel',
-  imports: [DayCell],
+  selector: 'app-calendar-month',
+  imports: [CalendarDay],
   template: `
     <div>
       <h2 class="text-lg font-semibold text-center mb-3 capitalize">{{ monthName() }} {{ year() }}</h2>
@@ -29,7 +29,7 @@ type CellData = {
       </div>
       <div class="grid grid-cols-7 auto-rows-[5rem] gap-1">
         @for (cell of cells(); track cell.key) {
-          <app-day-cell
+          <app-calendar-day
             [dateStr]="cell.dateStr"
             [dayNumber]="cell.day ?? 0"
             [events]="cell.events"
@@ -43,7 +43,7 @@ type CellData = {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MonthPanel {
+export class CalendarMonth {
   readonly month      = input.required<number>();
   readonly year       = input.required<number>();
   readonly activities = input<Array<{ date: string } & CalEvent>>([]);

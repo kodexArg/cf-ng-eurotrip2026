@@ -2,16 +2,16 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { Tag } from 'primeng/tag';
 import { Activity } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
-import { TipoChip } from '../tipo-chip/tipo-chip';
+import { ActivityTypeChip } from '../activity-type-chip/activity-type-chip';
 
 @Component({
   selector: 'app-activity-slot',
-  imports: [Tag, ConfirmedBadge, TipoChip],
+  imports: [Tag, ConfirmedBadge, ActivityTypeChip],
   template: `
     <div class="flex items-start gap-2 py-1">
       <p-tag [value]="slotLabel()" severity="secondary" styleClass="text-xs min-w-16" />
       <div class="flex-1 flex items-start gap-1.5">
-        <app-tipo-chip [tipo]="activity().tipo" />
+        <app-activity-type-chip [tipo]="activity().tipo" />
         <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
         @if (activity().costHint) {
           <span class="text-xs ml-1" style="color: var(--p-surface-400)">{{ activity().costHint }}</span>

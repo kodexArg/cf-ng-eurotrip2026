@@ -6,7 +6,7 @@ import { EventChip } from '../event-chip/event-chip';
 type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean };
 
 @Component({
-  selector: 'app-day-cell',
+  selector: 'app-calendar-day',
   imports: [EventChip, RouterLink],
   template: `
     @if (inactive()) {
@@ -29,7 +29,7 @@ type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirme
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DayCell {
+export class CalendarDay {
   readonly dateStr   = input<string>('');
   readonly dayNumber = input<number>(0);
   readonly events    = input<CalEvent[]>([]);

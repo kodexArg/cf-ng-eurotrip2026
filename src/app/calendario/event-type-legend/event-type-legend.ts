@@ -3,7 +3,7 @@ import { Card } from 'primeng/card';
 import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
 
 @Component({
-  selector: 'app-tipo-legend',
+  selector: 'app-event-type-legend',
   imports: [Card],
   template: `
     <p-card>
@@ -19,6 +19,6 @@ import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TipoLegend {
+export class EventTypeLegend {
   readonly tipos = Object.entries(TIPO_CONFIG) as [ActivityTipo, (typeof TIPO_CONFIG)[ActivityTipo]][];
 }

@@ -5,7 +5,7 @@ import { Day } from '../../shared/models';
 import { ActivitySlot } from '../activity-slot/activity-slot';
 
 @Component({
-  selector: 'app-day-block',
+  selector: 'app-itinerary-day',
   imports: [DatePipe, TitleCasePipe, Tag, ActivitySlot],
   template: `
     <div class="p-3" [id]="'day-' + day().date">
@@ -21,9 +21,13 @@ import { ActivitySlot } from '../activity-slot/activity-slot';
         <app-activity-slot [activity]="activity" />
       }
     </div>
+    @if (!isLast()) {
+      <div class="mt-3 h-px" style="background: linear-gradient(to right, transparent, var(--p-surface-200), transparent)"></div>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DayBlock {
+export class ItineraryDay {
   readonly day = input.required<Day>();
+  readonly isLast = input(false);
 }

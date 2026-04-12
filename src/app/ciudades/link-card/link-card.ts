@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Card } from 'primeng/card';
-import { Button } from 'primeng/button';
+import { ExternalLink } from '../../shared/external-link/external-link';
 import type { Card as CardModel } from '../../shared/models';
 
 @Component({
   selector: 'app-link-card',
-  imports: [Card, Button],
+  imports: [Card, ExternalLink],
   template: `
     <p-card [header]="card().title">
       @if (card().body) {
@@ -13,15 +13,7 @@ import type { Card as CardModel } from '../../shared/models';
       }
       @if (card().url) {
         <div class="mt-3">
-          <a [href]="card().url" target="_blank" rel="noopener noreferrer">
-            <p-button
-              label="Abrir enlace"
-              icon="pi pi-external-link"
-              severity="primary"
-              [outlined]="true"
-              size="small"
-            />
-          </a>
+          <app-external-link [url]="card().url!" label="Abrir enlace" severity="primary" />
         </div>
       }
     </p-card>

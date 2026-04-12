@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
 
 @Component({
-  selector: 'app-tipo-chip',
+  selector: 'app-activity-type-chip',
   imports: [],
   template: `
     <span
@@ -12,7 +12,7 @@ import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TipoChip {
+export class ActivityTypeChip {
   readonly tipo = input.required<ActivityTipo>();
 
   readonly label = computed(() => TIPO_CONFIG[this.tipo()].label);

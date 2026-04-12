@@ -9,15 +9,15 @@ import {
 import { httpResource } from '@angular/common/http';
 import { CityBlock as CityBlockModel } from '../shared/models';
 import { VariantService } from '../shared/services/variant.service';
-import { CityBlock } from './city-block/city-block';
+import { ItineraryCity } from './itinerary-city/itinerary-city';
 import { TransportInline } from './transport-inline/transport-inline';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { VariantSelector } from './variant-selector/variant-selector';
 
 @Component({
-  selector: 'app-itinerario',
-  imports: [CityBlock, TransportInline, LoadingState, ErrorState, VariantSelector],
+  selector: 'app-itinerary',
+  imports: [ItineraryCity, TransportInline, LoadingState, ErrorState, VariantSelector],
   template: `
     <div class="max-w-2xl mx-auto p-4">
       <div class="mb-4 flex justify-center">
@@ -40,14 +40,14 @@ import { VariantSelector } from './variant-selector/variant-selector';
           @if (block.transportLeg) {
             <app-transport-inline [leg]="block.transportLeg" />
           }
-          <app-city-block [city]="block.city" [days]="block.days" />
+          <app-itinerary-city [city]="block.city" [days]="block.days" />
         }
       }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItinerarioPage {
+export class ItineraryPage {
   private readonly variantService = inject(VariantService);
 
   readonly date = input<string>();

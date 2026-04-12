@@ -21,8 +21,8 @@ export class VariantSelector {
   private readonly variantService = inject(VariantService);
 
   readonly variantOptions = [
-    { label: 'Tren', value: 'train' },
-    { label: 'Vuelo', value: 'main' },
+    { label: '🚂 BCN → PAR en tren', value: 'train' },
+    { label: '✈️ BCN → PAR en avión', value: 'main' },
   ];
 
   currentVariant: 'main' | 'train' = this.variantService.variant();

@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { City, Day } from '../../shared/models';
-import { DayBlock } from '../day-block/day-block';
+import { ItineraryDay } from '../itinerary-day/itinerary-day';
 
 @Component({
-  selector: 'app-city-block',
-  imports: [DatePipe, DayBlock],
+  selector: 'app-itinerary-city',
+  imports: [DatePipe, ItineraryDay],
   template: `
     <div class="mb-6">
       <div class="rounded-lg overflow-hidden border border-surface-200">
@@ -15,9 +15,9 @@ import { DayBlock } from '../day-block/day-block';
             {{ city().arrival | date:'d MMM' }} – {{ city().departure | date:'d MMM' }} · {{ city().nights }} noches
           </p>
         </div>
-        <div class="divide-y divide-surface-100">
-          @for (day of days(); track day.id) {
-            <app-day-block [day]="day" />
+        <div>
+          @for (day of days(); track day.id; let last = $last) {
+            <app-itinerary-day [day]="day" [isLast]="last" />
           }
         </div>
       </div>
@@ -25,7 +25,7 @@ import { DayBlock } from '../day-block/day-block';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CityBlock {
+export class ItineraryCity {
   readonly city = input.required<City>();
   readonly days = input.required<Day[]>();
 }

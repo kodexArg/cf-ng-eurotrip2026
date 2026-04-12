@@ -5,7 +5,7 @@ import { MapLegend } from './map-legend/map-legend';
 import type { City, MapPoi, MapRoute } from '../shared/models';
 
 @Component({
-  selector: 'app-mapa',
+  selector: 'app-map',
   imports: [MapContainer, MapLegend],
   template: `
     <div class="relative" style="height: calc(100vh - 60px)">
@@ -22,7 +22,7 @@ import type { City, MapPoi, MapRoute } from '../shared/models';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapaPage {
+export class MapPage {
   readonly citiesResource = httpResource<City[]>(() => '/api/cities');
   readonly poisResource   = httpResource<MapPoi[]>(() => '/api/map/pois');
   readonly routesResource = httpResource<MapRoute[]>(() => '/api/map/routes');

@@ -8,44 +8,44 @@ export const routes: Routes = [
   },
   {
     path: 'mapa',
-    loadComponent: () => import('./mapa/mapa').then((m) => m.MapaPage),
+    loadComponent: () => import('./mapa/map').then((m) => m.MapPage),
   },
   {
     path: 'calendario',
-    loadComponent: () => import('./calendario/calendario').then((m) => m.CalendarioPage),
+    loadComponent: () => import('./calendario/calendar').then((m) => m.CalendarPage),
   },
   {
     path: 'itinerario',
-    loadComponent: () => import('./itinerario/itinerario').then((m) => m.ItinerarioPage),
+    loadComponent: () => import('./itinerario/itinerary').then((m) => m.ItineraryPage),
   },
   {
     path: 'madrid',
     data: { slug: 'madrid' },
-    loadComponent: () => import('./ciudades/ciudad').then((m) => m.CiudadPage),
+    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {
     path: 'barcelona',
     data: { slug: 'barcelona' },
-    loadComponent: () => import('./ciudades/ciudad').then((m) => m.CiudadPage),
+    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {
     path: 'paris',
     data: { slug: 'paris' },
-    loadComponent: () => import('./ciudades/ciudad').then((m) => m.CiudadPage),
+    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {
     path: 'venecia',
     data: { slug: 'venecia' },
-    loadComponent: () => import('./ciudades/ciudad').then((m) => m.CiudadPage),
+    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {
     path: 'roma',
     data: { slug: 'roma' },
-    loadComponent: () => import('./ciudades/ciudad').then((m) => m.CiudadPage),
+    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
   },
   {
     path: 'fotos',
-    loadComponent: () => import('./fotos/fotos').then((m) => m.FotosPage),
+    loadComponent: () => import('./fotos/gallery').then((m) => m.GalleryPage),
   },
   {
     path: '**',
