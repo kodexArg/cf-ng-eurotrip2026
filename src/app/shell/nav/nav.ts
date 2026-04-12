@@ -11,9 +11,11 @@ import { MenuItem } from 'primeng/api';
     <nav class="hidden md:block">
       <div class="flex items-center">
         <p-menubar [model]="menuItems" styleClass="flex-1" />
+        <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
         <a routerLink="/admin" routerLinkActive="text-primary" class="no-underline">
           <p-button icon="pi pi-cog" [text]="true" size="small" />
         </a>
+        -->
       </div>
     </nav>
 
@@ -36,9 +38,11 @@ import { MenuItem } from 'primeng/api';
       <a routerLink="/reservas" routerLinkActive="text-primary">
         <p-button icon="pi pi-wallet" label="Reservas" [text]="true" size="small" />
       </a>
+      <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
       <a routerLink="/admin" routerLinkActive="text-primary">
         <p-button icon="pi pi-cog" [text]="true" size="small" />
       </a>
+      -->
     </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
