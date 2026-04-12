@@ -11,6 +11,8 @@ const mockActivity: Activity = {
   id: 'act-1',
   dayId: 'day-1',
   timeSlot: 'morning',
+  tipo: 'visit',
+  tag: '',
   description: 'Visitar el Museo del Prado',
   costHint: '~15 pp',
   confirmed: false,
@@ -38,12 +40,14 @@ describe('ActivitySlot', () => {
     expect(fixture.nativeElement.textContent).toContain('Visitar el Museo del Prado');
   });
 
-  it('shows "Mañana" for morning slot', async () => {
+  it('shows tipo icon title for visit activity', async () => {
     const fixture = TestBed.createComponent(ActivitySlot);
-    fixture.componentRef.setInput('activity', { ...mockActivity, timeSlot: 'morning' });
+    fixture.componentRef.setInput('activity', { ...mockActivity, tipo: 'visit' });
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(fixture.nativeElement.textContent).toContain('Mañana');
+    const icon = fixture.nativeElement.querySelector('i[title]');
+    expect(icon).toBeTruthy();
+    expect(icon.getAttribute('title')).toBe('Visita');
   });
 
   it('shows confirmed badge when confirmed=true', async () => {
