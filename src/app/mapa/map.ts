@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { MapContainer } from './map-container/map-container';
 import { MapLegend } from './map-legend/map-legend';
-import type { City, MapPoi, MapRoute } from '../shared/models';
+import type { City, MapPoi, TripEventBase } from '../shared/models';
 
 @Component({
   selector: 'app-map',
@@ -12,7 +12,7 @@ import type { City, MapPoi, MapRoute } from '../shared/models';
       <app-map-container
         [cities]="citiesResource.value() ?? []"
         [pois]="poisResource.value() ?? []"
-        [routes]="routesResource.value() ?? []"
+        [events]="eventsResource.value() ?? []"
       />
       <app-map-legend
         class="absolute bottom-4 left-4 z-[1000]"
@@ -25,5 +25,5 @@ import type { City, MapPoi, MapRoute } from '../shared/models';
 export class MapPage {
   readonly citiesResource = httpResource<City[]>(() => '/api/cities');
   readonly poisResource   = httpResource<MapPoi[]>(() => '/api/map/pois');
-  readonly routesResource = httpResource<MapRoute[]>(() => '/api/map/routes');
+  readonly eventsResource = httpResource<TripEventBase[]>(() => '/api/map/events');
 }

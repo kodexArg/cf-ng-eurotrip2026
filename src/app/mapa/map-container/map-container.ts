@@ -1,9 +1,9 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import * as LeafletNs from 'leaflet';
-import type { City, MapPoi, MapRoute } from '../../shared/models';
+import type { City, MapPoi, TripEventBase } from '../../shared/models';
 import { createPoiMarker } from '../map-utils/marker-factory';
-import { renderRoutes } from '../map-utils/route-renderer';
+import { renderEventsOnMap } from '../map-utils/route-renderer';
 
 // Leaflet ships as UMD/CJS; esbuild may wrap it as { default: L } or spread it.
 // Unwrap once here so the rest of the file gets the real Leaflet namespace.
@@ -18,14 +18,14 @@ const L = ((LeafletNs as any).default ?? LeafletNs) as typeof LeafletNs;
 export class MapContainer {
   readonly cities = input<City[]>([]);
   readonly pois   = input<MapPoi[]>([]);
-  readonly routes = input<MapRoute[]>([]);
+  readonly events = input<TripEventBase[]>([]);
 
   private readonly router = inject(Router);
   private readonly mapReady = signal(false);
 
   private map: LeafletNs.Map | null = null;
   private poisLayer:   LeafletNs.LayerGroup | null = null;
-  private routesLayer: LeafletNs.LayerGroup | null = null;
+  private eventsLayer: LeafletNs.LayerGroup | null = null;
 
   private readonly _initMap = afterNextRender(() => {
     this.initMap();
@@ -40,10 +40,10 @@ export class MapContainer {
     }
   });
 
-  private readonly _renderRoutes = effect(() => {
-    const routes = this.routes();
-    if (this.mapReady() && routes.length > 0) {
-      this.renderRoutesLayer(routes);
+  private readonly _renderEvents = effect(() => {
+    const events = this.events();
+    if (this.mapReady() && events.length > 0) {
+      this.renderEventsLayer(events);
     }
   });
 
@@ -65,7 +65,7 @@ export class MapContainer {
     L.control.zoom({ position: 'topright' }).addTo(map);
 
     this.poisLayer   = L.layerGroup().addTo(map);
-    this.routesLayer = L.layerGroup().addTo(map);
+    this.eventsLayer = L.layerGroup().addTo(map);
 
     map.fitBounds([[39.9, -4.2], [48.9, 12.6]], { padding: [48, 48] });
   }
@@ -81,10 +81,10 @@ export class MapContainer {
     });
   }
 
-  private renderRoutesLayer(routes: MapRoute[]): void {
-    if (!this.map || !this.routesLayer) return;
-    this.routesLayer.clearLayers();
-    renderRoutes(L, this.map, routes).getLayers()
-      .forEach((layer) => this.routesLayer!.addLayer(layer));
+  private renderEventsLayer(events: TripEventBase[]): void {
+    if (!this.map || !this.eventsLayer) return;
+    this.eventsLayer.clearLayers();
+    renderEventsOnMap(L, this.map, events).getLayers()
+      .forEach((layer) => this.eventsLayer!.addLayer(layer));
   }
 }

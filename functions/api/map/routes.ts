@@ -12,7 +12,7 @@ interface RouteRow {
 
 export const onRequest: PagesFunction<Env> = async (ctx) => {
   const { results } = await ctx.env.DB.prepare(
-    'SELECT sku, from_poi AS fromPoi, to_poi AS toPoi, mode, waypoints FROM map_routes ORDER BY sku'
+    'SELECT sku, from_poi AS fromPoi, to_poi AS toPoi, mode, waypoints FROM _legacy_map_routes ORDER BY sku'
   ).all<RouteRow>();
 
   const parsed = results.map((r) => ({
