@@ -21,7 +21,29 @@ export const onRequestGet: PagesFunction<Env> = async (ctx) => {
     .bind(cityRow.id)
     .all();
 
-  return Response.json(results);
+  if (!results.length) return Response.json([]);
+
+  const cardIds = results.map((c) => (c as { id: string }).id);
+  const placeholders = cardIds.map(() => '?').join(', ');
+  const { results: linkRows } = await ctx.env.DB.prepare(
+    `SELECT id, card_id AS cardId, url, label, tooltip, sort_order AS sortOrder FROM card_links WHERE card_id IN (${placeholders}) ORDER BY sort_order ASC`
+  )
+    .bind(...cardIds)
+    .all();
+
+  const linksByCardId = new Map<string, unknown[]>();
+  for (const link of linkRows) {
+    const cid = (link as { cardId: string }).cardId;
+    if (!linksByCardId.has(cid)) linksByCardId.set(cid, []);
+    linksByCardId.get(cid)!.push(link);
+  }
+
+  const cards = results.map((card) => {
+    const id = (card as { id: string }).id;
+    return { ...card, links: linksByCardId.get(id) ?? [] };
+  });
+
+  return Response.json(cards);
 };
 
 export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
