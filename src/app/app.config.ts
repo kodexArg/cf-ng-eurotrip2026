@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, APP_INITIALIZER, provideBrowserGlobalErrorListeners } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -10,6 +10,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
+import { AuthService } from './shared/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,5 +31,11 @@ export const appConfig: ApplicationConfig = {
         options: { darkModeSelector: false },
       },
     }),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (auth: AuthService) => () => auth.checkAuth(),
+      deps: [AuthService],
+      multi: true,
+    },
   ],
 };
