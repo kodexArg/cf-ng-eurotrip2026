@@ -25,3 +25,15 @@ UPDATE transport_legs SET
   arrival_time   = '16:25',
   label          = 'IB0105 MAD → EZE TIA'
 WHERE id = 'leg-mad-eze';
+
+UPDATE transport_legs SET
+  departure_time = '06:28',
+  arrival_time   = '~17:40',
+  label          = 'Frecciarossa Paris → Milan → Florencia'
+WHERE id = 'leg-par-fir';
+
+UPDATE transport_legs SET
+  departure_time = '~09:00',
+  arrival_time   = '10:35',
+  label          = 'Frecciarossa Florencia SMN → Roma Termini'
+WHERE id = 'leg-fir-rom';
