@@ -27,7 +27,7 @@ type CellData = {
           <div class="text-center text-xs font-medium text-surface-400 py-1">{{ d }}</div>
         }
       </div>
-      <div class="grid grid-cols-7 gap-1">
+      <div class="grid grid-cols-7 auto-rows-[5rem] gap-1">
         @for (cell of cells(); track cell.key) {
           <app-day-cell
             [dateStr]="cell.dateStr"

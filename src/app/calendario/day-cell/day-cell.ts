@@ -10,12 +10,12 @@ type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirme
   imports: [EventChip, RouterLink],
   template: `
     @if (inactive()) {
-      <div class="rounded-md min-h-20 opacity-20" style="background-color: var(--p-surface-200)"></div>
+      <div class="rounded-md h-full opacity-20" style="background-color: var(--p-surface-200)"></div>
     } @else {
       <a
         [routerLink]="['/itinerario']"
         [queryParams]="{ date: dateStr() }"
-        class="block rounded-md min-h-20 p-1 cursor-pointer hover:opacity-90 transition-opacity no-underline overflow-hidden"
+        class="block rounded-md h-full p-1 cursor-pointer hover:opacity-90 transition-opacity no-underline overflow-hidden"
         [style]="cellStyle()"
       >
         <span class="text-xs font-semibold block" [class]="dayNumberClass()">{{ dayNumber() }}</span>

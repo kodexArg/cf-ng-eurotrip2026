@@ -1,12 +1,12 @@
 export type ActivityTipo = 'visit' | 'food' | 'transport' | 'hotel' | 'leisure' | 'event';
 
 export const TIPO_CONFIG: Record<ActivityTipo, { bg: string; text: string; label: string }> = {
-  visit:     { bg: '#3b82f6', text: '#ffffff', label: 'Visita' },
-  food:      { bg: '#f59e0b', text: '#1c1917', label: 'Comida' },
-  transport: { bg: '#6b7280', text: '#ffffff', label: 'Transporte' },
-  hotel:     { bg: '#8b5cf6', text: '#ffffff', label: 'Alojamiento' },
-  leisure:   { bg: '#10b981', text: '#ffffff', label: 'Ocio' },
-  event:     { bg: '#ef4444', text: '#ffffff', label: 'Evento' },
+  event:     { bg: 'rgba(255,255,255,0.25)',  text: '#dc2626', label: 'Evento' },
+  hotel:     { bg: 'rgba(255,255,255,0.25)',  text: '#7c3aed', label: 'Alojamiento' },
+  transport: { bg: 'rgba(241,245,249,0.25)',  text: '#475569', label: 'Transporte' },
+  visit:     { bg: 'rgba(239,246,255,0.25)',  text: '#1d4ed8', label: 'Visita' },
+  food:      { bg: 'rgba(254,243,199,0.25)',  text: '#92400e', label: 'Comida' },
+  leisure:   { bg: 'rgba(240,253,244,0.25)',  text: '#065f46', label: 'Ocio' },
 };
 
 export type TimeSlot = 'morning' | 'afternoon' | 'evening' | 'all-day';
