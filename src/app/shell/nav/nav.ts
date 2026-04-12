@@ -13,6 +13,11 @@ import { LoginDialog } from '../../shared/login-dialog/login-dialog';
     <nav class="hidden md:block">
       <div class="flex items-center">
         <p-menubar [model]="menuItems" styleClass="flex-1" />
+        @if (auth.isOwner()) {
+          <a routerLink="/admin" routerLinkActive="text-primary" class="no-underline">
+            <p-button icon="pi pi-cog" [text]="true" size="small" />
+          </a>
+        }
         @if (auth.isAuthenticated()) {
           <p-button
             [label]="auth.userName() ?? ''"
@@ -51,6 +56,11 @@ import { LoginDialog } from '../../shared/login-dialog/login-dialog';
       <a routerLink="/reservas" routerLinkActive="text-primary">
         <p-button icon="pi pi-wallet" label="Reservas" [text]="true" size="small" />
       </a>
+      @if (auth.isOwner()) {
+        <a routerLink="/admin" routerLinkActive="text-primary">
+          <p-button icon="pi pi-cog" [text]="true" size="small" />
+        </a>
+      }
       @if (auth.isAuthenticated()) {
         <p-button icon="pi pi-lock-open" [text]="true" size="small" (onClick)="auth.logout()" />
       } @else {

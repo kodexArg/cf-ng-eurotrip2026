@@ -52,6 +52,10 @@ export const routes: Routes = [
     loadComponent: () => import('./reservas/reservas').then((m) => m.ReservasPage),
   },
   {
+    path: 'admin',
+    loadComponent: () => import('./admin/admin').then((m) => m.AdminPage),
+  },
+  {
     path: '**',
     loadComponent: () => import('./not-found/not-found').then((m) => m.NotFound),
   },

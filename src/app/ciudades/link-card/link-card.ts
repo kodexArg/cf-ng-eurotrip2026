@@ -14,7 +14,7 @@ import { EditService } from '../../shared/services/edit.service';
   template: `
     <p-card>
       <ng-template #header>
-        @if (auth.isAuthenticated()) {
+        @if (auth.isOwner()) {
           <p-inplace (onDeactivate)="saveTitle()">
             <ng-template #display>
               <span class="font-bold">{{ editTitle }}</span>
@@ -32,7 +32,7 @@ import { EditService } from '../../shared/services/edit.service';
       }
       @if (card().url) {
         <div class="mt-3">
-          @if (auth.isAuthenticated()) {
+          @if (auth.isOwner()) {
             <p-inplace (onDeactivate)="saveUrl()">
               <ng-template #display>
                 <app-external-link [url]="editUrl || card().url!" label="Abrir enlace" severity="primary" />
