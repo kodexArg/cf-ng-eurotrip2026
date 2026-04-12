@@ -6,7 +6,7 @@ import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Tag } from 'primeng/tag';
-import { AdminService } from './admin.service';
+import { AdminService, AccessRequest, Session } from './admin.service';
 import { AuthService } from '../shared/services/auth.service';
 
 @Component({
@@ -20,7 +20,6 @@ import { AuthService } from '../shared/services/auth.service';
       @if (!auth.isOwner()) {
         <p class="text-center py-8" style="color: var(--p-surface-500)">Acceso restringido al propietario.</p>
       } @else {
-        <!-- Generar invitación -->
         <p-card styleClass="mb-4">
           <ng-template #header>
             <div class="px-4 pt-4">
@@ -67,7 +66,6 @@ import { AuthService } from '../shared/services/auth.service';
           </div>
         </p-card>
 
-        <!-- Access Requests -->
         <p-card styleClass="mb-4">
           <ng-template #header>
             <div class="flex items-center justify-between px-4 pt-4">
@@ -122,7 +120,6 @@ import { AuthService } from '../shared/services/auth.service';
           }
         </p-card>
 
-        <!-- Active Sessions -->
         <p-card>
           <ng-template #header>
             <div class="flex items-center justify-between px-4 pt-4">
@@ -173,7 +170,6 @@ import { AuthService } from '../shared/services/auth.service';
           }
         </p-card>
 
-        <!-- Magic Link Dialog -->
         <p-dialog
           header="Magic Link Generated"
           [(visible)]="showLinkDialog"
@@ -205,12 +201,12 @@ import { AuthService } from '../shared/services/auth.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminPage implements OnInit {
+export class AdminPage {
   readonly auth = inject(AuthService);
   private readonly adminService = inject(AdminService);
 
-  readonly requests = signal<any[]>([]);
-  readonly sessions = signal<any[]>([]);
+  readonly requests = signal<AccessRequest[]>([]);
+  readonly sessions = signal<Session[]>([]);
   readonly loadingRequests = signal(false);
   readonly loadingSessions = signal(false);
   readonly generatedLink = signal('');
@@ -222,7 +218,7 @@ export class AdminPage implements OnInit {
   inviteName = '';
   inviteEmail = '';
 
-  ngOnInit(): void {
+  constructor() {
     if (this.auth.isOwner()) {
       this.loadRequests();
       this.loadSessions();
@@ -253,7 +249,7 @@ export class AdminPage implements OnInit {
     }
   }
 
-  async approveRequest(req: any): Promise<void> {
+  async approveRequest(req: AccessRequest): Promise<void> {
     try {
       const res = await this.adminService.approve(req.id);
       if (res.success && res.magic_link) {
@@ -263,25 +259,22 @@ export class AdminPage implements OnInit {
       }
       await this.loadRequests();
     } catch {
-      // silently handle
     }
   }
 
-  async rejectRequest(req: any): Promise<void> {
+  async rejectRequest(req: AccessRequest): Promise<void> {
     try {
       await this.adminService.reject(req.id);
       await this.loadRequests();
     } catch {
-      // silently handle
     }
   }
 
-  async revokeSession(session: any): Promise<void> {
+  async revokeSession(session: Session): Promise<void> {
     try {
       await this.adminService.revokeSession(session.id);
       await this.loadSessions();
     } catch {
-      // silently handle
     }
   }
 
