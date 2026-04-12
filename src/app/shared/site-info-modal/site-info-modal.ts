@@ -37,8 +37,13 @@ interface LinkedEntry {
 
         @if (filterActivityId()) {
           @if (filteredEntry(); as entry) {
-            <div class="px-4 py-2">
-              <app-activity-slot [activity]="entry.activity" />
+            <div class="px-4 py-3">
+              <div
+                class="rounded-lg border border-surface-200 p-3"
+                style="background-color: var(--p-surface-50)"
+              >
+                <app-activity-slot [activity]="entry.activity" [hideInfoButton]="true" />
+              </div>
             </div>
             <div class="px-4 pb-4">
               <div
@@ -58,9 +63,16 @@ interface LinkedEntry {
             </div>
           }
         } @else if (day(); as d) {
-          <app-itinerary-day [day]="d" [isLast]="true" [showUnconfirmed]="true" />
+          <div class="px-4 pt-3">
+            <div
+              class="rounded-lg border border-surface-200 p-3"
+              style="background-color: var(--p-surface-50)"
+            >
+              <app-itinerary-day [day]="d" [isLast]="true" [showUnconfirmed]="true" />
+            </div>
+          </div>
           @if (linkedEntries().length) {
-            <div class="flex flex-col gap-3 px-4 pb-4 pt-2">
+            <div class="flex flex-col gap-3 px-4 pb-4 pt-3">
               @for (entry of linkedEntries(); track entry.activity.id) {
                 <div
                   class="rounded-lg p-3"

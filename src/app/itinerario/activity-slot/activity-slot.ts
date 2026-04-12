@@ -23,7 +23,7 @@ import { InfoRow } from '../info-row/info-row';
           (toggle)="onToggleConfirmed()"
         />
       }
-      @if (activity().cardId) {
+      @if (activity().cardId && !hideInfoButton()) {
         <button
           type="button"
           class="pi pi-lightbulb text-xs opacity-60 hover:opacity-100 transition-opacity ml-1 bg-transparent border-none cursor-pointer"
@@ -48,6 +48,7 @@ import { InfoRow } from '../info-row/info-row';
 })
 export class ActivitySlot {
   readonly activity = input.required<Activity>();
+  readonly hideInfoButton = input(false);
   readonly updated = output<void>();
   readonly openInfo = output<void>();
 
