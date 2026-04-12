@@ -4,21 +4,19 @@ import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { ActivityEditDialog } from '../activity-edit-dialog/activity-edit-dialog';
 import { AuthService } from '../../shared/services/auth.service';
 import { EditService } from '../../shared/services/edit.service';
+import { InfoRow } from '../info-row/info-row';
 
 @Component({
   selector: 'app-activity-slot',
   standalone: true,
-  imports: [ConfirmedBadge, ActivityEditDialog],
+  imports: [ConfirmedBadge, ActivityEditDialog, InfoRow],
   template: `
-    <div class="flex items-start gap-2 py-1" [class.opacity-60]="!activity().confirmed">
-      <i
-        class="pi {{ tipoIcon().icon }} text-sm mt-0.5 shrink-0"
-        [style.color]="tipoIcon().color"
-        [title]="tipoIcon().label"
-      ></i>
-      <div class="flex-1 min-w-0">
-        <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
-      </div>
+    <app-info-row
+      [icon]="tipoIcon().icon"
+      [iconColor]="tipoIcon().color"
+      [text]="activity().description"
+      [class.opacity-60]="!activity().confirmed"
+    >
       @if (activity().confirmed) {
         <app-confirmed-badge
           [editable]="auth.isAuthenticated()"
@@ -28,12 +26,13 @@ import { EditService } from '../../shared/services/edit.service';
       @if (auth.isAuthenticated()) {
         <button
           type="button"
-          class="pi pi-pencil text-xs opacity-40 hover:opacity-100 transition-opacity ml-1 mt-0.5 bg-transparent border-none cursor-pointer"
+          class="pi pi-pencil text-xs opacity-40 hover:opacity-100 transition-opacity ml-1 bg-transparent border-none cursor-pointer"
+          style="height: 1.25rem"
           (click)="editDialog().open(activity())"
           title="Editar actividad"
         ></button>
       }
-    </div>
+    </app-info-row>
     <app-activity-edit-dialog (saved)="onSaved($event)" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

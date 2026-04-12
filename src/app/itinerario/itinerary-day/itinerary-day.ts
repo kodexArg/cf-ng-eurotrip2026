@@ -2,10 +2,26 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { Day, DayWeather } from '../../shared/models';
 import { ActivitySlot } from '../activity-slot/activity-slot';
+import { InfoRow } from '../info-row/info-row';
+
+interface SpecialEvent {
+  text: string;
+  icon: string;
+}
+
+const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
+  '04-30': { text: 'Víspera de Mayo', icon: 'pi-sparkles' },
+  '05-01': { text: 'Día del Trabajo', icon: 'pi-users' },
+  '05-05': { text: 'Día de la Victoria en Europa', icon: 'pi-flag' },
+  '05-09': { text: 'Día de Europa', icon: 'pi-globe' },
+  '05-11': { text: 'Día de la Madre (España)', icon: 'pi-heart' },
+  '06-05': { text: 'Día del Medio Ambiente', icon: 'pi-leaf' },
+  '06-06': { text: 'Aniversario del Día D', icon: 'pi-star' },
+};
 
 @Component({
   selector: 'app-itinerary-day',
-  imports: [DatePipe, TitleCasePipe, ActivitySlot],
+  imports: [DatePipe, TitleCasePipe, ActivitySlot, InfoRow],
   template: `
     <div class="flex" [id]="'day-' + day().date">
       <div class="w-16 shrink-0 flex flex-col items-center justify-center py-3"
@@ -18,11 +34,7 @@ import { ActivitySlot } from '../activity-slot/activity-slot';
         </span>
       </div>
 
-      <div class="flex-1 flex flex-col py-2 px-3 min-w-0 relative overflow-hidden">
-        @if (weather()) {
-          <i [class]="'pi ' + weatherIcon() + ' absolute'"
-             style="font-size: 3rem; opacity: 0.06; color: var(--p-surface-900); right: 0.5rem; top: 50%; transform: translateY(-50%)"></i>
-        }
+      <div class="flex-1 flex flex-col py-2 px-3 min-w-0">
         @if (day().label) {
           <div class="flex items-center gap-1 mb-1">
             <i [class]="'pi ' + dayLabelIcon().icon + ' text-xs'"
@@ -31,6 +43,21 @@ import { ActivitySlot } from '../activity-slot/activity-slot';
           </div>
         }
         <div class="flex flex-col gap-1 flex-1">
+          <!-- primera entrada: siempre el clima -->
+          <app-info-row
+            [icon]="weatherIcon()"
+            [iconColor]="weatherIconColor()"
+            [text]="weatherText()"
+            [textColor]="weatherTextColor()"
+          />
+          @if (specialEvent()) {
+            <app-info-row
+              [icon]="specialEvent()!.icon"
+              iconColor="var(--p-surface-400)"
+              [text]="specialEvent()!.text"
+              textColor="var(--p-surface-400)"
+            />
+          }
           @for (activity of displayActivities(); track activity.id) {
             <app-activity-slot [activity]="activity" />
           }
@@ -54,10 +81,34 @@ export class ItineraryDay {
 
   protected readonly weatherIcon = computed(() => {
     const code = this.weather()?.weatherCode ?? -1;
-    if (code === 0) return 'pi-sun';
-    if (code <= 3) return 'pi-cloud';
+    if (code < 0) return 'pi-cloud';
+    if (code === 0 || code === 1) return 'pi-sun';
+    if (code === 2 || code === 3) return 'pi-cloud';
+    if (code >= 45 && code <= 48) return 'pi-eye-slash';
+    if (code >= 51 && code <= 67) return 'pi-cloud-rain';
+    if (code >= 71 && code <= 77) return 'pi-snowflake';
+    if (code >= 80 && code <= 82) return 'pi-cloud-rain';
     if (code >= 95) return 'pi-bolt';
     return 'pi-cloud';
+  });
+
+  protected readonly weatherIconColor = computed(() =>
+    this.weather() ? 'var(--p-surface-400)' : 'var(--p-surface-300)'
+  );
+
+  protected readonly weatherText = computed(() => {
+    const w = this.weather();
+    if (!w) return '—';
+    return `↓${w.tempMin}° ↑${w.tempMax}°  ·  💧${w.precipProb}%`;
+  });
+
+  protected readonly weatherTextColor = computed(() =>
+    this.weather() ? 'var(--p-surface-400)' : 'var(--p-surface-300)'
+  );
+
+  protected readonly specialEvent = computed((): SpecialEvent | null => {
+    const monthDay = this.day().date.slice(5); // MM-DD
+    return SPECIAL_EVENTS[monthDay] ?? null;
   });
 
   protected readonly dayLabelIcon = computed((): { icon: string; color: string } => {
