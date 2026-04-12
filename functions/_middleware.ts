@@ -9,7 +9,8 @@ interface Env {
   TELEGRAM_CHAT_ID: string;
 }
 
-// Endpoints that do not require authentication
+// Auth is disabled — all GET requests are public
+// Only mutating endpoints on admin/sessions remain protected
 const ALLOWLISTED: Set<string> = new Set([
   'POST /api/auth/login',
   'POST /api/auth/logout',
@@ -17,6 +18,8 @@ const ALLOWLISTED: Set<string> = new Set([
   'POST /api/access-requests',
   'GET /api/auth/magic-link',
 ]);
+
+const PUBLIC_GET = true; // disable auth on all GET requests
 
 export const onRequest: PagesFunction<Env> = async (ctx) => {
   const url = new URL(ctx.request.url);
@@ -32,7 +35,12 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
     return ctx.next();
   }
 
-  // --- All other /api/* requests require a valid JWT + active session ---
+  // All GET requests are public (auth disabled)
+  if (PUBLIC_GET && method === 'GET') {
+    return ctx.next();
+  }
+
+  // --- Mutating /api/* requests require a valid JWT + active session ---
 
   const cookies = parseCookies(ctx.request.headers.get('Cookie'));
   const token = cookies['auth_token'];
