@@ -1,8 +1,8 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import * as LeafletNs from 'leaflet';
-import type { City, MapPoi, TripEventBase } from '../../shared/models';
-import { createPoiMarker } from '../map-utils/marker-factory';
+import type { City, TripEventBase } from '../../shared/models';
+import { createCityMarker } from '../map-utils/marker-factory';
 import { renderEventsOnMap } from '../map-utils/route-renderer';
 
 // Leaflet ships as UMD/CJS; esbuild may wrap it as { default: L } or spread it.
@@ -17,14 +17,13 @@ const L = ((LeafletNs as any).default ?? LeafletNs) as typeof LeafletNs;
 })
 export class MapContainer {
   readonly cities = input<City[]>([]);
-  readonly pois   = input<MapPoi[]>([]);
   readonly events = input<TripEventBase[]>([]);
 
   private readonly router = inject(Router);
   private readonly mapReady = signal(false);
 
   private map: LeafletNs.Map | null = null;
-  private poisLayer:   LeafletNs.LayerGroup | null = null;
+  private citiesLayer: LeafletNs.LayerGroup | null = null;
   private eventsLayer: LeafletNs.LayerGroup | null = null;
 
   private readonly _initMap = afterNextRender(() => {
@@ -32,18 +31,17 @@ export class MapContainer {
     this.mapReady.set(true);
   });
 
-  private readonly _renderPois = effect(() => {
-    const pois = this.pois();
+  private readonly _renderCities = effect(() => {
     const cities = this.cities();
-    if (this.mapReady() && pois.length > 0) {
-      this.renderPois(pois, cities);
+    if (this.mapReady() && cities.length > 0) {
+      this.renderCities(cities);
     }
   });
 
   private readonly _renderEvents = effect(() => {
     const events = this.events();
     if (this.mapReady() && events.length > 0) {
-      this.renderEventsLayer(events);
+      this.renderEvents(events);
     }
   });
 
@@ -64,24 +62,22 @@ export class MapContainer {
 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    this.poisLayer   = L.layerGroup().addTo(map);
+    this.citiesLayer = L.layerGroup().addTo(map);
     this.eventsLayer = L.layerGroup().addTo(map);
 
     map.fitBounds([[39.9, -4.2], [48.9, 12.6]], { padding: [48, 48] });
   }
 
-  private renderPois(pois: MapPoi[], cities: City[]): void {
-    if (!this.poisLayer) return;
-    this.poisLayer.clearLayers();
-    const cityMap = new Map(cities.map((c) => [c.id, c]));
-    pois.forEach((poi) => {
-      const city = poi.cityId ? cityMap.get(poi.cityId) : undefined;
-      createPoiMarker(L, poi, city, (slug) => this.router.navigate(['/', slug]))
-        .addTo(this.poisLayer!);
+  private renderCities(cities: City[]): void {
+    if (!this.citiesLayer) return;
+    this.citiesLayer.clearLayers();
+    cities.forEach((city) => {
+      createCityMarker(L, city, (slug) => this.router.navigate(['/', slug]))
+        .addTo(this.citiesLayer!);
     });
   }
 
-  private renderEventsLayer(events: TripEventBase[]): void {
+  private renderEvents(events: TripEventBase[]): void {
     if (!this.map || !this.eventsLayer) return;
     this.eventsLayer.clearLayers();
     renderEventsOnMap(L, this.map, events).getLayers()

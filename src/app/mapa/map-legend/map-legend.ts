@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Card } from 'primeng/card';
-import type { MapPoi } from '../../shared/models';
+import type { City } from '../../shared/models';
 
 @Component({
   selector: 'app-map-legend',
@@ -21,10 +21,10 @@ import type { MapPoi } from '../../shared/models';
           <span>Vuelo</span>
         </div>
         <div class="font-semibold mt-1 mb-0.5">Ciudades</div>
-        @for (poi of cityPois(); track poi.id) {
+        @for (city of cities(); track city.id) {
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full inline-block" [style.background-color]="poi.color"></span>
-            <span>{{ poi.name }}</span>
+            <span class="w-3 h-3 rounded-full inline-block" [style.background-color]="city.color"></span>
+            <span>{{ city.name }}</span>
           </div>
         }
       </div>
@@ -33,6 +33,5 @@ import type { MapPoi } from '../../shared/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapLegend {
-  readonly pois = input<MapPoi[]>([]);
-  readonly cityPois = computed(() => this.pois().filter((p) => p.type === 'city'));
+  readonly cities = input<City[]>([]);
 }

@@ -5,5 +5,4 @@ export * from './card.model';
 export * from './photo.model';
 export * from './map-poi.model';
 export * from './map-route.model';
-export * from './booking.model';
 export * from './weather.model';

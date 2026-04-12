@@ -47,6 +47,11 @@ export const routes: Routes = [
     loadComponent: () => import('./admin/admin').then((m) => m.AdminPage),
     canActivate: [ownerGuard],
   },
+  { path: 'madrid', redirectTo: '/sitios?c=madrid' },
+  { path: 'barcelona', redirectTo: '/sitios?c=barcelona' },
+  { path: 'paris', redirectTo: '/sitios?c=paris' },
+  { path: 'palma', redirectTo: '/sitios' },
+  { path: 'roma', redirectTo: '/sitios?c=roma' },
   {
     path: '**',
     loadComponent: () => import('./not-found/not-found').then((m) => m.NotFound),
