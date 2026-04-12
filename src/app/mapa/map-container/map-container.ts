@@ -1,8 +1,13 @@
 import { afterNextRender, ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import * as LeafletNs from 'leaflet';
 import type { City, MapPoi, MapRoute } from '../../shared/models';
 import { createPoiMarker } from '../map-utils/marker-factory';
 import { renderRoutes } from '../map-utils/route-renderer';
+
+// Leaflet ships as UMD/CJS; esbuild may wrap it as { default: L } or spread it.
+// Unwrap once here so the rest of the file gets the real Leaflet namespace.
+const L = ((LeafletNs as any).default ?? LeafletNs) as typeof LeafletNs;
 
 @Component({
   selector: 'app-map-container',
@@ -18,56 +23,56 @@ export class MapContainer {
   private readonly router = inject(Router);
   private readonly mapReady = signal(false);
 
-  private map: import('leaflet').Map | null = null;
-  private poisLayer:   import('leaflet').LayerGroup | null = null;
-  private routesLayer: import('leaflet').LayerGroup | null = null;
+  private map: LeafletNs.Map | null = null;
+  private poisLayer:   LeafletNs.LayerGroup | null = null;
+  private routesLayer: LeafletNs.LayerGroup | null = null;
 
   private readonly _initMap = afterNextRender(() => {
-    this.initMap().then(() => this.mapReady.set(true));
+    this.initMap();
+    this.mapReady.set(true);
   });
 
   private readonly _renderPois = effect(() => {
     const pois = this.pois();
     const cities = this.cities();
     if (this.mapReady() && pois.length > 0) {
-      import('leaflet').then((mod) => this.renderPois(mod.default ?? mod, pois, cities));
+      this.renderPois(pois, cities);
     }
   });
 
   private readonly _renderRoutes = effect(() => {
     const routes = this.routes();
     if (this.mapReady() && routes.length > 0) {
-      import('leaflet').then((mod) => this.renderRoutesLayer(mod.default ?? mod, routes));
+      this.renderRoutesLayer(routes);
     }
   });
 
-  private async initMap(): Promise<void> {
-    const mod = await import('leaflet');
-    const L = (mod as any).default ?? mod;
-
-    this.map = L.map('leaflet-map', {
+  private initMap(): void {
+    const map = L.map('leaflet-map', {
       center: [46, 10],
       zoom: 5,
       zoomControl: false,
     });
+    this.map = map;
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19,
-    }).addTo(this.map);
+    }).addTo(map);
 
-    L.control.zoom({ position: 'topright' }).addTo(this.map);
+    L.control.zoom({ position: 'topright' }).addTo(map);
 
-    this.poisLayer   = L.layerGroup().addTo(this.map);
-    this.routesLayer = L.layerGroup().addTo(this.map);
+    this.poisLayer   = L.layerGroup().addTo(map);
+    this.routesLayer = L.layerGroup().addTo(map);
 
-    this.map.fitBounds([[39.9, -4.2], [48.9, 12.6]], { padding: [48, 48] });
+    map.fitBounds([[39.9, -4.2], [48.9, 12.6]], { padding: [48, 48] });
   }
 
-  private renderPois(L: typeof import('leaflet'), pois: MapPoi[], cities: City[]): void {
-    this.poisLayer?.clearLayers();
+  private renderPois(pois: MapPoi[], cities: City[]): void {
+    if (!this.poisLayer) return;
+    this.poisLayer.clearLayers();
     const cityMap = new Map(cities.map((c) => [c.id, c]));
     pois.forEach((poi) => {
       const city = poi.cityId ? cityMap.get(poi.cityId) : undefined;
@@ -76,9 +81,10 @@ export class MapContainer {
     });
   }
 
-  private renderRoutesLayer(L: typeof import('leaflet'), routes: MapRoute[]): void {
-    this.routesLayer?.clearLayers();
-    renderRoutes(L, this.map!, routes).getLayers()
+  private renderRoutesLayer(routes: MapRoute[]): void {
+    if (!this.map || !this.routesLayer) return;
+    this.routesLayer.clearLayers();
+    renderRoutes(L, this.map, routes).getLayers()
       .forEach((layer) => this.routesLayer!.addLayer(layer));
   }
 }
