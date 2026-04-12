@@ -1,21 +1,30 @@
-import type { MapRoute } from '../../shared/models/map-route.model';
+import type { TripEventBase } from '../../shared/models/event.model';
+import { greatCirclePoints } from './great-circle';
 
-const ROUTE_STYLES: Record<string, import('leaflet').PolylineOptions> = {
-  train:   { color: '#16a34a', weight: 2.5, dashArray: '10,6', opacity: 0.85 },
-  daytrip: { color: '#7c3aed', weight: 1.8, dashArray: '5,5',  opacity: 0.75 },
-  flight:  { color: '#2563eb', weight: 1.8, opacity: 0.7 },
-  ferry:   { color: '#0891b2', weight: 2.0, dashArray: '8,5',  opacity: 0.75 },
+// ─── Style constants ────────────────────────────────────────────────────────
+
+const TRASLADO_STYLES: Record<string, import('leaflet').PolylineOptions> = {
+  flight: { color: '#3b82f6', weight: 1.8, opacity: 0.75 },
+  train:  { color: '#16a34a', weight: 2.5, dashArray: '10,6', opacity: 0.85 },
+  ferry:  { color: '#0891b2', weight: 2.0, dashArray: '8,5',  opacity: 0.75 },
 };
 
-const ROUTE_COLORS: Record<string, string> = {
-  train:   '#16a34a',
-  daytrip: '#7c3aed',
-  flight:  '#2563eb',
-  ferry:   '#0891b2',
+const TRASLADO_COLORS: Record<string, string> = {
+  flight: '#3b82f6',
+  train:  '#16a34a',
+  ferry:  '#0891b2',
 };
+
+const MARKER_COLORS = {
+  hito:    '#f59e0b',
+  estadia: '#10b981',
+  traslado: '#3b82f6',
+};
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
 /**
- * Computes the initial bearing (in degrees, 0=North, clockwise) from p1 to p2.
+ * Computes the initial bearing (degrees, 0=North, clockwise) from p1 to p2.
  */
 function bearing(p1: [number, number], p2: [number, number]): number {
   const toRad = (d: number) => (d * Math.PI) / 180;
@@ -30,11 +39,8 @@ function bearing(p1: [number, number], p2: [number, number]): number {
 
 /**
  * Creates a small rotated SVG chevron DivIcon to indicate travel direction.
- * The chevron points "up" at 0 deg rotation (north), and is rotated to match
- * the bearing of the leg at its midpoint.
  */
 function makeArrowIcon(L: typeof import('leaflet'), deg: number, color: string): import('leaflet').DivIcon {
-  // SVG chevron pointing upward (north). Rotation is applied via CSS transform.
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
     <polygon points="6,1 11,11 6,8 1,11" fill="${color}" fill-opacity="0.85" stroke="white" stroke-width="0.8"/>
   </svg>`;
@@ -46,28 +52,90 @@ function makeArrowIcon(L: typeof import('leaflet'), deg: number, color: string):
   });
 }
 
-export function renderRoutes(
+/**
+ * Creates a small circle marker for hito or estadia events.
+ */
+function makeCircleIcon(L: typeof import('leaflet'), color: string, size = 10): import('leaflet').DivIcon {
+  return L.divIcon({
+    html: `<div style="
+      width:${size}px; height:${size}px;
+      background:${color};
+      border-radius:50%;
+      border:2px solid #fff;
+      box-shadow:0 1px 4px rgba(0,0,0,0.25);
+      opacity:0.9;
+    "></div>`,
+    className: '',
+    iconSize:   [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+}
+
+// ─── Main renderer ──────────────────────────────────────────────────────────
+
+/**
+ * Renders all events onto a Leaflet LayerGroup.
+ *
+ * - traslado: great-circle polyline from origin to destination + direction arrow.
+ * - estadia:  circle marker at origin coords.
+ * - hito:     circle marker at origin coords; optional second marker if destination present.
+ *
+ * Events with NULL required coords are silently skipped.
+ */
+export function renderEventsOnMap(
   L: typeof import('leaflet'),
   map: import('leaflet').Map,
-  routes: MapRoute[]
+  events: TripEventBase[]
 ): import('leaflet').LayerGroup {
   const group = L.layerGroup();
-  routes.forEach((route) => {
-    const opts = ROUTE_STYLES[route.mode] ?? ROUTE_STYLES['train'];
-    L.polyline(route.waypoints, opts).addTo(group);
 
-    // Place a directional arrow at the midpoint of the waypoints array.
-    const pts = route.waypoints;
-    if (pts.length >= 2) {
-      const midIdx  = Math.floor((pts.length - 1) / 2);
-      const midPt   = pts[midIdx];
-      const nextPt  = pts[midIdx + 1];
-      const deg     = bearing(midPt, nextPt);
-      const color   = ROUTE_COLORS[route.mode] ?? ROUTE_COLORS['train'];
-      const icon    = makeArrowIcon(L, deg, color);
+  for (const ev of events) {
+    const { type, subtype, originLat, originLon, destinationLat, destinationLon } = ev;
+
+    if (originLat == null || originLon == null) continue;
+
+    const origin: [number, number] = [originLat, originLon];
+
+    if (type === 'traslado') {
+      if (destinationLat == null || destinationLon == null) continue;
+      const dest: [number, number] = [destinationLat, destinationLon];
+
+      // Use great-circle arc so long-haul flights curve on the map.
+      const pts = greatCirclePoints(origin, dest, 30);
+      const opts = TRASLADO_STYLES[subtype] ?? TRASLADO_STYLES['flight'];
+      L.polyline(pts, opts).addTo(group);
+
+      // Directional arrow at midpoint.
+      const midIdx = Math.floor((pts.length - 1) / 2);
+      const midPt  = pts[midIdx];
+      const nextPt = pts[midIdx + 1];
+      const deg    = bearing(midPt, nextPt);
+      const color  = TRASLADO_COLORS[subtype] ?? TRASLADO_COLORS['flight'];
+      const icon   = makeArrowIcon(L, deg, color);
       L.marker(midPt as import('leaflet').LatLngExpression, { icon, interactive: false }).addTo(group);
+
+    } else if (type === 'estadia') {
+      const icon = makeCircleIcon(L, MARKER_COLORS.estadia, 10);
+      L.marker(origin as import('leaflet').LatLngExpression, { icon, interactive: false })
+        .bindTooltip(ev.title, { direction: 'top', offset: [0, -6] })
+        .addTo(group);
+
+    } else if (type === 'hito') {
+      const icon = makeCircleIcon(L, MARKER_COLORS.hito, 8);
+      L.marker(origin as import('leaflet').LatLngExpression, { icon, interactive: false })
+        .bindTooltip(ev.title, { direction: 'top', offset: [0, -5] })
+        .addTo(group);
+
+      // If the hito has a distinct closing point, draw a small marker + short line.
+      if (destinationLat != null && destinationLon != null) {
+        const dest: [number, number] = [destinationLat, destinationLon];
+        L.polyline([origin, dest], { color: MARKER_COLORS.hito, weight: 1.5, dashArray: '4,4', opacity: 0.6 }).addTo(group);
+        const endIcon = makeCircleIcon(L, MARKER_COLORS.hito, 6);
+        L.marker(dest as import('leaflet').LatLngExpression, { icon: endIcon, interactive: false }).addTo(group);
+      }
     }
-  });
+  }
+
   group.addTo(map);
   return group;
 }

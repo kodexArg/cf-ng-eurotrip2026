@@ -4,7 +4,9 @@ interface Env {
 
 export const onRequest: PagesFunction<Env> = async (ctx) => {
   const { results } = await ctx.env.DB.prepare(
-    'SELECT id, name, type, lat, lon, color, city_id AS cityId FROM map_pois ORDER BY type DESC, id ASC'
+    `SELECT id, name, 'city' AS type, lat, lon, color, id AS cityId
+     FROM cities
+     ORDER BY id`
   ).all();
   return Response.json(results);
 };

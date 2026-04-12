@@ -24,33 +24,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'madrid',
-    data: { slug: 'madrid' },
-    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'barcelona',
-    data: { slug: 'barcelona' },
-    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'paris',
-    data: { slug: 'paris' },
-    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'palma',
-    data: { slug: 'palma' },
-    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'roma',
-    data: { slug: 'roma' },
-    loadComponent: () => import('./ciudades/city').then((m) => m.CityPage),
+    path: 'sitios',
+    loadComponent: () => import('./sitios/sitios-page').then((m) => m.SitiosPage),
     canActivate: [authGuard],
   },
   {

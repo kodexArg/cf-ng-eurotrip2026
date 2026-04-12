@@ -26,6 +26,11 @@ export interface TripEventBase {
   variant: EventVariant;
   cardId: string | null;
   notes: string | null;
+  // Geographic coordinates (nullable — not all events have location data)
+  originLat?: number;
+  originLon?: number;
+  destinationLat?: number;
+  destinationLon?: number;
 }
 
 export interface HitoEvent extends TripEventBase {
