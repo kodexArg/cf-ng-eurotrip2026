@@ -71,3 +71,5 @@ Both are configured in `.mcp.json`:
 - All routes lazy-loaded.
 - `inject()` over constructor injection.
 - Signals over RxJS for state.
+- **Logic over hardcoding**: always solve problems in code/data logic — never patch them with hardcoded IDs, magic strings, or special-case conditions. If data varies, the algorithm must handle it generically.
+- **Componentize always**: extract repeated or self-contained UI patterns into components immediately. No inline duplication. See ADR-006.
