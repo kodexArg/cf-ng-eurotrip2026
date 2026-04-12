@@ -1,8 +1,7 @@
 import { httpResource } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { ActivityTipo } from '../shared/models/activity.model';
-import { City, CityBlock, Day } from '../shared/models';
-import { AuthService } from '../shared/services/auth.service';
+import { City, CityBlock } from '../shared/models';
 import { CalendarMonth } from './calendar-month/calendar-month';
 import { EventTypeLegend } from './event-type-legend/event-type-legend';
 import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
@@ -38,7 +37,6 @@ import { ItineraryDay } from '../itinerario/itinerary-day/itinerary-day';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarPage {
-  private readonly authService = inject(AuthService);
   readonly itineraryResource = httpResource<CityBlock[]>(() => '/api/itinerary');
 
   readonly selectedDate = signal<string | null>(null);
@@ -51,15 +49,11 @@ export class CalendarPage {
     const date = this.selectedDate();
     if (!date) return null;
     const blocks = this.itineraryResource.value() ?? [];
-    const showAll = this.authService.isAuthenticated();
     for (const block of blocks) {
       for (const day of block.days) {
         if (day.date === date) {
           return {
-            day: {
-              ...day,
-              activities: day.activities.filter(a => showAll || a.confirmed),
-            },
+            day,
             cityName: block.city.name,
             cityColor: block.city.color,
           };
@@ -71,14 +65,11 @@ export class CalendarPage {
 
   readonly confirmedActivities = computed((): Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean }> => {
     const blocks = this.itineraryResource.value() ?? [];
-    const showAll = this.authService.isAuthenticated();
     const result: Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean }> = [];
     for (const block of blocks) {
       for (const day of block.days) {
         for (const act of day.activities) {
-          if (showAll || act.confirmed) {
-            result.push({ date: day.date, description: act.description, tipo: act.tipo, tag: act.tag, confirmed: act.confirmed });
-          }
+          result.push({ date: day.date, description: act.description, tipo: act.tipo, tag: act.tag, confirmed: act.confirmed });
         }
       }
     }
