@@ -15,7 +15,6 @@ import type { City, TripEventBase } from '../shared/models';
       />
       <app-map-legend
         class="absolute bottom-4 left-4 z-[1000]"
-        [cities]="citiesResource.value() ?? []"
       />
     </div>
   `,

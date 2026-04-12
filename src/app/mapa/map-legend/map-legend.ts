@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Card } from 'primeng/card';
-import type { City } from '../../shared/models';
 
 @Component({
   selector: 'app-map-legend',
@@ -20,18 +19,9 @@ import type { City } from '../../shared/models';
           <span class="w-6 h-0.5 inline-block" style="border-top: 2px solid #3b82f6"></span>
           <span>Vuelo</span>
         </div>
-        <div class="font-semibold mt-1 mb-0.5">Ciudades</div>
-        @for (city of cities(); track city.id) {
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full inline-block" [style.background-color]="city.color"></span>
-            <span>{{ city.name }}</span>
-          </div>
-        }
       </div>
     </p-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapLegend {
-  readonly cities = input<City[]>([]);
-}
+export class MapLegend {}

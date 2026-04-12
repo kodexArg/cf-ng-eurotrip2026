@@ -49,9 +49,6 @@ import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
           </div>
         }
       </div>
-      @if (event().confirmed) {
-        <app-confirmed-badge />
-      }
       @if (event().usd) {
         <i
           class="pi pi-dollar text-xs ml-1"
@@ -60,6 +57,9 @@ import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
           tooltipPosition="top"
           [showDelay]="300"
         ></i>
+      }
+      @if (event().confirmed) {
+        <app-confirmed-badge />
       }
     </div>
   `,
