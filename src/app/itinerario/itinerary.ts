@@ -31,7 +31,7 @@ import { ErrorState } from '../shared/error-state/error-state';
       }
 
       @if (itineraryResource.value()) {
-        @for (block of filteredBlocks(); track block.city.id) {
+        @for (block of filteredBlocks(); track $index) {
           @if (block.transportLeg) {
             <app-transport-inline [leg]="block.transportLeg" />
           }
