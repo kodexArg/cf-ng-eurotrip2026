@@ -7,6 +7,7 @@ import { renderRoutes } from '../map-utils/route-renderer';
 @Component({
   selector: 'app-map-container',
   template: `<div id="leaflet-map" style="height: 100%; width: 100%;"></div>`,
+  host: { style: 'display: block; height: 100%; width: 100%;' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapContainer {
