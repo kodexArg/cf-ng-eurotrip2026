@@ -11,29 +11,38 @@ import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
   template: `
     <div class="flex items-start gap-3 py-3 px-4 rounded-lg border" style="border-color: var(--p-surface-200)">
       <app-booking-type-chip [type]="booking().type" />
-      <div class="flex-1">
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-semibold" style="color: var(--p-surface-800)">{{ booking().description }}</span>
-        </div>
-        <div class="text-xs mt-1" style="color: var(--p-surface-500)">
-          {{ booking().sortDate | date:'EEE d MMM' }}
-          @if (booking().time) { · {{ booking().time }}h }
-        </div>
-        @if (booking().type === 'viaje' && booking().origin) {
-          <div class="text-xs mt-0.5" style="color: var(--p-surface-400)">
+      <div class="flex-1 min-w-0">
+        @if (booking().type === 'viaje') {
+          <div class="text-sm font-semibold" style="color: var(--p-surface-800)">
             {{ booking().origin }} → {{ booking().destination }}
+          </div>
+          <div class="text-xs mt-0.5" style="color: var(--p-surface-600)">{{ booking().description }}</div>
+          <div class="text-xs mt-0.5" style="color: var(--p-surface-500)">
+            {{ booking().sortDate | date:'EEE d MMM' }}
+            @if (booking().time) { · {{ booking().time }}h }
             @if (booking().carrier) { · {{ booking().carrier }} }
           </div>
-        }
-        @if (booking().type === 'hospedaje' && booking().accommodation) {
-          <div class="text-xs mt-0.5" style="color: var(--p-surface-400)">
-            {{ booking().accommodation }}
-            @if (booking().checkoutDate) { · hasta {{ booking().checkoutDate | date:'d MMM' }} }
+        } @else if (booking().type === 'hospedaje') {
+          <div class="text-base font-bold" style="color: var(--p-surface-900)">
+            {{ booking().accommodation || booking().description }}
+          </div>
+          @if (booking().accommodation && booking().description !== booking().accommodation) {
+            <div class="text-sm" style="color: var(--p-surface-700)">{{ booking().description }}</div>
+          }
+          <div class="text-xs mt-1" style="color: var(--p-surface-500)">
+            {{ booking().sortDate | date:'EEE d MMM' }}
+            @if (booking().checkoutDate) { → {{ booking().checkoutDate | date:'EEE d MMM' }} }
+          </div>
+        } @else {
+          <div class="text-sm font-semibold" style="color: var(--p-surface-800)">{{ booking().description }}</div>
+          <div class="text-xs mt-1" style="color: var(--p-surface-500)">
+            {{ booking().sortDate | date:'EEE d MMM' }}
+            @if (booking().time) { · {{ booking().time }}h }
           </div>
         }
       </div>
       @if (booking().costUsd) {
-        <span class="text-xs font-medium" style="color: var(--p-surface-600)">US$ {{ booking().costUsd }}</span>
+        <span class="text-sm font-semibold" style="color: var(--p-surface-700)">US$ {{ booking().costUsd }}</span>
       }
       @if (booking().confirmed) {
         <app-confirmed-badge [editable]="editable()" (toggle)="toggleConfirmed.emit()" />

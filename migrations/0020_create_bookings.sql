@@ -18,13 +18,13 @@ CREATE TABLE bookings (
 
 -- Seed confirmed data
 INSERT INTO bookings (id, type, sort_date, time, description, origin, destination, mode, carrier, confirmed)
-VALUES ('bk-scl-mad', 'viaje', '2026-04-19', '06:40', 'Vuelo SCL → MAD', 'SCL', 'MAD', 'flight', 'Iberia', 1);
+VALUES ('bk-scl-mad', 'viaje', '2026-04-19', '06:40', 'Vuelo SCL → MAD', 'Santiago', 'Madrid', 'flight', 'Iberia', 1);
 
 INSERT INTO bookings (id, type, sort_date, time, description, origin, destination, mode, carrier, confirmed)
-VALUES ('bk-fco-mad', 'viaje', '2026-05-09', '20:25', 'IB0656 FCO T1 → MAD', 'FCO', 'MAD', 'flight', 'Iberia', 1);
+VALUES ('bk-fco-mad', 'viaje', '2026-05-09', '20:25', 'IB0656 FCO T1 → MAD', 'Roma', 'Madrid', 'flight', 'Iberia', 1);
 
 INSERT INTO bookings (id, type, sort_date, time, description, origin, destination, mode, carrier, confirmed)
-VALUES ('bk-mad-eze', 'viaje', '2026-05-10', '08:45', 'IB0105 MAD → EZE', 'MAD', 'EZE', 'flight', 'Iberia', 1);
+VALUES ('bk-mad-eze', 'viaje', '2026-05-10', '08:45', 'IB0105 MAD → EZE', 'Madrid', 'Buenos Aires', 'flight', 'Iberia', 1);
 
 INSERT INTO bookings (id, type, sort_date, description, accommodation, checkout_date, confirmed)
 VALUES ('bk-madrid-airbnb', 'hospedaje', '2026-04-20', 'AirBNB Madrid — C. del Ave María 42, Lavapiés', 'AirBNB Madrid', '2026-04-24', 1);
