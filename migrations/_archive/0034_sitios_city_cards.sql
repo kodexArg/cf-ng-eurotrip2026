@@ -66,7 +66,7 @@ INSERT INTO cards (id, city_id, type, title, body, url) VALUES
 
   ('bcn-card-montjuic', 'bcn', 'info',
    'Montjuïc',
-   'Castillo de Montjuïc: €5. MNAC (Museo Nacional de Arte de Cataluña): €12. Fundació Joan Miró: €12. Subir en Bus 150 desde Plaça d\'Espanya o en teleférico. Vistas panorámicas de Barcelona y el puerto. Dedicar 3-4 horas para una visita rápida.',
+   'Castillo de Montjuïc: €5. MNAC (Museo Nacional de Arte de Cataluña): €12. Fundació Joan Miró: €12. Subir en Bus 150 desde Plaça d''Espanya o en teleférico. Vistas panorámicas de Barcelona y el puerto. Dedicar 3-4 horas para una visita rápida.',
    NULL),
 
   ('bcn-card-paella', 'bcn', 'note',
@@ -114,7 +114,7 @@ INSERT INTO cards (id, city_id, type, title, body, url) VALUES
 
   ('pmi-card-mercados', 'pmi', 'note',
    'Mercados de Palma',
-   'Mercat de l\'Olivar: Lun-Vie 7-14:30h, Sáb hasta 15h. Ideal para desayunar tapas, ostras y cava. Santa Catalina: Lun-Sáb 7-17h. Productos frescos locales, ambiente artístico y bohemio. Ambos en el centro de Palma.',
+   'Mercat de l''Olivar: Lun-Vie 7-14:30h, Sáb hasta 15h. Ideal para desayunar tapas, ostras y cava. Santa Catalina: Lun-Sáb 7-17h. Productos frescos locales, ambiente artístico y bohemio. Ambos en el centro de Palma.',
    NULL),
 
   ('pmi-card-playas', 'pmi', 'note',
@@ -124,7 +124,7 @@ INSERT INTO cards (id, city_id, type, title, body, url) VALUES
 
   ('pmi-card-gastronomia', 'pmi', 'note',
    'Gastronomía mallorquina',
-   'Ensaimada: espiral de masa hojaldrada con azúcar (mejor en Ca\'n Joan de S\'Aigo, la pastelería más antigua de la isla). Sobrasada: embutido de cerdo con pimentón. Pa amb oli: pan con tomate y aceite de oliva. Tumbet: berenjenas y patatas al horno. Frito mallorquín. Para mariscos: MARiLUZ y Sa Roqueta.',
+   'Ensaimada: espiral de masa hojaldrada con azúcar (mejor en Ca''n Joan de S''Aigo, la pastelería más antigua de la isla). Sobrasada: embutido de cerdo con pimentón. Pa amb oli: pan con tomate y aceite de oliva. Tumbet: berenjenas y patatas al horno. Frito mallorquín. Para mariscos: MARiLUZ y Sa Roqueta.',
    NULL),
 
   ('pmi-card-clima', 'pmi', 'note',
@@ -141,7 +141,7 @@ INSERT INTO cards (id, city_id, type, title, body, url) VALUES
    'https://ticket.toureiffel.paris'),
 
   ('par-card-orsay', 'par', 'info',
-   'Musée d\'Orsay',
+   'Musée d''Orsay',
    'Entrada €16. Horario: Mar-Dom 9:30-18h (jueves hasta las 21:45h), cerrado los lunes. Exposición actual: "Renoir and Love" (mar-jul 2026) — ideal para parejas. Colección impresionista más importante del mundo.',
    'https://www.musee-orsay.fr'),
 
@@ -175,33 +175,8 @@ INSERT INTO cards (id, city_id, type, title, body, url) VALUES
    'Billete individual: €2.55. Carnet de 10 viajes: €17.05. Abono 1 día (t+): €12.30 (rentable a partir de 5+ viajes diarios). Los tickets de papel están en extinción — usar tarjeta bancaria contactless directamente o la app Île-de-France Mobilités.',
    NULL);
 
--- ── FLORENCIA ────────────────────────────────────────────────────────────────
-
-INSERT INTO cards (id, city_id, type, title, body, url) VALUES
-  ('fir-card-duomo', 'fir', 'info',
-   'Duomo — Santa Maria del Fiore',
-   'Catedral: entrada gratuita. Cúpula de Brunelleschi: incluida en el pase combinado €30 (463 escalones sin ascensor, vista espectacular desde arriba). Mejor al atardecer para aprovechar la luz. Reservar horario con anticipación.',
-   'https://duomo.firenze.it'),
-
-  ('fir-card-ponte-vecchio', 'fir', 'note',
-   'Ponte Vecchio',
-   'Acceso gratuito. El puente más icónico de Florencia, repleto de joyerías y orfebres desde el s.XVI. Las mejores vistas al puente se consiguen desde las orillas del Arno (especialmente la orilla sur). Ideal al atardecer. Dedicar 20-30 minutos.',
-   NULL),
-
-  ('fir-card-piazzale', 'fir', 'note',
-   'Piazzale Michelangelo',
-   'Acceso gratuito. El mirador con la mejor panorámica de Florencia — el Duomo, el Arno y los tejados de la ciudad. Subida a pie: 30-40 minutos desde el centro (algo empinada). Amanecer (~5:50h) o atardecer son los momentos ideales. Llevar agua.',
-   NULL),
-
-  ('fir-card-gastronomia', 'fir', 'note',
-   'Gastronomía florentina',
-   'Bistecca alla Fiorentina: chuletón de Chianina a la brasa, el plato estrella de la ciudad. Lampredotto: sándwich de callos en salsa verde, comida callejera auténtica. Gelato: Gelateria dei Neri y Vivoli (los mejores). Cantuccini con Vin Santo: galletas de almendra para mojar en vino dulce. Ribollita: guiso de verduras y pan toscano.',
-   NULL),
-
-  ('fir-card-consejos', 'fir', 'note',
-   'Consejos para 18 horas en Florencia',
-   'El centro histórico es compacto y todo se puede hacer a pie. Las calles son empedradas — calzado muy cómodo imprescindible. Fuentes de agua potable gratuitas repartidas por la ciudad. Museos cierran entre las 17-18h. Posibles eventos del Maggio Musicale Fiorentino (festival de ópera y música) — consultar cartelera.',
-   NULL);
+-- ── FLORENCIA — omitida: la ciudad 'fir' no existe en la tabla cities (fue revertida)
+-- Si se re-agrega Florencia al itinerario, ejecutar los INSERTs del archivo original.
 
 -- ── ROMA ─────────────────────────────────────────────────────────────────────
 
