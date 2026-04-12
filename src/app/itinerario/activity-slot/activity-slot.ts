@@ -19,11 +19,11 @@ import { InfoRow } from '../info-row/info-row';
     >
       @if (activity().confirmed) {
         <app-confirmed-badge
-          [editable]="auth.isAuthenticated()"
+          [editable]="auth.isOwner()"
           (toggle)="onToggleConfirmed()"
         />
       }
-      @if (auth.isAuthenticated()) {
+      @if (auth.isOwner()) {
         <button
           type="button"
           class="pi pi-pencil text-xs opacity-40 hover:opacity-100 transition-opacity ml-1 bg-transparent border-none cursor-pointer"

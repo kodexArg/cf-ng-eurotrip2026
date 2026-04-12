@@ -14,7 +14,7 @@ import { EditService } from '../../shared/services/edit.service';
   template: `
     <p-card>
       <ng-template #header>
-        @if (auth.isAuthenticated()) {
+        @if (auth.isOwner()) {
           <p-inplace (onDeactivate)="saveTitle()">
             <ng-template #display>
               <span class="font-bold">{{ editTitle }}</span>
@@ -28,7 +28,7 @@ import { EditService } from '../../shared/services/edit.service';
         }
       </ng-template>
       @if (card().body) {
-        @if (auth.isAuthenticated()) {
+        @if (auth.isOwner()) {
           <p-inplace (onDeactivate)="saveBody()">
             <ng-template #display>
               <p class="text-sm" style="color: var(--p-surface-700)">{{ editBody }}</p>

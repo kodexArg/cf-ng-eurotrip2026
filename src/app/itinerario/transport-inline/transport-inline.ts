@@ -57,7 +57,7 @@ const CITY_NAMES: Record<string, string> = {
         @if (leg().costHint || leg().fare) {
           <span class="text-xs shrink-0" style="color: var(--p-surface-500)">{{ leg().fare || leg().costHint }}</span>
         }
-        @if (auth.isAuthenticated()) {
+        @if (auth.isOwner()) {
           <i class="pi pi-pencil text-xs opacity-40 hover:opacity-100 cursor-pointer transition-opacity shrink-0"
              style="color: var(--p-surface-600)"
              (click)="editDialog().open(leg())"></i>

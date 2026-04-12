@@ -27,7 +27,7 @@ import { BookingDialog } from './booking-dialog/booking-dialog';
     <div class="max-w-2xl mx-auto p-4">
       <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold" style="color: var(--p-surface-800)">Reservas</h1>
-        @if (auth.isAuthenticated()) {
+        @if (auth.isOwner()) {
           <p-button label="Agregar" icon="pi pi-plus" size="small" (onClick)="bookingDialog().openCreate()" />
         }
       </div>
@@ -46,7 +46,7 @@ import { BookingDialog } from './booking-dialog/booking-dialog';
           <div class="mb-2">
             <app-booking-card
               [booking]="booking"
-              [editable]="auth.isAuthenticated()"
+              [editable]="auth.isOwner()"
               (edit)="openEdit(booking)"
               (remove)="deleteBooking(booking)"
               (toggleConfirmed)="toggleConfirmed(booking)"
