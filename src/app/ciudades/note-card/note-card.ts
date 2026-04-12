@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, linkedSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Inplace } from 'primeng/inplace';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
+import { firstValueFrom } from 'rxjs';
 import type { Card as CardModel } from '../../shared/models';
 import { AuthService } from '../../shared/services/auth.service';
 import { EditService } from '../../shared/services/edit.service';
@@ -14,10 +15,10 @@ import { EditService } from '../../shared/services/edit.service';
     @if (auth.isOwner()) {
       <p-inplace (onDeactivate)="saveTitle()">
         <ng-template #display>
-          <span class="font-semibold text-lg" style="color: var(--p-surface-900)">{{ editTitle }}</span>
+          <span class="font-semibold text-lg" style="color: var(--p-surface-900)">{{ editTitle() }}</span>
         </ng-template>
         <ng-template #content>
-          <input pInputText [(ngModel)]="editTitle" class="w-full" />
+          <input pInputText [ngModel]="editTitle()" (ngModelChange)="editTitle.set($event)" class="w-full" />
         </ng-template>
       </p-inplace>
     }
@@ -25,10 +26,10 @@ import { EditService } from '../../shared/services/edit.service';
       @if (auth.isOwner()) {
         <p-inplace (onDeactivate)="saveBody()">
           <ng-template #display>
-            <p class="text-sm whitespace-pre-wrap leading-relaxed" style="color: var(--p-surface-700)">{{ editBody }}</p>
+            <p class="text-sm whitespace-pre-wrap leading-relaxed" style="color: var(--p-surface-700)">{{ editBody() }}</p>
           </ng-template>
           <ng-template #content>
-            <textarea pInputText [(ngModel)]="editBody" rows="3" class="w-full text-sm"></textarea>
+            <textarea pInputText [ngModel]="editBody()" (ngModelChange)="editBody.set($event)" rows="3" class="w-full text-sm"></textarea>
           </ng-template>
         </p-inplace>
       } @else {
@@ -51,29 +52,24 @@ import { EditService } from '../../shared/services/edit.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoteCard implements OnInit {
+export class NoteCard {
   readonly card = input.required<CardModel>();
 
   readonly auth = inject(AuthService);
   private readonly editService = inject(EditService);
 
-  editTitle = '';
-  editBody = '';
+  protected readonly editTitle = linkedSignal(() => this.card().title);
+  protected readonly editBody = linkedSignal(() => this.card().body ?? '');
 
-  ngOnInit() {
-    this.editTitle = this.card().title;
-    this.editBody = this.card().body ?? '';
-  }
-
-  saveTitle() {
-    if (this.editTitle !== this.card().title) {
-      this.editService.patchCard(this.card().id, { title: this.editTitle }).subscribe();
+  async saveTitle() {
+    if (this.editTitle() !== this.card().title) {
+      await firstValueFrom(this.editService.patchCard(this.card().id, { title: this.editTitle() }));
     }
   }
 
-  saveBody() {
-    if (this.editBody !== (this.card().body ?? '')) {
-      this.editService.patchCard(this.card().id, { body: this.editBody }).subscribe();
+  async saveBody() {
+    if (this.editBody() !== (this.card().body ?? '')) {
+      await firstValueFrom(this.editService.patchCard(this.card().id, { body: this.editBody() }));
     }
   }
 }

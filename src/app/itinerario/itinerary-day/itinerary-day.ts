@@ -35,21 +35,15 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
       </div>
 
       <div class="flex-1 flex flex-col py-2 px-3 min-w-0">
-        @if (day().label) {
-          <div class="flex items-center gap-1 mb-1">
-            <i [class]="'pi ' + dayLabelIcon().icon + ' text-xs'"
-               [style.color]="dayLabelIcon().color"></i>
-            <span class="text-xs font-medium" [style.color]="dayLabelIcon().color">{{ day().label }}</span>
-          </div>
-        }
         <div class="flex flex-col gap-1 flex-1">
-          <!-- primera entrada: siempre el clima -->
-          <app-info-row
-            [icon]="weatherIcon()"
-            [iconColor]="weatherIconColor()"
-            [text]="weatherText()"
-            [textColor]="weatherTextColor()"
-          />
+          @if (day().label) {
+            <app-info-row
+              [icon]="dayLabelIcon().icon"
+              [iconColor]="dayLabelIcon().color"
+              [text]="day().label!"
+              [textColor]="dayLabelIcon().color"
+            />
+          }
           @if (specialEvent()) {
             <app-info-row
               [icon]="specialEvent()!.icon"
@@ -61,6 +55,10 @@ const SPECIAL_EVENTS: Record<string, SpecialEvent> = {
           @for (activity of displayActivities(); track activity.id) {
             <app-activity-slot [activity]="activity" />
           }
+        </div>
+        <div class="flex items-center justify-end gap-0.5 mt-0.5">
+          <i [class]="'pi ' + weatherIcon()" style="font-size: 0.6rem" [style.color]="weatherIconColor()"></i>
+          <span class="text-xxs leading-none" [style.color]="weatherTextColor()">{{ weatherTempText() }}</span>
         </div>
       </div>
     </div>
@@ -74,9 +72,12 @@ export class ItineraryDay {
   readonly day = input.required<Day>();
   readonly weather = input<DayWeather | null>(null);
   readonly isLast = input(false);
+  readonly showUnconfirmed = input(false);
 
   protected readonly displayActivities = computed(() =>
-    this.day().activities.filter(a => a.tipo !== 'transport')
+    this.day().activities.filter(a =>
+      a.confirmed || this.showUnconfirmed()
+    )
   );
 
   protected readonly weatherIcon = computed(() => {
@@ -96,10 +97,10 @@ export class ItineraryDay {
     this.weather() ? 'var(--p-surface-400)' : 'var(--p-surface-300)'
   );
 
-  protected readonly weatherText = computed(() => {
+  protected readonly weatherTempText = computed(() => {
     const w = this.weather();
     if (!w) return '—';
-    return `↓${w.tempMin}° ↑${w.tempMax}°  ·  💧${w.precipProb}%`;
+    return `↓${w.tempMin}° ↑${w.tempMax}°`;
   });
 
   protected readonly weatherTextColor = computed(() =>

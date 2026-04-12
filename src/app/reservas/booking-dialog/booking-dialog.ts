@@ -66,7 +66,6 @@ const EMPTY_DRAFT: BookingDraft = {
       [closable]="true"
     >
       <div class="flex flex-col gap-3 py-2">
-        <!-- Type -->
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Tipo</label>
           <p-selectbutton
@@ -78,25 +77,21 @@ const EMPTY_DRAFT: BookingDraft = {
           />
         </div>
 
-        <!-- Description -->
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Descripción *</label>
           <input pInputText [(ngModel)]="draft.description" placeholder="Descripción" />
         </div>
 
-        <!-- Date -->
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Fecha *</label>
           <input pInputText type="date" [(ngModel)]="draft.sort_date" />
         </div>
 
-        <!-- Time -->
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Hora</label>
           <input pInputText type="time" [(ngModel)]="draft.time" />
         </div>
 
-        <!-- Viaje fields -->
         @if (draft.type === 'viaje') {
           <div class="flex flex-col gap-1">
             <label class="text-xs font-medium" style="color: var(--p-surface-600)">Origen</label>
@@ -122,7 +117,6 @@ const EMPTY_DRAFT: BookingDraft = {
           </div>
         }
 
-        <!-- Hospedaje fields -->
         @if (draft.type === 'hospedaje') {
           <div class="flex flex-col gap-1">
             <label class="text-xs font-medium" style="color: var(--p-surface-600)">Alojamiento</label>
@@ -134,19 +128,16 @@ const EMPTY_DRAFT: BookingDraft = {
           </div>
         }
 
-        <!-- Cost -->
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Costo</label>
           <p-inputnumber [(ngModel)]="draft.cost_usd" mode="decimal" prefix="US$ " [minFractionDigits]="0" [maxFractionDigits]="2" placeholder="0" />
         </div>
 
-        <!-- Confirmed -->
         <div class="flex items-center gap-2">
           <p-checkbox [(ngModel)]="draft.confirmed" [binary]="true" inputId="confirmed" />
           <label for="confirmed" class="text-sm" style="color: var(--p-surface-700)">Confirmado</label>
         </div>
 
-        <!-- Notes -->
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium" style="color: var(--p-surface-600)">Notas</label>
           <textarea pTextarea [(ngModel)]="draft.notes" rows="3" placeholder="Notas adicionales"></textarea>
@@ -218,7 +209,6 @@ export class BookingDialog {
     if (!this.draft.description || !this.draft.sort_date) return;
 
     if (this.original) {
-      // Edit mode: emit only changed fields
       const changes: Record<string, unknown> = {};
       const keys = Object.keys(this.draft) as (keyof BookingDraft)[];
       for (const key of keys) {
@@ -229,7 +219,6 @@ export class BookingDialog {
       }
       this.saved.emit({ id: this.draft.id, data: changes });
     } else {
-      // Create mode: emit full draft
       const { id, ...data } = this.draft;
       this.saved.emit({ data: data as Record<string, unknown> });
     }

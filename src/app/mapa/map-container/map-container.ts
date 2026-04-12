@@ -1,4 +1,3 @@
-// Deviation from ADR-005: Leaflet used because PrimeNG has no map component equivalent.
 import { afterNextRender, ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import type { City, MapPoi, MapRoute } from '../../shared/models';

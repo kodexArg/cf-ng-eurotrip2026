@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, linkedSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Inplace } from 'primeng/inplace';
 import { InputText } from 'primeng/inputtext';
 import { Tooltip } from 'primeng/tooltip';
+import { firstValueFrom } from 'rxjs';
 import { ExternalLink } from '../../shared/external-link/external-link';
 import type { Card as CardModel } from '../../shared/models';
 import { AuthService } from '../../shared/services/auth.service';
@@ -15,10 +16,10 @@ import { EditService } from '../../shared/services/edit.service';
     @if (auth.isOwner()) {
       <p-inplace (onDeactivate)="saveTitle()">
         <ng-template #display>
-          <span class="font-semibold text-lg" style="color: var(--p-surface-900)">{{ editTitle }}</span>
+          <span class="font-semibold text-lg" style="color: var(--p-surface-900)">{{ editTitle() }}</span>
         </ng-template>
         <ng-template #content>
-          <input pInputText [(ngModel)]="editTitle" class="w-full" />
+          <input pInputText [ngModel]="editTitle()" (ngModelChange)="editTitle.set($event)" class="w-full" />
         </ng-template>
       </p-inplace>
     }
@@ -30,10 +31,10 @@ import { EditService } from '../../shared/services/edit.service';
         @if (auth.isOwner()) {
           <p-inplace (onDeactivate)="saveUrl()">
             <ng-template #display>
-              <app-external-link [url]="editUrl || card().url!" label="Abrir enlace" severity="primary" />
+              <app-external-link [url]="editUrl() || card().url!" label="Abrir enlace" severity="primary" />
             </ng-template>
             <ng-template #content>
-              <input pInputText [(ngModel)]="editUrl" class="w-full" placeholder="https://..." />
+              <input pInputText [ngModel]="editUrl()" (ngModelChange)="editUrl.set($event)" class="w-full" placeholder="https://..." />
             </ng-template>
           </p-inplace>
         } @else {
@@ -57,29 +58,24 @@ import { EditService } from '../../shared/services/edit.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LinkCard implements OnInit {
+export class LinkCard {
   readonly card = input.required<CardModel>();
 
   readonly auth = inject(AuthService);
   private readonly editService = inject(EditService);
 
-  editTitle = '';
-  editUrl = '';
+  protected readonly editTitle = linkedSignal(() => this.card().title);
+  protected readonly editUrl = linkedSignal(() => this.card().url ?? '');
 
-  ngOnInit() {
-    this.editTitle = this.card().title;
-    this.editUrl = this.card().url ?? '';
-  }
-
-  saveTitle() {
-    if (this.editTitle !== this.card().title) {
-      this.editService.patchCard(this.card().id, { title: this.editTitle }).subscribe();
+  async saveTitle() {
+    if (this.editTitle() !== this.card().title) {
+      await firstValueFrom(this.editService.patchCard(this.card().id, { title: this.editTitle() }));
     }
   }
 
-  saveUrl() {
-    if (this.editUrl !== (this.card().url ?? '')) {
-      this.editService.patchCard(this.card().id, { url: this.editUrl }).subscribe();
+  async saveUrl() {
+    if (this.editUrl() !== (this.card().url ?? '')) {
+      await firstValueFrom(this.editService.patchCard(this.card().id, { url: this.editUrl() }));
     }
   }
 }
