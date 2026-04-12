@@ -1,20 +1,29 @@
 import { httpResource } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { Activity, Card, Day } from '../models';
-import { ItineraryDay } from '../../itinerario/itinerary-day/itinerary-day';
-import { ActivitySlot } from '../../itinerario/activity-slot/activity-slot';
+import { Card, City, TripEvent } from '../models';
+import { EventSlot } from '../../itinerario/event-slot/event-slot';
 import { InfoCard } from '../../ciudades/info-card/info-card';
 import { LinkCard } from '../../ciudades/link-card/link-card';
 import { NoteCard } from '../../ciudades/note-card/note-card';
 
 interface LinkedEntry {
-  activity: Activity;
+  event: TripEvent;
   card: Card;
 }
 
+/**
+ * Modal that shows the events of a single day for one city, plus
+ * any informational cards linked to those events via `event.cardId`.
+ *
+ * Previously this component accepted a legacy `Day { activities }`
+ * shape. It now receives a flat `events` list (already scoped to a
+ * given day + city by the caller), which matches the unified event
+ * model. `filterEventId` keeps the pre-existing behaviour of
+ * highlighting just one row when the user taps its card link.
+ */
 @Component({
   selector: 'app-site-info-modal',
-  imports: [ItineraryDay, ActivitySlot, InfoCard, LinkCard, NoteCard],
+  imports: [EventSlot, InfoCard, LinkCard, NoteCard],
   template: `
     <div
       class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
@@ -35,14 +44,14 @@ interface LinkedEntry {
           >✕</button>
         </div>
 
-        @if (filterActivityId()) {
+        @if (filterEventId()) {
           @if (filteredEntry(); as entry) {
             <div class="px-4 py-3">
               <div
                 class="rounded-lg border border-surface-200 p-3"
                 style="background-color: var(--p-surface-50)"
               >
-                <app-activity-slot [activity]="entry.activity" [hideInfoButton]="true" />
+                <app-event-slot [event]="entry.event" [cities]="cities()" />
               </div>
             </div>
             <div class="px-4 pb-4">
@@ -59,27 +68,29 @@ interface LinkedEntry {
             </div>
           } @else {
             <div class="px-4 py-6 text-center text-sm" style="color: var(--p-surface-500)">
-              Sin informacion vinculada para esta actividad.
+              Sin informacion vinculada para este evento.
             </div>
           }
-        } @else if (day(); as d) {
-          <div class="px-4 pt-3">
-            <div
-              class="rounded-lg border border-surface-200 p-3"
-              style="background-color: var(--p-surface-50)"
-            >
-              <app-itinerary-day [day]="d" [isLast]="true" [showUnconfirmed]="true" />
-            </div>
+        } @else {
+          <div class="flex flex-col gap-2 px-4 pt-3">
+            @for (e of visibleEvents(); track e.id) {
+              <div
+                class="rounded-lg border border-surface-200 p-3"
+                style="background-color: var(--p-surface-50)"
+              >
+                <app-event-slot [event]="e" [cities]="cities()" />
+              </div>
+            }
           </div>
           @if (linkedEntries().length) {
             <div class="flex flex-col gap-3 px-4 pb-4 pt-3">
-              @for (entry of linkedEntries(); track entry.activity.id) {
+              @for (entry of linkedEntries(); track entry.event.id) {
                 <div
                   class="rounded-lg p-3"
                   style="background-color: var(--p-surface-50); border: 1px solid var(--p-surface-200)"
                 >
                   <div class="text-xs mb-2 font-medium" [style.color]="cityColor()">
-                    {{ entry.activity.description }}
+                    {{ entry.event.title }}
                   </div>
                   @switch (entry.card.type) {
                     @case ('info') { <app-info-card [card]="entry.card" /> }
@@ -97,11 +108,12 @@ interface LinkedEntry {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SiteInfoModal {
-  readonly day = input<Day | null>(null);
+  readonly events = input<TripEvent[]>([]);
+  readonly cities = input<readonly City[]>([]);
   readonly cityName = input.required<string>();
   readonly cityColor = input.required<string>();
   readonly citySlug = input.required<string>();
-  readonly filterActivityId = input<string | null>(null);
+  readonly filterEventId = input<string | null>(null);
   readonly close = output<void>();
 
   readonly cardsResource = httpResource<Card[]>(() => '/api/cards/' + this.citySlug());
@@ -112,28 +124,28 @@ export class SiteInfoModal {
     return map;
   });
 
+  readonly visibleEvents = computed((): TripEvent[] =>
+    [...this.events()].sort((a, b) => a.timestampIn.localeCompare(b.timestampIn))
+  );
+
   readonly linkedEntries = computed((): LinkedEntry[] => {
-    const d = this.day();
-    if (!d) return [];
     const map = this.cardsById();
     const out: LinkedEntry[] = [];
-    for (const a of d.activities) {
-      if (!a.cardId) continue;
-      const card = map.get(a.cardId);
-      if (card) out.push({ activity: a, card });
+    for (const e of this.events()) {
+      if (!e.cardId) continue;
+      const card = map.get(e.cardId);
+      if (card) out.push({ event: e, card });
     }
     return out;
   });
 
   readonly filteredEntry = computed((): LinkedEntry | null => {
-    const id = this.filterActivityId();
+    const id = this.filterEventId();
     if (!id) return null;
-    const d = this.day();
-    if (!d) return null;
-    const activity = d.activities.find(a => a.id === id);
-    if (!activity || !activity.cardId) return null;
-    const card = this.cardsById().get(activity.cardId);
+    const event = this.events().find((e) => e.id === id);
+    if (!event || !event.cardId) return null;
+    const card = this.cardsById().get(event.cardId);
     if (!card) return null;
-    return { activity, card };
+    return { event, card };
   });
 }
