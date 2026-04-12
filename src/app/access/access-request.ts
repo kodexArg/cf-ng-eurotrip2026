@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -137,28 +138,26 @@ export class AccessRequestPage {
   readonly submitted = signal(false);
   readonly errorMessage = signal('');
 
-  submit(): void {
+  async submit(): Promise<void> {
     if (!this.name.trim() || !this.email.trim()) return;
     if (this.loading()) return;
 
     this.loading.set(true);
     this.errorMessage.set('');
 
-    this.http
-      .post('/api/access-requests', {
-        name: this.name.trim(),
-        email: this.email.trim(),
-        note: this.note.trim(),
-      })
-      .subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.submitted.set(true);
-        },
-        error: () => {
-          this.loading.set(false);
-          this.errorMessage.set('Something went wrong. Please try again.');
-        },
-      });
+    try {
+      await firstValueFrom(
+        this.http.post('/api/access-requests', {
+          name: this.name.trim(),
+          email: this.email.trim(),
+          note: this.note.trim(),
+        })
+      );
+      this.submitted.set(true);
+    } catch {
+      this.errorMessage.set('Something went wrong. Please try again.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

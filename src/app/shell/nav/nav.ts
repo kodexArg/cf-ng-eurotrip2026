@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { Button } from 'primeng/button';
@@ -72,14 +72,10 @@ import { LoginDialog } from '../../shared/login-dialog/login-dialog';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Nav implements OnInit {
+export class Nav {
   private router = inject(Router);
   readonly auth = inject(AuthService);
   readonly loginDialog = viewChild.required(LoginDialog);
-
-  ngOnInit(): void {
-    this.auth.checkAuth();
-  }
 
   readonly menuItems: MenuItem[] = [
     { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },
