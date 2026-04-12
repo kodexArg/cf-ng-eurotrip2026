@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, viewChild } from '@angular/core';
-import { Tag } from 'primeng/tag';
 import { Activity } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { ActivityTypeChip } from '../activity-type-chip/activity-type-chip';
@@ -10,20 +9,19 @@ import { EditService } from '../../shared/services/edit.service';
 @Component({
   selector: 'app-activity-slot',
   standalone: true,
-  imports: [Tag, ConfirmedBadge, ActivityTypeChip, ActivityEditDialog],
+  imports: [ConfirmedBadge, ActivityTypeChip, ActivityEditDialog],
   template: `
     <div class="flex items-start gap-2 py-1">
-      <p-tag [value]="slotLabel()" severity="secondary" styleClass="text-xs min-w-16" />
-      <div class="flex-1 min-w-0">
-        <div class="flex items-start gap-1.5">
+      <i
+        class="pi {{ slotIcon().icon }} text-sm mt-0.5 shrink-0"
+        [style.color]="slotIcon().color"
+        [title]="slotIcon().title"
+      ></i>
+      <div class="flex-1 flex items-start gap-1.5">
+        @if (activity().tipo !== 'visit') {
           <app-activity-type-chip [tipo]="activity().tipo" />
-          <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
-        </div>
-        @if (activity().costHint) {
-          <div class="mt-0.5 ml-6">
-            <span class="text-xs" style="color: var(--p-surface-400)">{{ activity().costHint }}</span>
-          </div>
         }
+        <span class="text-sm" style="color: var(--p-surface-700)">{{ activity().description }}</span>
       </div>
       @if (activity().confirmed) {
         <app-confirmed-badge
@@ -53,34 +51,28 @@ export class ActivitySlot {
 
   protected readonly editDialog = viewChild.required(ActivityEditDialog);
 
-  readonly slotLabel = computed(() => {
-    const labels: Record<string, string> = {
-      morning: 'Mañana',
-      afternoon: 'Tarde',
-      evening: 'Noche',
-      'all-day': 'Todo el día',
+  readonly slotIcon = computed((): { icon: string; color: string; title: string } => {
+    const icons: Record<string, { icon: string; color: string; title: string }> = {
+      morning:   { icon: 'pi-sun',      color: '#f59e0b', title: 'Mañana' },
+      afternoon: { icon: 'pi-sun',      color: '#f97316', title: 'Tarde' },
+      evening:   { icon: 'pi-moon',     color: '#6366f1', title: 'Noche' },
+      'all-day': { icon: 'pi-calendar', color: 'var(--p-surface-500)', title: 'Todo el día' },
     };
-    return labels[this.activity().timeSlot] ?? this.activity().timeSlot;
+    return icons[this.activity().timeSlot] ?? { icon: 'pi-calendar', color: 'var(--p-surface-500)', title: this.activity().timeSlot };
   });
 
   protected onToggleConfirmed(): void {
     const act = this.activity();
     this.editService.patchActivity(act.id, { confirmed: !act.confirmed }).subscribe({
-      next: () => {
-        console.log('Activity confirmed toggled', act.id);
-        this.updated.emit();
-      },
-      error: (err) => console.error('Failed to toggle confirmed', err),
+      next: () => this.updated.emit(),
+      error: () => {},
     });
   }
 
   protected onSaved(event: { id: string; changes: Record<string, unknown> }): void {
     this.editService.patchActivity(event.id, event.changes).subscribe({
-      next: () => {
-        console.log('Activity saved', event.id, event.changes);
-        this.updated.emit();
-      },
-      error: (err) => console.error('Failed to save activity', err),
+      next: () => this.updated.emit(),
+      error: () => {},
     });
   }
 }
