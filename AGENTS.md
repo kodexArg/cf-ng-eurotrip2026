@@ -55,6 +55,12 @@ Both are configured in `.mcp.json`:
 - **Confirmed flights**: SCL → MAD (departure), ROM → EZE (return)
 - **Fixed dates**: Madrid Apr 20–24, Roma departure May 9
 
+## Workflow rules
+
+- **Fast iterations**: push to prod without asking, execute SQL migrations (local + remote) without asking
+- **D1 migrations**: always run on both local SQLite AND remote (`--remote`) when deploying
+- **SQL is free**: create, modify, delete data at will — the DB is a scratch pad during development
+
 ## Key rules (summary)
 
 - Code and docs: **English**. Rendered UI: **Spanish**.
