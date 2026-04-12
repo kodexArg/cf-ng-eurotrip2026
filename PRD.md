@@ -77,7 +77,7 @@ Every distinct piece of UI is its own component. Components compose other compon
 
 ### 1. Calendar
 
-A month-view calendar covering the full trip: April 17 – May 9, 2026. This is the default landing page (`/calendario`).
+A month-view calendar covering the full trip: April 19 – May 10, 2026. This is the default landing page (`/calendario`).
 
 - Spans two months (April + May) shown as a single continuous view or two adjacent month panels
 - Each day cell is color-coded by city (same palette as the Itinerary: Madrid amber, Barcelona coral, Palma gold, Londres blue, Roma rose); travel days get a gradient between the origin and destination colors
