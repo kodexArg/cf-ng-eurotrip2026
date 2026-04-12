@@ -4,7 +4,7 @@ import { City } from '../../shared/models';
 import { getDayColorFromCities, getTravelGradientFromCities, toDateStr } from '../calendar-utils';
 import { CalendarDay } from '../calendar-day/calendar-day';
 
-type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean };
+type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string };
 
 type CellData = {
   key: string;
@@ -47,7 +47,7 @@ type CellData = {
 export class CalendarMonth {
   readonly month      = input.required<number>();
   readonly year       = input.required<number>();
-  readonly activities = input<Array<{ date: string } & CalEvent>>([]);
+  readonly activities = input<Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string }>>([]);
   readonly cities     = input<City[]>([]);
 
   readonly selectDate = output<string>();
@@ -78,7 +78,11 @@ export class CalendarMonth {
       const dateStr = toDateStr(year, month, d);
       const events  = acts.filter(a => a.date === dateStr);
       const gradient = getTravelGradientFromCities(dateStr, cities);
-      const bgColor  = gradient ? null : getDayColorFromCities(dateStr, cities);
+      let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
+      if (!bgColor && !gradient && events.some(e => e.confirmed)) {
+        const confirmedEvent = events.find(e => e.confirmed && e.cityColor);
+        if (confirmedEvent?.cityColor) bgColor = confirmedEvent.cityColor;
+      }
       cells.push({ key: dateStr, day: d, dateStr, events, bgColor, gradient, inactive: false });
     }
 
