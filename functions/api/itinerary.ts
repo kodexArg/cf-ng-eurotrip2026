@@ -23,7 +23,6 @@ interface Activity {
   tag: string;
   costHint: string | null;
   confirmed: boolean;
-  variant: string;
 }
 
 interface Day {
@@ -31,7 +30,6 @@ interface Day {
   cityId: string;
   date: string;
   label: string | null;
-  variant: string;
   activities: Activity[];
 }
 
@@ -59,10 +57,10 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
       'SELECT id, name, slug, arrival, departure, nights, color, lat, lon FROM cities ORDER BY arrival ASC'
     ).all<City>(),
     ctx.env.DB.prepare(
-      'SELECT id, city_id AS cityId, date, label, variant FROM days ORDER BY date ASC, id ASC'
+      'SELECT id, city_id AS cityId, date, label FROM days ORDER BY date ASC, id ASC'
     ).all<Day>(),
     ctx.env.DB.prepare(
-      'SELECT id, day_id AS dayId, time_slot AS timeSlot, description, tipo, tag, cost_hint AS costHint, confirmed, variant FROM activities ORDER BY id ASC'
+      'SELECT id, day_id AS dayId, time_slot AS timeSlot, description, tipo, tag, cost_hint AS costHint, confirmed FROM activities ORDER BY id ASC'
     ).all<Activity>(),
     ctx.env.DB.prepare(
       'SELECT id, from_city AS fromCity, to_city AS toCity, date, mode, label, duration, cost_hint AS costHint, confirmed FROM transport_legs ORDER BY date ASC'
