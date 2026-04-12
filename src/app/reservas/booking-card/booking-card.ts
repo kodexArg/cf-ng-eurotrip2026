@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Tooltip } from 'primeng/tooltip';
 import { Booking } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
@@ -7,7 +8,7 @@ import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
 @Component({
   selector: 'app-booking-card',
   standalone: true,
-  imports: [DatePipe, ConfirmedBadge, BookingTypeChip],
+  imports: [DatePipe, ConfirmedBadge, BookingTypeChip, Tooltip],
   template: `
     <div class="flex items-start gap-3 py-3 px-4 rounded-lg border" style="border-color: var(--p-surface-200)">
       <app-booking-type-chip [type]="booking().type" />
@@ -41,11 +42,17 @@ import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
           </div>
         }
       </div>
-      @if (booking().costUsd) {
-        <span class="text-sm font-semibold" style="color: var(--p-surface-700)">US$ {{ booking().costUsd }}</span>
-      }
       @if (booking().confirmed) {
         <app-confirmed-badge [editable]="editable()" (toggle)="toggleConfirmed.emit()" />
+      }
+      @if (booking().costUsd) {
+        <i
+          class="pi pi-dollar text-xs ml-1"
+          style="color: var(--p-surface-400)"
+          [pTooltip]="'Precio: $' + booking().costUsd + ' USD'"
+          tooltipPosition="top"
+          [showDelay]="300"
+        ></i>
       }
       @if (editable()) {
         <div class="flex gap-1">
