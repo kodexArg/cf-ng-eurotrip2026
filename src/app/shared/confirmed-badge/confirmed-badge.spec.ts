@@ -25,10 +25,10 @@ describe('ConfirmedBadge', () => {
     expect(fixture.nativeElement).toBeTruthy();
   });
 
-  it('contains "Confirmado" text', async () => {
+  it('contains checkmark indicator', async () => {
     const fixture = TestBed.createComponent(ConfirmedBadge);
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(fixture.nativeElement.textContent).toContain('Confirmado');
+    expect(fixture.nativeElement.textContent).toContain('\u2713');
   });
 });
