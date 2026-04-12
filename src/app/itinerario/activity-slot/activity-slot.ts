@@ -3,7 +3,7 @@ import { Activity, TIPO_CONFIG } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { ActivityEditDialog } from '../activity-edit-dialog/activity-edit-dialog';
 import { AuthService } from '../../shared/services/auth.service';
-import { EditService } from '../../shared/services/edit.service';
+import { EditService, ActivityPatch } from '../../shared/services/edit.service';
 import { InfoRow } from '../info-row/info-row';
 
 @Component({
@@ -60,7 +60,7 @@ export class ActivitySlot {
   }
 
   protected onSaved(event: { id: string; changes: Record<string, unknown> }): void {
-    this.editService.patchActivity(event.id, event.changes).subscribe({
+    this.editService.patchActivity(event.id, event.changes as ActivityPatch).subscribe({
       next: () => this.updated.emit(),
       error: () => {},
     });

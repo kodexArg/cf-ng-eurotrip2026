@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, viewChild } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { TransportLeg } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { TransportEditDialog } from '../transport-edit-dialog/transport-edit-dialog';
 import { AuthService } from '../../shared/services/auth.service';
-import { EditService } from '../../shared/services/edit.service';
+import { EditService, TransportPatch } from '../../shared/services/edit.service';
 
 const CITY_NAMES: Record<string, string> = {
   scl: 'Santiago',
@@ -99,8 +100,12 @@ export class TransportInline {
     return CITY_NAMES[code.toLowerCase()] ?? code.toUpperCase();
   }
 
-  onSaved(event: { id: string; changes: Partial<TransportLeg> }): void {
-    this.editService.patchTransport(event.id, event.changes as Record<string, unknown>).subscribe();
+  async onSaved(event: { id: string; changes: Partial<TransportLeg> }): Promise<void> {
+    try {
+      await firstValueFrom(this.editService.patchTransport(event.id, event.changes as TransportPatch));
+    } catch (err) {
+      console.error('[TransportInline] Failed to save transport changes:', err);
+    }
     this.updated.emit(event);
   }
 }

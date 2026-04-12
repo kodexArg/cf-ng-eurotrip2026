@@ -59,13 +59,14 @@ export class ItineraryPage {
     return this.itineraryResource.value() ?? [];
   });
 
-  private readonly _scrollEffect = effect(() => {
+  private readonly _scrollEffect = effect((onCleanup) => {
     const d = this.date();
     const blocks = this.itineraryResource.value();
     if (d && blocks) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         document.getElementById('day-' + d)?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
+      onCleanup(() => clearTimeout(timer));
     }
   });
 }

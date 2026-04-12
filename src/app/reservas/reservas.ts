@@ -5,7 +5,7 @@ import { SelectButton } from 'primeng/selectbutton';
 import { Button } from 'primeng/button';
 import { Booking, BookingType } from '../shared/models';
 import { AuthService } from '../shared/services/auth.service';
-import { EditService } from '../shared/services/edit.service';
+import { EditService, BookingPatch } from '../shared/services/edit.service';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from './booking-card/booking-card';
@@ -91,11 +91,11 @@ export class ReservasPage {
 
   onSaved(event: { id?: string; data: Record<string, unknown> }): void {
     if (event.id) {
-      this.editService.patchBooking(event.id, event.data).subscribe(() => {
+      this.editService.patchBooking(event.id, event.data as BookingPatch).subscribe(() => {
         this.bookingsResource.reload();
       });
     } else {
-      this.editService.createBooking(event.data).subscribe(() => {
+      this.editService.createBooking(event.data as BookingPatch).subscribe(() => {
         this.bookingsResource.reload();
       });
     }
@@ -110,7 +110,7 @@ export class ReservasPage {
 
   toggleConfirmed(booking: Booking): void {
     this.editService
-      .patchBooking(booking.id, { confirmed: !booking.confirmed ? 1 : 0 })
+      .patchBooking(booking.id, { confirmed: !booking.confirmed })
       .subscribe(() => {
         this.bookingsResource.reload();
       });
