@@ -14,7 +14,7 @@ export class WeatherService {
       this.cache.set(citySlug, sig);
       firstValueFrom(this.http.get<CityWeather>(`/api/weather/${citySlug}`))
         .then(data => sig.set(data))
-        .catch(() => {}); // silently fail — weather is non-critical
+        .catch(() => {});
     }
     return this.cache.get(citySlug)!.asReadonly();
   }

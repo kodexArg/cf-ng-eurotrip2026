@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Activity, Booking, Card, TransportLeg } from '../models';
 
-// Patch types — only fields accepted by each API endpoint
 export type ActivityPatch = Partial<Pick<Activity, 'description' | 'timeSlot' | 'confirmed' | 'costHint' | 'tag' | 'tipo'>>;
 export type TransportPatch = Partial<Pick<TransportLeg, 'label' | 'duration' | 'confirmed' | 'fare' | 'company' | 'departureTime' | 'arrivalTime' | 'costHint'>>;
 export type CardPatch = Partial<Pick<Card, 'title' | 'body' | 'url'>>;
