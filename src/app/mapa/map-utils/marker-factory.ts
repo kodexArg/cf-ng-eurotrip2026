@@ -1,40 +1,278 @@
 import type { City } from '../../shared/models/city.model';
 import type { TripEventBase } from '../../shared/models/event.model';
+import { timeOf } from '../../shared/models/event.model';
 
 const escapeHtml = (s: string): string =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
 
+// Spanish day/month abbreviations — deterministic, locale-independent.
+const DOW_ES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const MON_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+/** "2026-04-27" → "Lun 27 abr". Naive local date, no TZ shifting. */
+function formatDayHeader(ymd: string): string {
+  const [y, m, d] = ymd.split('-').map(Number);
+  // Date constructed as UTC then read with UTC getters → no TZ drift.
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return `${DOW_ES[dt.getUTCDay()]} ${d} ${MON_ES[m - 1]}`;
+}
+
+/** "2026-04-27" → "27/04". */
+function formatShortDate(ymd: string): string {
+  const [, m, d] = ymd.split('-');
+  return `${d}/${m}`;
+}
+
+/** Chronological sort: date ASC, then timestamp_in ASC (nulls last). */
+function sortHitos(hitos: TripEventBase[]): TripEventBase[] {
+  return [...hitos].sort((a, b) => {
+    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+    const ta = a.timestampIn ?? '';
+    const tb = b.timestampIn ?? '';
+    if (!ta && !tb) return 0;
+    if (!ta) return 1;
+    if (!tb) return -1;
+    return ta < tb ? -1 : 1;
+  });
+}
+
+/** True when the hito has a real origin coordinate pair (placed on the map). */
+function hasCoords(h: TripEventBase): boolean {
+  return typeof h.originLat === 'number' && typeof h.originLon === 'number';
+}
+
+/** Soft background tinted from the city color (alpha ~14%). */
+function tintBg(hex: string): string {
+  // Accepts #rrggbb or named fallback; if unparseable, return a neutral gray.
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return 'rgba(0,0,0,0.04)';
+  const n = parseInt(m[1], 16);
+  const r = (n >> 16) & 0xff;
+  const g = (n >> 8) & 0xff;
+  const b = n & 0xff;
+  return `rgba(${r},${g},${b},0.09)`;
+}
+
 /**
- * Builds the HTML for the city hover popup: city header + list of confirmed
- * hitos. Hitos appear regardless of whether their coords are precise, since
- * the list is informational and doesn't place anything on the map.
+ * Builds the HTML for the city hover popup. Receives ALL hitos for the city
+ * (confirmed + planned). Confirmed ones get a check badge; unconfirmed stay
+ * dimmer. Hitos with real coords get a tiny map-pin indicator to hint that
+ * they're also drawn on the map.
  */
-function buildCityPopupHtml(city: City, confirmedHitos: TripEventBase[]): string {
+function buildCityPopupHtml(city: City, hitos: TripEventBase[]): string {
+  const color = city.color;
+  const bg = tintBg(color);
+
+  const confirmedCount = hitos.filter((h) => h.confirmed).length;
+  const totalCount = hitos.length;
+  const totalUsd = hitos.reduce((acc, h) => acc + (h.usd ?? 0), 0);
+
   const header = `
-    <div style="text-align:center;border-bottom:1px solid #e5e7eb;padding-bottom:4px;margin-bottom:6px">
-      <strong style="font-size:14px;color:${city.color}">${escapeHtml(city.name)}</strong><br>
-      <span style="color:#666;font-size:11px">${escapeHtml(city.arrival)} – ${escapeHtml(city.departure)} · ${city.nights}n</span>
+    <div style="
+      text-align:center;
+      background:${bg};
+      border-left:3px solid ${color};
+      padding:8px 10px 6px;
+      margin:-4px -4px 6px;
+      border-radius:2px 2px 0 0;
+    ">
+      <div style="
+        font-size:14px;
+        font-weight:700;
+        color:${color};
+        letter-spacing:0.2px;
+        line-height:1.2;
+      ">${escapeHtml(city.name)}</div>
+      <div style="
+        font-size:10.5px;
+        color:#555;
+        margin-top:3px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:6px;
+        flex-wrap:wrap;
+      ">
+        <span><i class="pi pi-calendar" style="font-size:9px;margin-right:2px"></i>${escapeHtml(formatShortDate(city.arrival))} – ${escapeHtml(formatShortDate(city.departure))}</span>
+        <span style="color:#bbb">·</span>
+        <span><i class="pi pi-moon" style="font-size:9px;margin-right:2px"></i>${city.nights}n</span>
+        ${totalCount > 0 ? `
+          <span style="color:#bbb">·</span>
+          <span><i class="pi pi-map-marker" style="font-size:9px;margin-right:2px"></i>${confirmedCount}/${totalCount}</span>
+        ` : ''}
+        ${totalUsd > 0 ? `
+          <span style="color:#bbb">·</span>
+          <span><i class="pi pi-dollar" style="font-size:9px;margin-right:1px"></i>${totalUsd}</span>
+        ` : ''}
+      </div>
     </div>`;
 
-  if (confirmedHitos.length === 0) {
-    return header + `<div style="color:#999;font-size:11px;font-style:italic">Sin hitos confirmados</div>`;
+  if (totalCount === 0) {
+    return header + `
+      <div style="
+        color:#999;
+        font-size:11px;
+        font-style:italic;
+        text-align:center;
+        padding:8px 4px 4px;
+      ">Sin hitos registrados</div>`;
   }
 
-  const rows = confirmedHitos
-    .map((h) => `
-      <li style="display:flex;align-items:center;gap:6px;padding:2px 0;font-size:12px;color:#333">
-        <i class="pi ${escapeHtml(h.icon || 'pi-map-marker')}" style="font-size:11px;color:${city.color};width:14px;text-align:center"></i>
-        <span>${escapeHtml(h.title)}</span>
-      </li>`)
-    .join('');
+  // Group by date → sorted list of [date, hitos[]].
+  const sorted = sortHitos(hitos);
+  const byDate = new Map<string, TripEventBase[]>();
+  for (const h of sorted) {
+    const list = byDate.get(h.date) ?? [];
+    list.push(h);
+    byDate.set(h.date, list);
+  }
 
-  return header + `<ul style="list-style:none;margin:0;padding:0;max-height:240px;overflow-y:auto">${rows}</ul>`;
+  const dayBlocks: string[] = [];
+  for (const [date, dayHitos] of byDate) {
+    const dayHeader = `
+      <div style="
+        font-size:10px;
+        font-weight:600;
+        color:${color};
+        text-transform:uppercase;
+        letter-spacing:0.6px;
+        padding:5px 2px 2px;
+        border-bottom:1px dashed ${bg.replace('0.09', '0.35')};
+        margin-bottom:3px;
+      ">${escapeHtml(formatDayHeader(date))}</div>`;
+
+    const rows = dayHitos.map((h) => renderHitoRow(h, color)).join('');
+    dayBlocks.push(dayHeader + rows);
+  }
+
+  return header + `
+    <div style="
+      max-height:280px;
+      overflow-y:auto;
+      padding-right:2px;
+    ">${dayBlocks.join('')}</div>`;
+}
+
+/** Single hito row: time / icon / title / side metadata. */
+function renderHitoRow(h: TripEventBase, cityColor: string): string {
+  const confirmed = !!h.confirmed;
+  const rowOpacity = confirmed ? '1' : '0.62';
+  const iconName = h.icon || 'pi-map-marker';
+  const time = h.timestampIn ? timeOf(h.timestampIn) : '';
+
+  // Left gutter: time or a thin placeholder so icons align.
+  const timeCell = time
+    ? `<span style="
+        font-size:9.5px;
+        color:#777;
+        font-variant-numeric:tabular-nums;
+        min-width:30px;
+        text-align:right;
+        padding-top:1px;
+      ">${escapeHtml(time)}</span>`
+    : `<span style="min-width:30px"></span>`;
+
+  // Small map-pin suffix when the hito is drawn on the map.
+  const mapIndicator = hasCoords(h)
+    ? `<i class="pi pi-map-marker" title="En el mapa" style="
+        font-size:8px;
+        color:${cityColor};
+        opacity:0.75;
+        margin-left:3px;
+      "></i>`
+    : '';
+
+  // Confirmed check or planned dot on the far right.
+  const statusBadge = confirmed
+    ? `<i class="pi pi-check-circle" title="Confirmado" style="
+        font-size:10px;
+        color:#16a34a;
+        flex-shrink:0;
+      "></i>`
+    : `<i class="pi pi-circle" title="Planeado" style="
+        font-size:9px;
+        color:#cbd5e1;
+        flex-shrink:0;
+      "></i>`;
+
+  // Optional $ before the status badge.
+  const usdBadge = typeof h.usd === 'number' && h.usd > 0
+    ? `<span style="
+        font-size:9px;
+        color:#16a34a;
+        font-weight:600;
+        display:inline-flex;
+        align-items:center;
+        gap:1px;
+        flex-shrink:0;
+      "><i class="pi pi-dollar" style="font-size:8px"></i>${h.usd}</span>`
+    : '';
+
+  // Optional one-line description underneath the title.
+  const desc = h.description
+    ? `<div style="
+        font-size:10px;
+        color:#777;
+        line-height:1.3;
+        margin-top:1px;
+      ">${escapeHtml(h.description)}</div>`
+    : '';
+
+  // Optional notes (shorter, even dimmer).
+  const notes = h.notes
+    ? `<div style="
+        font-size:9.5px;
+        color:#999;
+        font-style:italic;
+        line-height:1.3;
+        margin-top:1px;
+      "><i class="pi pi-info-circle" style="font-size:8px;margin-right:2px"></i>${escapeHtml(h.notes)}</div>`
+    : '';
+
+  return `
+    <div style="
+      display:flex;
+      align-items:flex-start;
+      gap:6px;
+      padding:3px 2px;
+      opacity:${rowOpacity};
+    ">
+      ${timeCell}
+      <i class="pi ${escapeHtml(iconName)}" style="
+        font-size:12px;
+        color:${cityColor};
+        width:14px;
+        text-align:center;
+        padding-top:1px;
+        flex-shrink:0;
+      "></i>
+      <div style="flex:1;min-width:0">
+        <div style="
+          font-size:11.5px;
+          color:#222;
+          line-height:1.3;
+          font-weight:${confirmed ? '500' : '400'};
+          word-wrap:break-word;
+        ">${escapeHtml(h.title)}${mapIndicator}</div>
+        ${desc}
+        ${notes}
+      </div>
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:4px;
+        padding-top:1px;
+      ">
+        ${usdBadge}
+        ${statusBadge}
+      </div>
+    </div>`;
 }
 
 export function createCityMarker(
   L: typeof import('leaflet'),
   city: City,
-  confirmedHitos: TripEventBase[],
+  hitos: TripEventBase[],
   onClick: (slug: string) => void
 ): import('leaflet').Marker {
   const icon = L.divIcon({
@@ -62,10 +300,10 @@ export function createCityMarker(
     className: 'city-label',
   });
 
-  marker.bindPopup(buildCityPopupHtml(city, confirmedHitos), {
+  marker.bindPopup(buildCityPopupHtml(city, hitos), {
     offset: [0, -8],
-    maxWidth: 260,
-    minWidth: 180,
+    maxWidth: 280,
+    minWidth: 220,
     className: 'city-hitos-popup',
     closeButton: false,
     autoPan: false,

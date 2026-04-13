@@ -41,9 +41,8 @@ export class MapContainer {
 
   private readonly _renderEvents = effect(() => {
     const events = this.events();
-    const cities = this.cities();
-    if (this.mapReady() && events.length > 0 && cities.length > 0) {
-      this.renderEvents(events, cities);
+    if (this.mapReady() && events.length > 0) {
+      this.renderEvents(events);
     }
   });
 
@@ -74,24 +73,26 @@ export class MapContainer {
   private renderCities(cities: City[], events: TripEventBase[]): void {
     if (!this.citiesLayer) return;
     this.citiesLayer.clearLayers();
+    // Pass ALL hitos per city (confirmed + planned). The popup itself
+    // visually distinguishes them; unconfirmed ones still deserve to show.
     const hitosByCity = new Map<string, TripEventBase[]>();
     for (const ev of events) {
-      if (ev.type !== 'hito' || !ev.confirmed) continue;
+      if (ev.type !== 'hito') continue;
       const list = hitosByCity.get(ev.cityIn) ?? [];
       list.push(ev);
       hitosByCity.set(ev.cityIn, list);
     }
     cities.forEach((city) => {
-      const confirmedHitos = hitosByCity.get(city.id) ?? [];
-      createCityMarker(L, city, confirmedHitos, (slug) => this.router.navigate(['/', slug]))
+      const cityHitos = hitosByCity.get(city.id) ?? [];
+      createCityMarker(L, city, cityHitos, (slug) => this.router.navigate(['/', slug]))
         .addTo(this.citiesLayer!);
     });
   }
 
-  private renderEvents(events: TripEventBase[], cities: City[]): void {
+  private renderEvents(events: TripEventBase[]): void {
     if (!this.map || !this.eventsLayer) return;
     this.eventsLayer.clearLayers();
-    renderEventsOnMap(L, this.map, events, cities).getLayers()
+    renderEventsOnMap(L, this.map, events).getLayers()
       .forEach((layer) => this.eventsLayer!.addLayer(layer));
   }
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ActivityTipo } from '../../shared/models/activity.model';
-import { City } from '../../shared/models';
+import { City, TripEvent } from '../../shared/models';
 import { getDayColorFromCities, getTravelGradientFromCities, toDateStr } from '../calendar-utils';
 import { CalendarDay } from '../calendar-day/calendar-day';
 
@@ -11,6 +11,7 @@ type CellData = {
   day: number | null;
   dateStr: string;
   events: CalEvent[];
+  rawEvents: TripEvent[];
   bgColor: string | null;
   gradient: string | null;
   inactive: boolean;
@@ -33,6 +34,8 @@ type CellData = {
             [dateStr]="cell.dateStr"
             [dayNumber]="cell.day ?? 0"
             [events]="cell.events"
+            [rawEvents]="cell.rawEvents"
+            [cities]="cities()"
             [bgColor]="cell.bgColor"
             [gradient]="cell.gradient"
             [inactive]="cell.inactive"
@@ -45,10 +48,11 @@ type CellData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarMonth {
-  readonly month      = input.required<number>();
-  readonly year       = input.required<number>();
-  readonly activities = input<Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string }>>([]);
-  readonly cities     = input<City[]>([]);
+  readonly month       = input.required<number>();
+  readonly year        = input.required<number>();
+  readonly activities  = input<Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string }>>([]);
+  readonly eventsByDay = input<Map<string, TripEvent[]>>(new Map());
+  readonly cities      = input<City[]>([]);
 
   readonly selectDate = output<string>();
   readonly dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -63,6 +67,7 @@ export class CalendarMonth {
     const month  = this.month();
     const acts   = this.activities();
     const cities = this.cities();
+    const eByDay = this.eventsByDay();
 
     const daysInMonth = new Date(year, month, 0).getDate();
     const firstDay    = new Date(year, month - 1, 1).getDay();
@@ -71,19 +76,20 @@ export class CalendarMonth {
     const cells: CellData[] = [];
 
     for (let i = 0; i < startOffset; i++) {
-      cells.push({ key: 'empty-' + i, day: null, dateStr: '', events: [], bgColor: null, gradient: null, inactive: true });
+      cells.push({ key: 'empty-' + i, day: null, dateStr: '', events: [], rawEvents: [], bgColor: null, gradient: null, inactive: true });
     }
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = toDateStr(year, month, d);
       const events  = acts.filter(a => a.date === dateStr).sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
+      const rawEvents = eByDay.get(dateStr) ?? [];
       const gradient = getTravelGradientFromCities(dateStr, cities);
       let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
       if (!bgColor && !gradient && events.some(e => e.confirmed)) {
         const confirmedEvent = events.find(e => e.confirmed && e.cityColor);
         if (confirmedEvent?.cityColor) bgColor = confirmedEvent.cityColor;
       }
-      cells.push({ key: dateStr, day: d, dateStr, events, bgColor, gradient, inactive: false });
+      cells.push({ key: dateStr, day: d, dateStr, events, rawEvents, bgColor, gradient, inactive: false });
     }
 
     return cells;

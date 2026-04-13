@@ -1,6 +1,16 @@
-# angular-21-csr-primeng
+# eurotrip2026
 
-An opinionated Angular 21 CSR starter template built around **PrimeNG** and **Tailwind CSS v4**. Designed for AI-assisted development with a full Claude Code skill suite and Angular MCP integration baked in.
+Personal travel companion site for Gabriel & Vanesa's Europe trip — April 19 to May 10, 2026. Deployed at <https://eurotrip2026.kodexarg.com>. Angular 21 CSR + PrimeNG + Tailwind v4 + Cloudflare (Pages, D1, R2).
+
+## Project docs
+
+Start here before touching anything:
+
+- [`PRD.md`](PRD.md) — product definition, language rule, design constraints, seed data
+- [`AGENTS.md`](AGENTS.md) — trip constraints and workflow rules for any agent working on this repo
+- [`VIAJE.md`](VIAJE.md) — canonical trip fallback (flights, accommodations, day-by-day itinerary)
+- [`ADRs/`](ADRs/) — architectural decisions (tech stack, Angular patterns, routing, design system, glossary)
+- [`docs/db-workflow.md`](docs/db-workflow.md) — how to query and modify the remote Cloudflare D1
 
 ## Stack
 
@@ -92,12 +102,16 @@ Available MCP tools: `build`, `devserver_start/stop`, `test`, `modernize`, `e2e`
 
 ## Getting Started
 
+This project follows a **production-only workflow** — validate against the live site, not localhost. See [`AGENTS.md`](AGENTS.md) workflow rules.
+
 ```bash
 npm install
-npm start        # ng serve  →  http://localhost:4200
-npm test         # vitest
-npm run build    # production build
+npm test                          # vitest
+npm run build                     # production build
+npm run db -- --command "…"       # one-liner against remote D1 (see docs/db-workflow.md)
 ```
+
+Deployment is automatic: every push to `master` triggers a Cloudflare Pages build.
 
 ## License
 

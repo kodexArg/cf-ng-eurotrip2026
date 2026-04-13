@@ -105,7 +105,7 @@ Rules:
 - Confirmed items (flights, Sagrada Família ticket, etc.) are visually marked.
 - Transport legs between cities shown inline (AVE, TGV, Frecciarossa, flights) with rough cost reference.
 
-Source of truth: D1, seeded from `context/`.
+Source of truth: D1. Data changes go direct against the remote — see [`docs/db-workflow.md`](docs/db-workflow.md). Canonical fallback if the DB is lost: [`VIAJE.md`](VIAJE.md) + this file.
 
 ---
 
@@ -118,24 +118,22 @@ A visual representation of the route across Europe.
 - Future: interactive — tapping a pin navigates to that city's detail page
 - Future: geolocation — shows the traveler's current position on the map (opt-in, mobile)
 
-The map in `context/` is the reference for style and feel.
-
 ---
 
 ### 4. Sites (city detail pages)
 
 One page per city: `/madrid`, `/barcelona`, `/palma`, `/londres`, `/roma`. Grouped under the "Sitios" nav item.
 
-Each page contains cards for activities in that city. Card types:
+Each page contains cards for activities in that city. A card in the `cards` table has one of two types:
 
 | Type | Content |
 |------|---------|
 | `info` | Reference info — address, phone, opening hours, ticket link |
-| `link` | Curated external links — verified, non-scam booking/info pages |
 | `note` | Personal comment — freeform text, markdown, added by Gabriel or Vanesa |
-| `photo` | One or more photos with caption (see Photos section) |
 
-Cards can be added at any time before or during the trip. No public editing — write access is internal only (direct D1 writes or a simple admin path).
+External links live in a separate `card_links` table (1:N per card, with URL + label + tooltip). Photos live in the top-level `photos` table, keyed by city.
+
+Cards can be added at any time before or during the trip. No public editing — write access is internal only (direct SQL against the remote D1, or a future admin path once auth ships).
 
 ---
 

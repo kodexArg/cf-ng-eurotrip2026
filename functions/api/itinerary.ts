@@ -45,6 +45,10 @@ interface EventRow {
   variant: string;
   cardId: string | null;
   notes: string | null;
+  originLat: number | null;
+  originLon: number | null;
+  destinationLat: number | null;
+  destinationLon: number | null;
 
   // events_traslado (nullable via LEFT JOIN)
   company: string | null;
@@ -78,6 +82,10 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
         e.usd, e.icon, e.confirmed, e.variant,
         e.card_id       AS cardId,
         e.notes,
+        e.origin_lat       AS originLat,
+        e.origin_lon       AS originLon,
+        e.destination_lat  AS destinationLat,
+        e.destination_lon  AS destinationLon,
         t.company, t.fare,
         t.vehicle_code  AS vehicleCode,
         t.seat,
@@ -113,6 +121,10 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
       variant: r.variant,
       cardId: r.cardId,
       notes: r.notes,
+      originLat: r.originLat ?? undefined,
+      originLon: r.originLon ?? undefined,
+      destinationLat: r.destinationLat ?? undefined,
+      destinationLon: r.destinationLon ?? undefined,
     };
 
     if (r.type === 'traslado') {
