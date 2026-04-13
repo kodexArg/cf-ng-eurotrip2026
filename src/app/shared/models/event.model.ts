@@ -31,6 +31,12 @@ export interface TripEventBase {
   originLon?: number;
   destinationLat?: number;
   destinationLon?: number;
+  // Optional explicit route waypoints between origin and destination
+  // (traslado only). When present, the map renderer draws straight segments
+  // through these points instead of a great-circle arc. Useful for trains
+  // with a real track that doesn't match the geodesic (e.g. Eurostar via
+  // Channel Tunnel).
+  waypoints?: [number, number][];
 }
 
 export interface HitoEvent extends TripEventBase {
