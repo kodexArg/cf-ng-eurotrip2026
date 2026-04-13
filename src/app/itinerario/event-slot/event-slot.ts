@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { InfoRow } from '../info-row/info-row';
-import { TrasladoPhrasePipe } from './traslado-phrase.pipe';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -14,7 +13,7 @@ import { TrasladoPhrasePipe } from './traslado-phrase.pipe';
  */
 @Component({
   selector: 'app-event-slot',
-  imports: [InfoRow, ConfirmedBadge, TrasladoPhrasePipe],
+  imports: [InfoRow, ConfirmedBadge],
   template: `
     @switch (event().type) {
       @case ('hito') {
@@ -43,16 +42,17 @@ import { TrasladoPhrasePipe } from './traslado-phrase.pipe';
       @case ('traslado') {
         @if (asTraslado(); as t) {
           <app-info-row
-            [icon]="t.icon"
+            icon="pi-sign-out"
             [iconColor]="iconColor()"
-            [text]="t | trasladoPhrase:cities()"
+            [text]="trasladoPartidaText()"
+            [class.opacity-60]="!t.confirmed"
+          />
+          <app-info-row
+            icon="pi-sign-in"
+            [iconColor]="iconColor()"
+            [text]="trasladoArriboText()"
             [class.opacity-60]="!t.confirmed"
           >
-            @if (t.fare || t.vehicleCode) {
-              <span class="text-xs shrink-0 ml-1 select-none" style="color: var(--p-surface-500)">
-                {{ t.fare || t.vehicleCode }}
-              </span>
-            }
             @if (t.confirmed) {
               <app-confirmed-badge />
             }
@@ -102,6 +102,43 @@ export class EventSlot {
   });
 
   protected readonly iconColor = computed(() => 'var(--p-surface-600)');
+
+  private readonly cityNameMap = computed(() =>
+    new Map(this.cities().map((c) => [c.id, c.name]))
+  );
+
+  private resolveCityName(id: string | null): string {
+    if (!id) return '—';
+    return this.cityNameMap().get(id) ?? id.toUpperCase();
+  }
+
+  /**
+   * Partida line: "Partida desde {cityOut} a las {timeOut} por {company} {vehicleCode}"
+   * timestampIn holds the departure time; cityOut is the origin.
+   */
+  protected readonly trasladoPartidaText = computed((): string => {
+    const t = this.asTraslado();
+    if (!t) return '';
+    const origin = this.resolveCityName(t.cityOut);
+    const departTime = timeOf(t.timestampIn);
+    const company = t.company?.trim() || '—';
+    const vehicle = t.vehicleCode?.trim() || '';
+    const service = vehicle ? `${company} ${vehicle}` : company;
+    return `Partida desde ${origin} a las ${departTime} por ${service}`;
+  });
+
+  /**
+   * Arribo line: "Llega a {cityIn} a las {timeIn}"
+   * timestampOut holds the arrival time; cityIn is the destination.
+   */
+  protected readonly trasladoArriboText = computed((): string => {
+    const t = this.asTraslado();
+    if (!t) return '';
+    const dest = this.resolveCityName(t.cityIn);
+    if (!t.timestampOut) return `Destino ${dest}`;
+    const arriveTime = timeOf(t.timestampOut);
+    return `Llega a ${dest} a las ${arriveTime}`;
+  });
 
   protected readonly stayText = computed((): string => {
     const s = this.asEstadia();
