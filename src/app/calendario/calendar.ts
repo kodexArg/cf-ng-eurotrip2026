@@ -6,6 +6,7 @@ import { CalendarMonth } from './calendar-month/calendar-month';
 import { EventTypeLegend } from './event-type-legend/event-type-legend';
 import { CityLegend } from './city-legend/city-legend';
 import { DayDetailDialog } from './day-detail-dialog/day-detail-dialog';
+import { LoadingState } from '../shared/loading-state/loading-state';
 import { getTravelGradientFromEvents } from './calendar-utils';
 
 interface ItineraryPayload {
@@ -31,20 +32,9 @@ const HITO_SUBTYPE_TO_TIPO: Record<string, ActivityTipo> = {
   transfer: 'transport',
 };
 
-/**
- * Calendar page — month grid showing all confirmed (and optionally
- * planned) trip events as category chips.
- *
- * Includes ALL event types: `hito`, `traslado` (flights, trains,
- * transfers), and `estadia` (lodging). The legacy `CalendarActivity`
- * shape is still used by calendar-month / calendar-day / event-chip for
- * the visible chips, but the page also threads the raw `TripEvent[]`
- * down so the day cell can show a hover popup and a click-to-open
- * detail dialog with full info.
- */
 @Component({
   selector: 'app-calendar',
-  imports: [CalendarMonth, EventTypeLegend, CityLegend, DayDetailDialog],
+  imports: [CalendarMonth, EventTypeLegend, CityLegend, DayDetailDialog, LoadingState],
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-6">
       <div class="flex items-center justify-between">
@@ -62,26 +52,30 @@ const HITO_SUBTYPE_TO_TIPO: Record<string, ActivityTipo> = {
           ></i>
         </button>
       </div>
-      @if (cities().length) {
-        <app-city-legend [cities]="cities()" />
+      @if (itineraryResource.isLoading()) {
+        <app-loading-state />
+      } @else {
+        @if (cities().length) {
+          <app-city-legend [cities]="cities()" />
+        }
+        <app-calendar-month
+          [month]="4"
+          [year]="2026"
+          [activitiesByDay]="visibleActivitiesByDay()"
+          [eventsByDay]="visibleEventsByDay()"
+          [cities]="cities()"
+          (selectDate)="openDay($event)"
+        />
+        <app-calendar-month
+          [month]="5"
+          [year]="2026"
+          [activitiesByDay]="visibleActivitiesByDay()"
+          [eventsByDay]="visibleEventsByDay()"
+          [cities]="cities()"
+          (selectDate)="openDay($event)"
+        />
+        <app-event-type-legend />
       }
-      <app-calendar-month
-        [month]="4"
-        [year]="2026"
-        [activities]="visibleActivities()"
-        [eventsByDay]="visibleEventsByDay()"
-        [cities]="cities()"
-        (selectDate)="openDay($event)"
-      />
-      <app-calendar-month
-        [month]="5"
-        [year]="2026"
-        [activities]="visibleActivities()"
-        [eventsByDay]="visibleEventsByDay()"
-        [cities]="cities()"
-        (selectDate)="openDay($event)"
-      />
-      <app-event-type-legend />
     </div>
 
     <app-day-detail-dialog
@@ -106,50 +100,40 @@ export class CalendarPage {
   readonly cities = computed((): City[] => this.itineraryResource.value()?.cities ?? []);
   readonly events = computed((): TripEvent[] => this.itineraryResource.value()?.events ?? []);
 
-  /**
-   * Convert each event into a flat `CalendarActivity` so existing chip
-   * components keep working. Hitos use their subtype-derived tipo;
-   * traslados render as `transport` chips; estadías as `hotel` chips.
-   */
-  readonly allActivities = computed((): CalendarActivity[] => {
+  readonly visibleActivitiesByDay = computed((): Map<string, CalendarActivity[]> => {
     const cityColor = new Map(this.cities().map((c) => [c.id, c.color]));
-    const result: CalendarActivity[] = [];
+    const showAll = this.showIdeas();
+    const map = new Map<string, CalendarActivity[]>();
     for (const e of this.events()) {
+      if (!showAll && !e.confirmed) continue;
       let tipo: ActivityTipo;
-      let tag: string;
-      let description: string;
       if (isHito(e)) {
         tipo = HITO_SUBTYPE_TO_TIPO[e.subtype] ?? 'visit';
-        tag = e.title;
-        description = e.description ?? e.title;
       } else if (isTraslado(e)) {
         tipo = 'transport';
-        tag = e.title;
-        description = e.description ?? e.title;
       } else if (isEstadia(e)) {
         tipo = 'hotel';
-        tag = e.title;
-        description = e.description ?? e.title;
       } else {
         continue;
       }
-      result.push({
+      const activity: CalendarActivity = {
         date: e.date,
-        description,
+        description: e.description ?? e.title,
         tipo,
-        tag,
+        tag: e.title,
         confirmed: e.confirmed,
         cityColor: cityColor.get(e.cityIn) ?? 'var(--p-surface-400)',
-      });
+      };
+      const list = map.get(e.date);
+      if (list) list.push(activity);
+      else map.set(e.date, [activity]);
     }
-    return result;
+    for (const list of map.values()) {
+      list.sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
+    }
+    return map;
   });
 
-  readonly visibleActivities = computed(() =>
-    this.showIdeas() ? this.allActivities() : this.allActivities().filter((a) => a.confirmed)
-  );
-
-  /** Map date → raw TripEvent[] for hover popup & click dialog. */
   readonly visibleEventsByDay = computed((): Map<string, TripEvent[]> => {
     const showAll = this.showIdeas();
     const map = new Map<string, TripEvent[]>();
@@ -171,11 +155,9 @@ export class CalendarPage {
   readonly selectedDayCity = computed((): City | null => {
     const date = this.selectedDate();
     if (!date) return null;
-    // Prefer the city whose [arrival, departure] interval contains the day.
     for (const c of this.cities()) {
       if (date >= c.arrival && date <= c.departure) return c;
     }
-    // Fallback: dominant cityIn from events of the day.
     const evs = this.selectedDayEvents();
     if (evs.length === 0) return null;
     const counts = new Map<string, number>();
