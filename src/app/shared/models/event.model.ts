@@ -31,6 +31,11 @@ export interface TripEventBase {
   originLon?: number;
   destinationLat?: number;
   destinationLon?: number;
+  // Human-readable station / airport / point-of-interest label for origin
+  // and destination. Used in the Reservas card to show exact departure and
+  // arrival points (e.g. "London St Pancras International").
+  originLabel?: string;
+  destinationLabel?: string;
   // Optional explicit route waypoints between origin and destination
   // (traslado only). When present, the map renderer draws straight segments
   // through these points instead of a great-circle arc. Useful for trains
