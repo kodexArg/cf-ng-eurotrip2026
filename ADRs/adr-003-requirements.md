@@ -1,7 +1,7 @@
 ---
 status: accepted
 created_at: 2026-04-09
-updated_at: 2026-04-09
+updated_at: 2026-04-12
 ---
 
 # Requirements
@@ -39,7 +39,8 @@ This ADR declares the product requirements that are already decided and binding.
 - DRY and KISS are mandatory, not optional.
 
 **Content:**
-- The itinerary is read-only from the UI. Data lives in D1, seeded from `context/`.
+- The itinerary is read-only from the UI. Data lives in the remote Cloudflare D1 (`eurotrip2026`). Changes are applied directly via `wrangler d1 execute --remote` — there is no migrations folder and no local D1. See [`docs/db-workflow.md`](../docs/db-workflow.md).
+- Canonical fallback for trip data is [`VIAJE.md`](../VIAJE.md) + [`PRD.md`](../PRD.md). If the DB is lost, rebuild from those.
 - City detail cards can be added at any time via internal tooling.
 - Photos are stored in R2 with metadata in D1.
 
