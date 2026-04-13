@@ -2,7 +2,7 @@
 
 2 pasajeros · Solo carry-on (10 kg c/u) · 19 abril – 10 mayo 2026
 
-**Ruta:** Santiago → Madrid → Barcelona → Palma de Mallorca → Londres → Liverpool → Roma → Madrid (escala nocturna) → Buenos Aires
+**Ruta:** Santiago → Madrid → Barcelona → Palma de Mallorca → Londres → París → Roma → Madrid (escala nocturna) → Buenos Aires
 
 ---
 
@@ -14,7 +14,9 @@
 | MAD → BCN | Renfe AVE | Vie 24 abr 2026 | 08:57 | ~11:30 | — | — | **CONFIRMADO** |
 | BCN → PMI | Vueling (BASIC) | Mar 28 abr 2026 | 09:05 | ~10:00 | USD 95 | UMSDND | **CONFIRMADO** |
 | PMI → LON (Stansted) | Ryanair FR28 | Sáb 2 may 2026 | 06:00 | ~07:35 | €15.99 | — | **CONFIRMADO** |
-| LPL (Liverpool) → CIA (Roma Ciampino) | Ryanair FR1935 (op. Malta Air) | Lun 4 may 2026 | 08:50 | ~12:30 | — | — | **CONFIRMADO** |
+| LON (St Pancras) → PAR (Gare du Nord) | Eurostar 9001 | Mar 5 may 2026 | 05:57 BST | 09:20 CEST | ~£49 | — | pendiente |
+| PAR (Gare de Lyon) → LYS (Saint-Exupéry TGV) | TGV INOUI 6923 | Mar 5 may 2026 | 17:13 | 19:07 CEST | — | — | pendiente |
+| LYS → FCO (Roma Fiumicino) | easyJet U2 4421 | Mar 5 may 2026 | 20:20 | 21:55 CEST | ~€55–125 p/p | — | pendiente |
 | FCO → MAD | Iberia IB0656 | Sáb 9 may 2026 | 20:25 | 23:00 | — | KM99T | **CONFIRMADO** |
 | MAD → EZE | Iberia IB0105 | Dom 10 may 2026 | 08:45 | 16:25 | — | KM99T | **CONFIRMADO** |
 
@@ -40,8 +42,8 @@
 | Madrid | 20–24 abr (4 noches) | AirBNB · C. del Ave María 42, 28012 Madrid · Barrio Lavapiés | USD 468.84 | **PAGADO** |
 | Barcelona | 24–28 abr (4 noches) | Airbnb · Poble Sec | USD 675.39 | **CONFIRMADO** |
 | Palma de Mallorca | 28 abr – 2 may (4 noches) | Por confirmar | — | SIN RESERVAR |
-| Londres | 2–4 may (2 noches) | Por confirmar | — | SIN RESERVAR |
-| Roma | 4–9 may (5 noches) | Por confirmar | — | SIN RESERVAR |
+| Londres | 2–5 may (3 noches) | Por confirmar | — | SIN RESERVAR |
+| Roma | 5–9 may (4 noches) | Por confirmar | — | SIN RESERVAR |
 | Madrid (escala) | Noche del sáb 9 may | Hotel cercano T4 / o noche en aeropuerto | — | SIN RESERVAR |
 
 ---
@@ -72,21 +74,24 @@
 - **Vie 1 may** · Excursión Sóller — tren histórico de 1912 (~1h, €23 ida / €30 ida y vuelta) hasta Port de Sóller · Tarde en el puerto, kayak o paddleboard opcional (€15–€25/hora, mar 15–16°C)
 - **Sáb 2 may** · Salida muy temprana · Ryanair FR28 Palma → Londres Stansted 06:00 — CONFIRMADO (€15.99)
 
-### Londres — 2 al 4 de mayo (2 noches)
+### Londres — 2 al 5 de mayo (3 noches)
 
 - **Sáb 2 may** · Llegada Stansted (~07:35) · Traslado al centro (Stansted Express ~45 min, £20 aprox) · Check-in · Tarde: Covent Garden · Noche: Soho, cena
 - **Dom 3 may** · Mañana: Tower of London (~£34, reservar online) · Free Tour Londres en español (GuruWalk, ~3h, propina £10–15) · Tarde: Westminster, Big Ben, St. James's Park · Noche: West End — musical (£25–£120 según obra)
-- **Lun 4 may, madrugada** · Salida muy temprana · Tren Euston → Liverpool Lime Street (~2h 15m, primer tren ~05:00 — ver London North Western / Avanti West Coast) · Transfer corto Lime Street → Liverpool John Lennon Airport (LPL, ~20 min bus/taxi) · **Ryanair FR1935 (op. Malta Air) LPL → Roma Ciampino 08:50 — CONFIRMADO**
+- **Lun 4 may** · `ev-lon-may04-prep` — Prep Eurostar: cena temprana y descanso · Preparación para madrugón del día siguiente (salida 05:57 desde St Pancras)
+- **Mar 5 may, madrugada** · Salida muy temprana hacia London St Pancras · **Eurostar 9001 05:57 BST → Paris Gare du Nord 09:20 CEST** (~£49, ~2h20m)
 
-> **Nota**: el traslado London → Liverpool de madrugada el 4 may es ajustado. Alternativa más segura: pernoctar la noche del 3 al 4 en Liverpool (tren desde Euston en la tarde del domingo) — esto reduciría Londres a 1 noche. Decisión final del usuario pendiente.
+> **Nota**: el routing original London→Liverpool→Roma (FR1935 Malta Air, 4 may) fue reemplazado por London→París→Lyon→Roma el 5 may (migración 0011). El madrugón ya no es el 4 may sino el 5 may desde St Pancras.
 
-### Liverpool — tránsito (4 may)
+### París — tránsito diurno (5 may)
 
-- **Lun 4 may** · Llegada en tren desde Londres (madrugada) · Traslado directo a LPL · Vuelo FR1935 a Roma Ciampino (08:50 → 12:30)
+- **Mar 5 may** · Llegada Gare du Nord 09:20 · Consigna en Gare de Lyon (~€7–10) · Día libre ~7h: Le Marais, Notre-Dame, Île de la Cité · 17:13 **TGV INOUI 6923** Paris Gare de Lyon → Lyon Saint-Exupéry TGV (19:07, 1h54m) · 20:20 **easyJet U2 4421** LYS → Roma Fiumicino (21:55 CEST, 1h35m)
 
-### Roma — 4 al 9 de mayo (5 noches)
+> **Nota**: buffer LYS solo 1h13m — carry-on obligatorio en todos los tramos. Total París→Roma puerta a puerta: ~4h42m · ~€55–125/pax.
 
-- **Lun 4 may** · Llegada Ciampino (~12:30) · Traslado al centro · Check-in · Tarde: Pantheon (~€5) + Fontana di Trevi · Noche: Trastevere, cena en trattoria
+### Roma — 5 al 9 de mayo (4 noches)
+
+- **Mar 5 may** · Llegada Fiumicino (~21:55) · Traslado al centro · Check-in (llegada noche)
 - **Mié 6 may** · Colosseo + Foro Romano + Palatino (entrada combinada ~€18, **RESERVAR online con 2+ semanas de anticipación**) · Tarde: barrio Monti (gratis)
 - **Jue 7 may** · Musei Vaticani + Capilla Sixtina (~€22, timed 8:00–9:00, **RESERVAR con anticipación**) · Basílica de San Pedro + Plaza San Pedro (gratis) · Almuerzo en Prati · Cena en Trastevere
 - **Vie 8 may** · Galería Borghese (~€18 + €2 reserva, **RESERVAR 10+ días antes, se agota**) · Villa Borghese (jardines, gratis) · Cena de despedida: Ghetto Ebraico o Campo de' Fiori
@@ -105,8 +110,8 @@
 ### Alojamientos sin reservar
 
 - [ ] **Palma de Mallorca** · 4 noches (28 abr – 2 may)
-- [ ] **Londres** · 2 noches (2–4 may)
-- [ ] **Roma** · 5 noches (4–9 may)
+- [ ] **Londres** · 3 noches (2–5 may)
+- [ ] **Roma** · 4 noches (5–9 may)
 - [ ] **Madrid escala** · 1 noche (9–10 may) · Hotel T4 o noche en aeropuerto
 
 ### Actividades con reserva anticipada recomendada
