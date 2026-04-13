@@ -36,9 +36,28 @@ interface TrasladoView {
   standalone: true,
   imports: [DatePipe, ConfirmedBadge, BookingTypeChip, Tooltip],
   template: `
-    <div class="flex items-start gap-3 py-3 px-4 rounded-lg border" style="border-color: var(--p-surface-200)">
-      <app-booking-type-chip [type]="event().type" />
-      <div class="flex-1 min-w-0">
+    <div class="flex flex-col py-3 px-4 rounded-lg border" style="border-color: var(--p-surface-200)">
+      <!-- Header: chip + badges -->
+      <div class="flex items-center justify-between mb-2">
+        <app-booking-type-chip [type]="event().type" />
+        <div class="flex items-center gap-1">
+          @if (event().usd) {
+            <i
+              class="pi pi-dollar text-xs"
+              style="color: var(--p-surface-400)"
+              [pTooltip]="'Precio: $' + event().usd + ' USD'"
+              tooltipPosition="top"
+              [showDelay]="300"
+            ></i>
+          }
+          @if (event().confirmed) {
+            <app-confirmed-badge />
+          }
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="min-w-0">
         @if (trasladoView(); as t) {
           <!-- Title: company + vehicle -->
           <div class="text-sm font-semibold select-none" style="color: var(--p-surface-900)">
@@ -173,18 +192,6 @@ interface TrasladoView {
           </div>
         }
       </div>
-      @if (event().usd) {
-        <i
-          class="pi pi-dollar text-xs ml-1 mt-1"
-          style="color: var(--p-surface-400)"
-          [pTooltip]="'Precio: $' + event().usd + ' USD'"
-          tooltipPosition="top"
-          [showDelay]="300"
-        ></i>
-      }
-      @if (event().confirmed) {
-        <app-confirmed-badge />
-      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

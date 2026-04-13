@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ActivityTipo } from '../../shared/models/activity.model';
-import { City, TripEvent } from '../../shared/models';
+import { City, TripEvent, isTraslado } from '../../shared/models';
 import { getDayColorFromCities, getTravelGradientFromEvents, toDateStr } from '../calendar-utils';
 import { CalendarDay } from '../calendar-day/calendar-day';
 
@@ -16,6 +16,10 @@ type CellData = {
   gradient: string | null;
   inactive: boolean;
 };
+
+const EMPTY_EVENTS: CalEvent[] = [];
+const EMPTY_RAW: TripEvent[] = [];
+const MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
 @Component({
   selector: 'app-calendar-month',
@@ -48,24 +52,21 @@ type CellData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalendarMonth {
-  readonly month       = input.required<number>();
-  readonly year        = input.required<number>();
-  readonly activities  = input<Array<{ date: string; description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string }>>([]);
-  readonly eventsByDay = input<Map<string, TripEvent[]>>(new Map());
-  readonly cities      = input<City[]>([]);
+  readonly month           = input.required<number>();
+  readonly year            = input.required<number>();
+  readonly activitiesByDay = input<Map<string, CalEvent[]>>(new Map());
+  readonly eventsByDay     = input<Map<string, TripEvent[]>>(new Map());
+  readonly cities          = input<City[]>([]);
 
   readonly selectDate = output<string>();
   readonly dayNames = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-  readonly monthName = computed(() => {
-    const names = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-    return names[this.month() - 1];
-  });
+  readonly monthName = computed(() => MONTH_NAMES[this.month() - 1]);
 
   readonly cells = computed((): CellData[] => {
     const year   = this.year();
     const month  = this.month();
-    const acts   = this.activities();
+    const actsByDay = this.activitiesByDay();
     const cities = this.cities();
     const eByDay = this.eventsByDay();
 
@@ -73,20 +74,27 @@ export class CalendarMonth {
     const firstDay    = new Date(year, month - 1, 1).getDay();
     const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
+    const gradientsByDay = new Map<string, string>();
+    for (const [date, evs] of eByDay) {
+      if (!evs.some(isTraslado)) continue;
+      const g = getTravelGradientFromEvents(evs, cities);
+      if (g) gradientsByDay.set(date, g);
+    }
+
     const cells: CellData[] = [];
 
     for (let i = 0; i < startOffset; i++) {
-      cells.push({ key: 'empty-' + i, day: null, dateStr: '', events: [], rawEvents: [], bgColor: null, gradient: null, inactive: true });
+      cells.push({ key: 'empty-' + i, day: null, dateStr: '', events: EMPTY_EVENTS, rawEvents: EMPTY_RAW, bgColor: null, gradient: null, inactive: true });
     }
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = toDateStr(year, month, d);
-      const events  = acts.filter(a => a.date === dateStr).sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
-      const rawEvents = eByDay.get(dateStr) ?? [];
-      const gradient = getTravelGradientFromEvents(rawEvents, cities);
+      const events  = actsByDay.get(dateStr) ?? EMPTY_EVENTS;
+      const rawEvents = eByDay.get(dateStr) ?? EMPTY_RAW;
+      const gradient = gradientsByDay.get(dateStr) ?? null;
       let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
-      if (!bgColor && !gradient && events.some(e => e.confirmed)) {
-        const confirmedEvent = events.find(e => e.confirmed && e.cityColor);
+      if (!bgColor && !gradient && events.length > 0) {
+        const confirmedEvent = events.find((e) => e.confirmed && e.cityColor);
         if (confirmedEvent?.cityColor) bgColor = confirmedEvent.cityColor;
       }
       cells.push({ key: dateStr, day: d, dateStr, events, rawEvents, bgColor, gradient, inactive: false });
