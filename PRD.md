@@ -51,7 +51,7 @@ This applies without exception. When in doubt: if a human reads it in the browse
 
 ## What is this
 
-A personal travel companion site for Gabriel & Vanesa's Europe trip — April 19 to May 10, 2026. Route: Santiago de Chile → Madrid → Barcelona → Palma de Mallorca → Londres → Roma → Madrid (escala nocturna) → Buenos Aires.
+A personal travel companion site for Gabriel & Vanesa's Europe trip — April 19 to May 10, 2026. Route: Santiago de Chile → Madrid → Barcelona → Palma de Mallorca → Londres → Liverpool (transit) → Roma → Madrid (escala nocturna) → Buenos Aires.
 
 Public to anyone with the link. No login. No accounts.
 
@@ -113,7 +113,7 @@ Source of truth: D1. Data changes go direct against the remote — see [`docs/db
 
 A visual representation of the route across Europe.
 
-- Static route drawn between all cities in order: SCL → MAD → BCN → PMI → LON → ROM → MAD → EZE
+- Static route drawn between all cities in order: SCL → MAD → BCN → PMI → LON → LPL → ROM → MAD → EZE
 - Each city is a labeled pin with dates
 - Future: interactive — tapping a pin navigates to that city's detail page
 - Future: geolocation — shows the traveler's current position on the map (opt-in, mobile)
@@ -174,8 +174,9 @@ Cities and confirmed dates (source of truth: Cloudflare D1 `cities` table):
 | Madrid | Apr 20 | Apr 24 | 4 |
 | Barcelona | Apr 24 | Apr 28 | 4 |
 | Palma de Mallorca | Apr 28 | May 2 | 4 |
-| Londres | May 2 | May 5 | 3 |
-| Roma | May 5 | May 9 | 4 |
+| Londres | May 2 | May 4 | 2 |
+| Liverpool (transit) | May 4 | May 4 | 0 |
+| Roma | May 4 | May 9 | 5 |
 | Madrid (escala nocturna) | May 9 (night) | May 10 (morning) | 0 |
 
 Confirmed bookings (source of truth: D1 `events` table, `confirmed = 1`):
@@ -186,8 +187,8 @@ Confirmed bookings (source of truth: D1 `events` table, `confirmed = 1`):
 - ✓ Park Güell (zona monumental + Casa Museo Gaudí, 2 pax) — Sun Apr 26 — USD 59
 - ✓ Sagrada Família (acceso básico + Torre del Nacimiento, 2 pax) — Mon Apr 27 17:00 — ~€36 p/p
 - ✓ Vueling BCN → PMI — Apr 28 09:05 — USD 95, locator UMSDND
-- ✓ Ryanair FR28 PMI → Londres Stansted — May 2 06:00 — €15.99
-- ✓ Ryanair FR2455 Londres Stansted → Roma Ciampino — May 5 06:15 — £23.99
+- ✓ Ryanair FR28 PMI → Londres Stansted — May 2 06:00 → 07:35 — €15.99 (solo bolso de mano)
+- ✓ Ryanair FR1935 (Malta Air) Liverpool LPL → Roma Ciampino — May 4 08:50 → 12:30 (solo bolso de mano)
 - ✓ Iberia IB0656 FCO T1 → MAD — May 9 20:25 — booking ref KM99T
 - ✓ Iberia IB0105 MAD → EZE — May 10 08:45 — booking ref KM99T (physical ticket 075-2533915149)
 
