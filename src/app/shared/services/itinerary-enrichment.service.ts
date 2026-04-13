@@ -15,10 +15,10 @@ const OFFSET_INTERNATIONAL_MIN = 120;
 @Injectable({ providedIn: 'root' })
 export class ItineraryEnrichmentService {
   /**
-   * Given the raw events from the API, synthesise an extra "Arribo al
-   * aeropuerto" hito before every flight traslado. The synthetic hito
-   * lives in the origin city (cityOut of the leg) with a timestamp equal
-   * to the flight's timestampIn minus the right offset.
+   * Given the raw events from the API, synthesise an extra "Presentarse en
+   * aeropuerto" hito before every flight traslado. The synthetic hito lives
+   * in the origin city (cityOut of the leg) with a timestamp equal to the
+   * flight's timestampIn minus the right offset.
    *
    * The returned array contains the original events plus the synthetic
    * ones, re-sorted by timestampIn.
@@ -42,8 +42,8 @@ export class ItineraryEnrichmentService {
       const originName = originCity?.name ?? originId.toUpperCase();
 
       const title = e.confirmed
-        ? `Arribo aeropuerto ${originName} · ${timeOf(arriveTimestamp)}`
-        : `Arribo anticipado al aeropuerto (~${offsetMin}min antes)`;
+        ? `Presentarse en aeropuerto ${originName} · ${timeOf(arriveTimestamp)}`
+        : `Presentarse en aeropuerto (~${offsetMin}min antes)`;
 
       synthetic.push({
         id: `synth_arrive_${e.id}`,

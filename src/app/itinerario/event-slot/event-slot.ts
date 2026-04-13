@@ -42,13 +42,13 @@ import { InfoRow } from '../info-row/info-row';
       @case ('traslado') {
         @if (asTraslado(); as t) {
           <app-info-row
-            icon="pi-sign-out"
+            [icon]="trasladoPartidaIcon()"
             [iconColor]="iconColor()"
             [text]="trasladoPartidaText()"
             [class.opacity-60]="!t.confirmed"
           />
           <app-info-row
-            icon="pi-sign-in"
+            [icon]="trasladoArriboIcon()"
             [iconColor]="iconColor()"
             [text]="trasladoArriboText()"
             [class.opacity-60]="!t.confirmed"
@@ -112,10 +112,16 @@ export class EventSlot {
     return this.cityNameMap().get(id) ?? id.toUpperCase();
   }
 
-  /**
-   * Partida line: "Partida desde {cityOut} a las {timeOut} por {company} {vehicleCode}"
-   * timestampIn holds the departure time; cityOut is the origin.
-   */
+  protected readonly trasladoPartidaIcon = computed((): string => {
+    const t = this.asTraslado();
+    return t?.subtype === 'flight' ? 'pi-arrow-up-right' : 'pi-sign-out';
+  });
+
+  protected readonly trasladoArriboIcon = computed((): string => {
+    const t = this.asTraslado();
+    return t?.subtype === 'flight' ? 'pi-arrow-down-right' : 'pi-sign-in';
+  });
+
   protected readonly trasladoPartidaText = computed((): string => {
     const t = this.asTraslado();
     if (!t) return '';
@@ -124,20 +130,18 @@ export class EventSlot {
     const company = t.company?.trim() || '—';
     const vehicle = t.vehicleCode?.trim() || '';
     const service = vehicle ? `${company} ${vehicle}` : company;
-    return `Partida desde ${origin} a las ${departTime} por ${service}`;
+    const verb = t.subtype === 'flight' ? 'Despega desde' : 'Sale de';
+    return `${verb} ${origin} a las ${departTime} por ${service}`;
   });
 
-  /**
-   * Arribo line: "Llega a {cityIn} a las {timeIn}"
-   * timestampOut holds the arrival time; cityIn is the destination.
-   */
   protected readonly trasladoArriboText = computed((): string => {
     const t = this.asTraslado();
     if (!t) return '';
     const dest = this.resolveCityName(t.cityIn);
     if (!t.timestampOut) return `Destino ${dest}`;
     const arriveTime = timeOf(t.timestampOut);
-    return `Llega a ${dest} a las ${arriveTime}`;
+    const verb = t.subtype === 'flight' ? 'Aterriza en' : 'Llega a';
+    return `${verb} ${dest} a las ${arriveTime}`;
   });
 
   protected readonly stayText = computed((): string => {

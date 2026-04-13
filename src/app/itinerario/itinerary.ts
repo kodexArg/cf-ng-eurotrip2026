@@ -38,7 +38,7 @@ interface EventModalState {
  *
  * Data flow:
  *   1. httpResource fetches { cities, events } from /api/itinerary
- *   2. ItineraryEnrichmentService injects synthetic "Arribo aeropuerto"
+ *   2. ItineraryEnrichmentService injects synthetic "Presentarse en aeropuerto"
  *      hitos in front of every flight traslado
  *   3. Events are clustered into city blocks by cityIn + contiguous
  *      date range (gap ≤ 2 days). Traslado events route into the
