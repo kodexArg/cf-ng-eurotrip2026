@@ -50,6 +50,8 @@ interface EventRow {
   destinationLat: number | null;
   destinationLon: number | null;
   waypoints: string | null;
+  originLabel: string | null;
+  destinationLabel: string | null;
 
   // events_traslado (nullable via LEFT JOIN)
   company: string | null;
@@ -88,6 +90,8 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
         e.destination_lat  AS destinationLat,
         e.destination_lon  AS destinationLon,
         e.waypoints,
+        e.origin_label     AS originLabel,
+        e.destination_label AS destinationLabel,
         t.company, t.fare,
         t.vehicle_code  AS vehicleCode,
         t.seat,
@@ -128,6 +132,8 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
       destinationLat: r.destinationLat ?? undefined,
       destinationLon: r.destinationLon ?? undefined,
       waypoints: r.waypoints ? (JSON.parse(r.waypoints) as [number, number][]) : undefined,
+      originLabel: r.originLabel ?? undefined,
+      destinationLabel: r.destinationLabel ?? undefined,
     };
 
     if (r.type === 'traslado') {

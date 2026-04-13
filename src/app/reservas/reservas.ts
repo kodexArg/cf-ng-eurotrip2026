@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { httpResource } from '@angular/common/http';
 import { SelectButton } from 'primeng/selectbutton';
 import { TripEvent, EventType } from '../shared/models/event.model';
+import { City } from '../shared/models/city.model';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from './booking-card/booking-card';
@@ -29,7 +30,7 @@ type FilterValue = EventType | 'all';
       @if (reservasResource.value()) {
         @for (event of filteredEvents(); track event.id) {
           <div class="mb-2">
-            <app-booking-card [event]="event" />
+            <app-booking-card [event]="event" [cities]="cities()" />
           </div>
         } @empty {
           <p class="text-center text-sm py-8" style="color: var(--p-surface-400)">No hay reservas</p>
@@ -40,7 +41,9 @@ type FilterValue = EventType | 'all';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReservasPage {
-  readonly reservasResource = httpResource<{ events: TripEvent[] }>(() => '/api/reservas');
+  readonly reservasResource = httpResource<{ cities: City[]; events: TripEvent[] }>(() => '/api/reservas');
+
+  readonly cities = computed<readonly City[]>(() => this.reservasResource.value()?.cities ?? []);
 
   readonly typeFilter = signal<FilterValue>('all');
 
