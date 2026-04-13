@@ -84,7 +84,9 @@ export function renderEventsOnMap(
       if (destinationLat == null || destinationLon == null) continue;
       const dest: [number, number] = [destinationLat, destinationLon];
 
-      const pts = greatCirclePoints(origin, dest, 30);
+      const pts: [number, number][] = ev.waypoints && ev.waypoints.length > 0
+        ? [origin, ...ev.waypoints, dest]
+        : greatCirclePoints(origin, dest, 30);
       const opts = TRASLADO_STYLES[subtype] ?? TRASLADO_STYLES['flight'];
       L.polyline(pts, opts).addTo(group);
 
