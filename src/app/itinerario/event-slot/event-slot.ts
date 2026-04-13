@@ -114,12 +114,12 @@ export class EventSlot {
 
   protected readonly trasladoPartidaIcon = computed((): string => {
     const t = this.asTraslado();
-    return t?.subtype === 'flight' ? 'pi-arrow-up-right' : 'pi-sign-out';
+    return t?.subtype === 'flight' ? 'ms-flight_takeoff' : 'pi-sign-out';
   });
 
   protected readonly trasladoArriboIcon = computed((): string => {
     const t = this.asTraslado();
-    return t?.subtype === 'flight' ? 'pi-arrow-down-right' : 'pi-sign-in';
+    return t?.subtype === 'flight' ? 'ms-flight_land' : 'pi-sign-in';
   });
 
   protected readonly trasladoPartidaText = computed((): string => {
