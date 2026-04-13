@@ -48,7 +48,7 @@ export class MapContainer {
 
   private initMap(): void {
     const map = L.map('leaflet-map', {
-      center: [46, 10],
+      center: [48, 7],
       zoom: 5,
       zoomControl: false,
     });
