@@ -26,6 +26,7 @@ interface CityBlock {
   firstDay: string;
   lastDay: string;
   nightCount: number;
+  firstTimestamp: string;
 }
 
 interface EventModalState {
@@ -147,17 +148,29 @@ export class ItineraryPage {
         const first = cluster[0];
         const last = cluster[cluster.length - 1];
         const clusterEvents = cityEvents.filter((e) => e.date >= first && e.date <= last);
+        // Tiebreaker for multi-city days (e.g. 2026-05-05 London → Paris → Rome):
+        // earliest event timestamp on firstDay decides block order.
+        const firstTimestamp = clusterEvents
+          .filter((e) => e.date === first)
+          .map((e) => e.timestampIn)
+          .filter((t): t is string => !!t)
+          .sort()[0] ?? `${first}T00:00:00`;
         out.push({
           city,
           events: clusterEvents,
           firstDay: first,
           lastDay: last,
           nightCount: cluster.length,
+          firstTimestamp,
         });
       }
     }
 
-    out.sort((a, b) => a.firstDay.localeCompare(b.firstDay));
+    out.sort((a, b) => {
+      const byDay = a.firstDay.localeCompare(b.firstDay);
+      if (byDay !== 0) return byDay;
+      return a.firstTimestamp.localeCompare(b.firstTimestamp);
+    });
     return out;
   });
 
