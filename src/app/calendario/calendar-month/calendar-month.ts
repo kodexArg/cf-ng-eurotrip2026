@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ActivityTipo } from '../../shared/models/activity.model';
 import { City, TripEvent } from '../../shared/models';
-import { getDayColorFromCities, getTravelGradientFromCities, toDateStr } from '../calendar-utils';
+import { getDayColorFromCities, getTravelGradientFromEvents, toDateStr } from '../calendar-utils';
 import { CalendarDay } from '../calendar-day/calendar-day';
 
 type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string };
@@ -83,7 +83,7 @@ export class CalendarMonth {
       const dateStr = toDateStr(year, month, d);
       const events  = acts.filter(a => a.date === dateStr).sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
       const rawEvents = eByDay.get(dateStr) ?? [];
-      const gradient = getTravelGradientFromCities(dateStr, cities);
+      const gradient = getTravelGradientFromEvents(rawEvents, cities);
       let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
       if (!bgColor && !gradient && events.some(e => e.confirmed)) {
         const confirmedEvent = events.find(e => e.confirmed && e.cityColor);

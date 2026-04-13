@@ -153,7 +153,7 @@ export class CalendarDay {
     const g = this.gradient();
     if (g) return { background: g };
     const c = this.bgColor();
-    if (c) return { 'background-color': c, opacity: '0.85' };
+    if (c) return { 'background-color': c };
     return { 'background-color': 'var(--p-surface-100)' };
   });
 

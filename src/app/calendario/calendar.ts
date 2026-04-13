@@ -6,7 +6,7 @@ import { CalendarMonth } from './calendar-month/calendar-month';
 import { EventTypeLegend } from './event-type-legend/event-type-legend';
 import { CityLegend } from './city-legend/city-legend';
 import { DayDetailDialog } from './day-detail-dialog/day-detail-dialog';
-import { getTravelGradientFromCities } from './calendar-utils';
+import { getTravelGradientFromEvents } from './calendar-utils';
 
 interface ItineraryPayload {
   cities: City[];
@@ -199,7 +199,7 @@ export class CalendarPage {
   readonly selectedDayIsTravel = computed(() => {
     const date = this.selectedDate();
     if (!date) return false;
-    return getTravelGradientFromCities(date, this.cities()) !== null;
+    return getTravelGradientFromEvents(this.selectedDayEvents(), this.cities()) !== null;
   });
 
   openDay(date: string): void {
