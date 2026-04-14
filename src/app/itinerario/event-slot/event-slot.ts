@@ -41,29 +41,42 @@ import { InfoRow } from '../info-row/info-row';
       }
       @case ('traslado') {
         @if (asTraslado(); as t) {
-          @if (showPartida()) {
+          @if (isIntraCity()) {
             <app-info-row
-              [icon]="trasladoPartidaIcon()"
+              [icon]="intraCityIcon()"
               [iconColor]="iconColor()"
-              [text]="trasladoPartidaText()"
-              [class.opacity-60]="!t.confirmed"
-            >
-              @if (t.confirmed && t.renderMode === 'partida') {
-                <app-confirmed-badge />
-              }
-            </app-info-row>
-          }
-          @if (showArribo()) {
-            <app-info-row
-              [icon]="trasladoArriboIcon()"
-              [iconColor]="iconColor()"
-              [text]="trasladoArriboText()"
+              [text]="intraCityText()"
               [class.opacity-60]="!t.confirmed"
             >
               @if (t.confirmed) {
                 <app-confirmed-badge />
               }
             </app-info-row>
+          } @else {
+            @if (showPartida()) {
+              <app-info-row
+                [icon]="trasladoPartidaIcon()"
+                [iconColor]="iconColor()"
+                [text]="trasladoPartidaText()"
+                [class.opacity-60]="!t.confirmed"
+              >
+                @if (t.confirmed && t.renderMode === 'partida') {
+                  <app-confirmed-badge />
+                }
+              </app-info-row>
+            }
+            @if (showArribo()) {
+              <app-info-row
+                [icon]="trasladoArriboIcon()"
+                [iconColor]="iconColor()"
+                [text]="trasladoArriboText()"
+                [class.opacity-60]="!t.confirmed"
+              >
+                @if (t.confirmed) {
+                  <app-confirmed-badge />
+                }
+              </app-info-row>
+            }
           }
         }
       }
@@ -166,6 +179,53 @@ export class EventSlot {
     const arriveTime = timeOf(t.timestampOut);
     const verb = t.subtype === 'flight' ? 'Aterriza en' : 'Llega a';
     return `${verb} ${dest} a las ${arriveTime}`;
+  });
+
+  // Intra-city transit (metro/bus/tram/taxi) collapses to a single row.
+  // The cross-city "Sale de X / Llega a X" copy reads nonsensical when
+  // origin and destination are the same city, so we switch to a compact
+  // "<service> · <origin> → <destination> · HH:MM–HH:MM" format.
+  protected readonly isIntraCity = computed((): boolean => {
+    const t = this.asTraslado();
+    if (!t) return false;
+    return !!t.cityOut && t.cityOut === t.cityIn;
+  });
+
+  protected readonly intraCityIcon = computed((): string => {
+    const t = this.asTraslado();
+    switch (t?.subtype) {
+      case 'metro':
+        return 'ms-subway';
+      case 'tram':
+        return 'ms-tram';
+      case 'bus':
+        return 'ms-directions_bus';
+      case 'taxi':
+        return 'ms-local_taxi';
+      case 'train':
+        return 'ms-train';
+      case 'walk':
+        return 'ms-directions_walk';
+      default:
+        return 'ms-directions_transit';
+    }
+  });
+
+  protected readonly intraCityText = computed((): string => {
+    const t = this.asTraslado();
+    if (!t) return '';
+    const company = t.company?.trim() || '';
+    const vehicle = t.vehicleCode?.trim() || '';
+    const service = [company, vehicle].filter(Boolean).join(' ') || t.title;
+    const origin = t.originLabel?.trim();
+    const dest = t.destinationLabel?.trim();
+    const depart = timeOf(t.timestampIn);
+    const arrive = t.timestampOut ? timeOf(t.timestampOut) : '';
+    const window = arrive ? `${depart}–${arrive}` : depart;
+    if (origin && dest) {
+      return `${service} · ${origin} → ${dest} · ${window}`;
+    }
+    return `${service} · ${window}`;
   });
 
   protected readonly stayText = computed((): string => {
