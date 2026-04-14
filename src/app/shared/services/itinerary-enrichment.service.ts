@@ -73,13 +73,16 @@ export class ItineraryEnrichmentService {
 }
 
 /**
- * Subtract `minutes` from a naive local timestamp (YYYY-MM-DDTHH:MM:SS)
- * and return the result in the same format. We deliberately treat the
- * timestamp as UTC during the math so DST shifts never enter the picture
- * — the trip is displayed in wall-clock local time anyway.
+ * Subtract `minutes` from a local timestamp and return a naive
+ * YYYY-MM-DDTHH:MM:SS. Accepts both naive (`2026-05-06T16:50:00`) and
+ * timezone-suffixed (`2026-05-06T16:50:00+02:00` / `...Z`) inputs —
+ * in both cases we operate on the wall-clock the traveler sees, so DST
+ * and timezone math never enter the picture.
  */
 function subtractMinutes(timestamp: string, minutes: number): string {
-  const asUtc = new Date(timestamp + 'Z');
+  // Strip any trailing Z or ±HH:MM offset so the result is always naive local.
+  const naive = timestamp.replace(/(Z|[+-]\d{2}:?\d{2})$/, '');
+  const asUtc = new Date(naive + 'Z');
   asUtc.setUTCMinutes(asUtc.getUTCMinutes() - minutes);
   const yyyy = asUtc.getUTCFullYear();
   const mm = String(asUtc.getUTCMonth() + 1).padStart(2, '0');
