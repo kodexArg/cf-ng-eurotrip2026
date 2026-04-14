@@ -11,6 +11,7 @@ import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
 import { AuthService } from './shared/services/auth.service';
+import { VersionCheckService } from './shared/services/version-check.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,6 +36,14 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       useFactory: (auth: AuthService) => () => auth.checkAuth(),
       deps: [AuthService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (vc: VersionCheckService) => () => {
+        vc.start();
+      },
+      deps: [VersionCheckService],
       multi: true,
     },
   ],
