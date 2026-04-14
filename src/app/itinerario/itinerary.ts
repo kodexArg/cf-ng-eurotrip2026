@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { City, TripEvent } from '../shared/models';
+import { City, TripEvent, dateOf, isTraslado } from '../shared/models';
 import { ItineraryCity } from './itinerary-city/itinerary-city';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
@@ -109,12 +109,48 @@ export class ItineraryPage {
     const events = this.enrichedEvents();
     if (!cities.length) return [];
 
-    // Index events by destination city (cityIn).
+    // Index events by the city block they belong to.
+    //
+    // Non-traslado events and intra-city transfers (cityOut === cityIn)
+    // route to cityIn as before. Cross-city traslados are SPLIT into two
+    // halves: the "partida" row routes to cityOut with the departure
+    // timestamp (so it becomes the last line of the origin city block),
+    // and the "arribo" row routes to cityIn with the arrival timestamp
+    // (first line of the destination city block). Each half carries a
+    // `renderMode` tag so `event-slot` renders only its relevant InfoRow.
     const byCity = new Map<string, TripEvent[]>();
-    for (const e of events) {
-      const list = byCity.get(e.cityIn) ?? [];
+    const push = (cityId: string, e: TripEvent) => {
+      const list = byCity.get(cityId) ?? [];
       list.push(e);
-      byCity.set(e.cityIn, list);
+      byCity.set(cityId, list);
+    };
+
+    for (const e of events) {
+      if (isTraslado(e) && e.cityOut && e.cityOut !== e.cityIn) {
+        const arriveTs = e.timestampOut ?? e.timestampIn;
+        const partida: TripEvent = {
+          ...e,
+          id: `${e.id}__partida`,
+          date: dateOf(e.timestampIn),
+          renderMode: 'partida',
+        };
+        const arribo: TripEvent = {
+          ...e,
+          id: `${e.id}__arribo`,
+          date: dateOf(arriveTs),
+          // Override timestampIn on the arribo clone so that day-level
+          // sorting (which sorts by timestampIn) uses the arrival time.
+          // The original timestamps are no longer needed on this clone —
+          // event-slot reads `timestampOut` for the arrival text, which
+          // we keep intact.
+          timestampIn: arriveTs,
+          renderMode: 'arribo',
+        };
+        push(e.cityOut, partida);
+        push(e.cityIn, arribo);
+      } else {
+        push(e.cityIn, e);
+      }
     }
 
     const out: CityBlock[] = [];

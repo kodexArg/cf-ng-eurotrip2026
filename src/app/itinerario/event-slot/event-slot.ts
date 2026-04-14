@@ -41,22 +41,30 @@ import { InfoRow } from '../info-row/info-row';
       }
       @case ('traslado') {
         @if (asTraslado(); as t) {
-          <app-info-row
-            [icon]="trasladoPartidaIcon()"
-            [iconColor]="iconColor()"
-            [text]="trasladoPartidaText()"
-            [class.opacity-60]="!t.confirmed"
-          />
-          <app-info-row
-            [icon]="trasladoArriboIcon()"
-            [iconColor]="iconColor()"
-            [text]="trasladoArriboText()"
-            [class.opacity-60]="!t.confirmed"
-          >
-            @if (t.confirmed) {
-              <app-confirmed-badge />
-            }
-          </app-info-row>
+          @if (showPartida()) {
+            <app-info-row
+              [icon]="trasladoPartidaIcon()"
+              [iconColor]="iconColor()"
+              [text]="trasladoPartidaText()"
+              [class.opacity-60]="!t.confirmed"
+            >
+              @if (t.confirmed && t.renderMode === 'partida') {
+                <app-confirmed-badge />
+              }
+            </app-info-row>
+          }
+          @if (showArribo()) {
+            <app-info-row
+              [icon]="trasladoArriboIcon()"
+              [iconColor]="iconColor()"
+              [text]="trasladoArriboText()"
+              [class.opacity-60]="!t.confirmed"
+            >
+              @if (t.confirmed) {
+                <app-confirmed-badge />
+              }
+            </app-info-row>
+          }
         }
       }
       @case ('estadia') {
@@ -102,6 +110,18 @@ export class EventSlot {
   });
 
   protected readonly iconColor = computed(() => 'var(--p-surface-600)');
+
+  // When the itinerary splits a cross-city traslado into two halves it
+  // tags each with `renderMode`. An un-tagged traslado is intra-city and
+  // still shows both rows.
+  protected readonly showPartida = computed(() => {
+    const m = this.asTraslado()?.renderMode;
+    return m === 'partida' || m === undefined;
+  });
+  protected readonly showArribo = computed(() => {
+    const m = this.asTraslado()?.renderMode;
+    return m === 'arribo' || m === undefined;
+  });
 
   private readonly cityNameMap = computed(() =>
     new Map(this.cities().map((c) => [c.id, c.name]))
