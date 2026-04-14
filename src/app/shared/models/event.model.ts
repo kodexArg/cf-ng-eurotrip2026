@@ -42,6 +42,13 @@ export interface TripEventBase {
   // with a real track that doesn't match the geodesic (e.g. Eurostar via
   // Channel Tunnel).
   waypoints?: [number, number][];
+  /**
+   * UI-only transient field. When a cross-city traslado is split at the
+   * itinerary grouping stage, each half is tagged so `event-slot` knows
+   * to render only the partida row or only the arribo row. Never set by
+   * the API or the DB — populated in-memory by `itinerary.ts`.
+   */
+  renderMode?: 'partida' | 'arribo';
 }
 
 export interface HitoEvent extends TripEventBase {
