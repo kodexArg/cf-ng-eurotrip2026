@@ -81,7 +81,7 @@ function formatLongDate(ymd: string): string {
           <div class="flex items-start justify-between gap-3">
             <div class="flex-1 min-w-0">
               <div
-                class="text-base font-bold capitalize leading-tight"
+                class="text-base font-bold leading-tight"
                 [style.color]="cityColor()"
               >
                 {{ longDate() }}
@@ -124,7 +124,6 @@ function formatLongDate(ymd: string): string {
               @if (totalUsd() > 0) {
                 <span style="color: var(--p-surface-300)">·</span>
                 <span class="flex items-center gap-1" style="color: #16a34a">
-                  <i class="pi pi-dollar" style="font-size: 9px"></i>
                   USD {{ totalUsd() }}
                 </span>
               }
