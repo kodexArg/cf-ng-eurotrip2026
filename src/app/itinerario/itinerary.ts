@@ -35,6 +35,12 @@ interface EventModalState {
   city: City;
 }
 
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+function dateToUtcMs(dateStr: string): number {
+  return new Date(dateStr + 'T00:00:00Z').getTime();
+}
+
 /**
  * Itinerary page.
  *
@@ -99,35 +105,24 @@ export class ItineraryPage {
 
   readonly itineraryResource = httpResource<ItineraryPayload>(() => '/api/itinerary');
 
-  readonly cities = computed((): City[] => this.itineraryResource.value()?.cities ?? []);
+  private readonly payload = computed(() => this.itineraryResource.value() ?? null);
+
+  readonly cities = computed((): City[] => this.payload()?.cities ?? []);
 
   readonly enrichedEvents = computed((): TripEvent[] => {
-    const payload = this.itineraryResource.value();
-    if (!payload) return [];
-    return this.enrichment.enrich(payload.events, payload.cities);
+    const p = this.payload();
+    if (!p) return [];
+    return this.enrichment.enrich(p.events, p.cities);
   });
 
-  readonly blocks = computed((): CityBlock[] => {
-    const cities = this.cities();
+  private readonly cityEventMap = computed((): Map<string, TripEvent[]> => {
     const events = this.enrichedEvents();
-    if (!cities.length) return [];
-
-    // Index events by the city block they belong to.
-    //
-    // Non-traslado events and intra-city transfers (cityOut === cityIn)
-    // route to cityIn as before. Cross-city traslados are SPLIT into two
-    // halves: the "partida" row routes to cityOut with the departure
-    // timestamp (so it becomes the last line of the origin city block),
-    // and the "arribo" row routes to cityIn with the arrival timestamp
-    // (first line of the destination city block). Each half carries a
-    // `renderMode` tag so `event-slot` renders only its relevant InfoRow.
     const byCity = new Map<string, TripEvent[]>();
     const push = (cityId: string, e: TripEvent) => {
       const list = byCity.get(cityId) ?? [];
       list.push(e);
       byCity.set(cityId, list);
     };
-
     for (const e of events) {
       if (isTraslado(e) && e.cityOut && e.cityOut !== e.cityIn) {
         const arriveTs = e.timestampOut ?? e.timestampIn;
@@ -141,11 +136,6 @@ export class ItineraryPage {
           ...e,
           id: `${e.id}__arribo`,
           date: dateOf(arriveTs),
-          // Override timestampIn on the arribo clone so that day-level
-          // sorting (which sorts by timestampIn) uses the arrival time.
-          // The original timestamps are no longer needed on this clone —
-          // event-slot reads `timestampOut` for the arrival text, which
-          // we keep intact.
           timestampIn: arriveTs,
           renderMode: 'arribo',
         };
@@ -155,6 +145,13 @@ export class ItineraryPage {
         push(e.cityIn, e);
       }
     }
+    return byCity;
+  });
+
+  readonly blocks = computed((): CityBlock[] => {
+    const cities = this.cities();
+    const byCity = this.cityEventMap();
+    if (!cities.length) return [];
 
     const out: CityBlock[] = [];
 
@@ -162,18 +159,13 @@ export class ItineraryPage {
       const cityEvents = byCity.get(city.id) ?? [];
       if (cityEvents.length === 0) continue;
 
-      // Collect unique dates, sorted.
       const dateSet = new Set(cityEvents.map((e) => e.date));
       const dates = [...dateSet].sort();
 
-      // Cluster contiguous dates (gap <= 2 days). This mirrors the
-      // legacy heuristic and keeps non-contiguous Madrid stays separate.
       const clusters: string[][] = [];
       let current: string[] = [dates[0]];
       for (let i = 1; i < dates.length; i++) {
-        const prev = new Date(current[current.length - 1] + 'T00:00:00Z').getTime();
-        const curr = new Date(dates[i] + 'T00:00:00Z').getTime();
-        const gapDays = (curr - prev) / (1000 * 60 * 60 * 24);
+        const gapDays = (dateToUtcMs(dates[i]) - dateToUtcMs(current[current.length - 1])) / MS_PER_DAY;
         if (gapDays > 2) {
           clusters.push(current);
           current = [dates[i]];
@@ -187,8 +179,6 @@ export class ItineraryPage {
         const first = cluster[0];
         const last = cluster[cluster.length - 1];
         const clusterEvents = cityEvents.filter((e) => e.date >= first && e.date <= last);
-        // Tiebreaker for multi-city days (e.g. 2026-05-05 London → Paris → Rome):
-        // earliest event timestamp on firstDay decides block order.
         const firstTimestamp = clusterEvents
           .filter((e) => e.date === first)
           .map((e) => e.timestampIn)
@@ -218,7 +208,6 @@ export class ItineraryPage {
   readonly eventsForModal = computed((): TripEvent[] => {
     const s = this.eventModal();
     if (!s) return [];
-    // Events visible in the modal are the city's events for the event's date.
     return this.enrichedEvents().filter(
       (e) => e.cityIn === s.city.id && e.date === s.event.date
     );
