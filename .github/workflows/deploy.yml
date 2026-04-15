@@ -62,3 +62,24 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist/angular-21-csr-primeng/browser --project-name=eurotrip2026 --branch=prod
+
+  # ── Smoke: validate critical events on the live API after deploy ─────
+  # Hits https://eurotrip2026.kodexarg.com/api/map/events and asserts
+  # invariants (confirmed status, expected USD prices) on key events.
+  # Catches data drift, broken migrations, and bad deploys.
+  smoke:
+    name: Smoke prod
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for CF Pages propagation
+        run: sleep 20
+
+      - name: Run smoke checks against prod API
+        run: node scripts/smoke-prod.mjs
