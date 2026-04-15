@@ -5,11 +5,12 @@ on:
     branches: [prod]
 
 jobs:
-  # ── Gate: apply any pending D1 migrations before deploying ────────────
-  # This job always runs on push to prod. It checks if migration files
-  # changed in this push; if yes, it applies them. If the apply fails,
-  # the deploy job below is blocked (it declares `needs: migrate`).
-  # If there are no pending migrations, wrangler exits 0 (idempotent).
+  # ── Apply D1 migrations before deploying ─────────────────────────────
+  # `wrangler d1 migrations apply` is idempotent: Wrangler tracks applied
+  # migrations in its own d1_migrations table and only runs pending ones.
+  # We call it unconditionally on every prod push — no git-diff gate needed.
+  # A git-diff gate is fragile: if a previous run failed to apply migrations,
+  # a later push that doesn't touch migrations/ would silently skip them.
   migrate:
     name: Apply D1 migrations
     runs-on: ubuntu-latest
@@ -18,31 +19,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      - name: Check for migration changes in this push
-        id: check
-        run: |
-          if git diff --name-only HEAD~1 HEAD -- 'migrations/*.sql' | grep -q .; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-            echo "Migration files changed — will apply."
-          else
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No migration files changed — skipping apply."
-          fi
 
       - uses: actions/setup-node@v4
-        if: steps.check.outputs.changed == 'true'
         with:
           node-version: 22
           cache: npm
 
       - run: npm ci
-        if: steps.check.outputs.changed == 'true'
 
       - name: Apply migrations (remote)
-        if: steps.check.outputs.changed == 'true'
         run: |
           echo "Applying pending D1 migrations to production database..."
           npx wrangler d1 migrations apply eurotrip2026 --remote
