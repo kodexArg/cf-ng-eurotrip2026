@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { InfoRow } from '../info-row/info-row';
+import { transportColor } from '../../shared/transport-colors';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -122,7 +123,13 @@ export class EventSlot {
     return isEstadia(e) ? e : null;
   });
 
-  protected readonly iconColor = computed(() => 'var(--p-surface-600)');
+  protected readonly iconColor = computed((): string => {
+    const e = this.event();
+    if (e.type === 'traslado') return transportColor(e.subtype);
+    if (e.type === 'hito')    return '#f59e0b';   // amber — matches hito marker on /maps
+    if (e.type === 'estadia') return '#10b981';   // emerald — matches estadia marker on /maps
+    return 'var(--p-surface-600)';
+  });
 
   // When the itinerary splits a cross-city traslado into two halves it
   // tags each with `renderMode`. An un-tagged traslado is intra-city and
