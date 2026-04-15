@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { City, DayWeather, TripEvent } from '../../shared/models';
 import { EventSlot } from '../event-slot/event-slot';
 import { InfoRow } from '../info-row/info-row';
+import { ItineraryFilterService } from '../itinerary-filter.service';
 
 interface SpecialEvent {
   text: string;
@@ -78,6 +79,8 @@ export interface ItineraryDayInput {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryDay {
+  private readonly filterService = inject(ItineraryFilterService);
+
   readonly day = input.required<ItineraryDayInput>();
   readonly cities = input<readonly City[]>([]);
   readonly weather = input<DayWeather | null>(null);
@@ -87,10 +90,18 @@ export class ItineraryDay {
 
   protected readonly displayEvents = computed(() => {
     const show = this.showUnconfirmed();
+    const showHitos = this.filterService.showHitos();
+    const showTraslados = this.filterService.showTraslados();
+    const showHospedajes = this.filterService.showHospedajes();
     const events = [...this.day().events].sort((a, b) =>
       a.timestampIn.localeCompare(b.timestampIn)
     );
-    return show ? events : events.filter((e) => e.confirmed);
+    return (show ? events : events.filter((e) => e.confirmed)).filter((e) => {
+      if (e.type === 'hito' && !showHitos) return false;
+      if (e.type === 'traslado' && !showTraslados) return false;
+      if (e.type === 'estadia' && !showHospedajes) return false;
+      return true;
+    });
   });
 
   protected readonly weatherIcon = computed(() => {
