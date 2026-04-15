@@ -10,6 +10,15 @@ const TYPE_CONFIG: Record<EventType, { icon: string; severity: TagSeverity; labe
   estadia:  { icon: 'pi pi-home',  severity: 'secondary', label: 'Hospedaje' },
 };
 
+/**
+ * PrimeNG Tag badge that classifies a booking by its event type.
+ *
+ * @remarks
+ * Variants driven by `type` input:
+ * - `hito`: yellow warning tag with flag icon.
+ * - `traslado`: blue info tag with send icon.
+ * - `estadia`: grey secondary tag with home icon.
+ */
 @Component({
   selector: 'app-booking-type-chip',
   standalone: true,

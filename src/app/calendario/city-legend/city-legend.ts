@@ -1,6 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { City } from '../../shared/models';
 
+/**
+ * Horizontal legend showing one colored dot per city in the trip.
+ *
+ * @remarks
+ * Deduplicates cities by id before rendering so repeated city entries
+ * from the itinerary payload do not produce duplicate legend items.
+ */
 @Component({
   selector: 'app-city-legend',
   imports: [],

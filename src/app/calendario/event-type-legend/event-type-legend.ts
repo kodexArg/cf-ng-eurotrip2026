@@ -2,6 +2,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Card } from 'primeng/card';
 import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
 
+/**
+ * Color-coded pill legend listing all visible activity types in the calendar.
+ *
+ * @remarks
+ * Reads TIPO_CONFIG for colors and labels. Transport (traslado) entries are
+ * excluded because travel days are hidden from the calendar view.
+ */
 @Component({
   selector: 'app-event-type-legend',
   imports: [Card],

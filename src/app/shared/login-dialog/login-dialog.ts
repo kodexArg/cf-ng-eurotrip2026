@@ -6,6 +6,13 @@ import { InputText } from 'primeng/inputtext';
 import { SelectButton } from 'primeng/selectbutton';
 import { AuthService } from '../services/auth.service';
 
+/**
+ * Modal login dialog with user name selector and passphrase field.
+ *
+ * @remarks
+ * Opened programmatically via the public `open()` method (e.g. from the nav bar).
+ * Delegates authentication to AuthService; shows an inline error on wrong passphrase.
+ */
 @Component({
   selector: 'app-login-dialog',
   imports: [FormsModule, Dialog, Button, InputText, SelectButton],

@@ -5,6 +5,13 @@ import { Skeleton } from 'primeng/skeleton';
 import { PhotoGrid } from './photo-grid/photo-grid';
 import { Photo } from '../shared/models';
 
+/**
+ * Trip photo gallery page.
+ *
+ * @remarks
+ * Fetches the photo list from /api/photos and delegates rendering to PhotoGrid.
+ * Shows skeleton placeholders while loading and an info message when the album is empty.
+ */
 @Component({
   selector: 'app-gallery',
   imports: [PhotoGrid, Message, Skeleton],

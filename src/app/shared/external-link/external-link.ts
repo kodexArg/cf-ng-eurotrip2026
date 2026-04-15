@@ -1,6 +1,14 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Button } from 'primeng/button';
 
+/**
+ * Outlined button that opens a URL in a new tab.
+ *
+ * @remarks
+ * - `url`: the href target (opened with rel="noopener noreferrer").
+ * - `label`: button text.
+ * - `severity`: PrimeNG severity variant, defaults to 'secondary'.
+ */
 @Component({
   selector: 'app-external-link',
   imports: [Button],

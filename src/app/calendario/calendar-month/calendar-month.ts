@@ -21,6 +21,15 @@ const EMPTY_EVENTS: CalEvent[] = [];
 const EMPTY_RAW: TripEvent[] = [];
 const MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
+/**
+ * Monthly calendar grid for a given year + month.
+ *
+ * @remarks
+ * Accepts pre-grouped activity and event maps keyed by YYYY-MM-DD.
+ * Renders a 7-column grid of CalendarDay cells, including leading
+ * empty cells to align to Monday-first week start.
+ * Emits `selectDate` when a day cell is clicked.
+ */
 @Component({
   selector: 'app-calendar-month',
   imports: [CalendarDay],

@@ -14,6 +14,17 @@ function formatHoverHeader(ymd: string): string {
   return `${DOW_ES[dt.getUTCDay()]} ${d} ${MON_ES[m - 1]}`;
 }
 
+/**
+ * Single day cell in the monthly calendar grid.
+ *
+ * @remarks
+ * Variants via inputs:
+ * - `inactive`: renders as a dimmed placeholder for days outside the current month.
+ * - `gradient` / `bgColor`: travel days get a gradient; city-stay days use a solid color.
+ * - `events`: pre-computed chip rows shown inside the cell.
+ * - `rawEvents`: full event objects used to build the hover tooltip with time + icon detail.
+ * Emits `selectDate` when the user clicks a day that has events.
+ */
 @Component({
   selector: 'app-calendar-day',
   imports: [EventChip],

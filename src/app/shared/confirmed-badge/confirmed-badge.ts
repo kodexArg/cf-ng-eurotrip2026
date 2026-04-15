@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
+/**
+ * Green check icon indicating a confirmed event, optionally interactive.
+ *
+ * @remarks
+ * - `editable`: when true, clicking the icon emits `toggle` so the parent can flip the confirmed state.
+ */
 @Component({
   selector: 'app-confirmed-badge',
   standalone: true,

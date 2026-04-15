@@ -16,6 +16,13 @@ import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import type { City, Card } from '../shared/models';
 
+/**
+ * Lazy content panel for a single city tab in the sitios page.
+ *
+ * @remarks
+ * Only fetches cards when `active` is true to avoid unnecessary API calls for
+ * non-visible tabs. Cards are loaded from /api/cards/:slug.
+ */
 @Component({
   selector: 'app-city-tab-content',
   imports: [CityCardList, LoadingState, ErrorState],
@@ -52,6 +59,14 @@ export class CityTabContent {
   });
 }
 
+/**
+ * Sitios page: tabbed view of per-city activity and point-of-interest cards.
+ *
+ * @remarks
+ * Fetches the city list from /api/cities and renders one tab per city.
+ * The active tab is synced to the `c` query parameter so deep-linking works.
+ * Card data is loaded lazily by CityTabContent only when its tab is active.
+ */
 @Component({
   selector: 'app-sitios-page',
   imports: [Tabs, TabList, Tab, TabPanels, TabPanel, CityTabContent, LoadingState, ErrorState],

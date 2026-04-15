@@ -2,6 +2,13 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { Message } from 'primeng/message';
 import { Button } from 'primeng/button';
 
+/**
+ * Standardized error state with a message and a retry button.
+ *
+ * @remarks
+ * - `message`: human-readable error text displayed in the PrimeNG Message component.
+ * Emits `retry` when the user clicks the retry button.
+ */
 @Component({
   selector: 'app-error-state',
   imports: [Message, Button],

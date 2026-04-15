@@ -13,6 +13,14 @@ import { EventForm } from './event-form/event-form';
 
 type FilterValue = EventType | 'all';
 
+/**
+ * Owner-only event management page for creating, editing, and deleting trip events.
+ *
+ * @remarks
+ * Guarded by AuthService; shows LoginPanel when the user is not the owner.
+ * Selecting a BookingCard loads that event into EventForm for editing.
+ * On save or delete the resource is reloaded and the selection is cleared.
+ */
 @Component({
   selector: 'app-modificaciones',
   standalone: true,

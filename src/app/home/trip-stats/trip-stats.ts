@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Card } from 'primeng/card';
 
+/**
+ * Static trip statistics card showing total days, cities, and transfers.
+ */
 @Component({
   selector: 'app-trip-stats',
   imports: [Card],

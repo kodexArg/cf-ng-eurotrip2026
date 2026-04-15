@@ -9,6 +9,13 @@ export interface CityPreview {
   nights: number;
 }
 
+/**
+ * City summary card displayed on the home page.
+ *
+ * @remarks
+ * Shows a colored top bar, city name, date range, and night count.
+ * The entire card is a router link to the city's detail route.
+ */
 @Component({
   selector: 'app-city-preview-card',
   imports: [RouterLink],

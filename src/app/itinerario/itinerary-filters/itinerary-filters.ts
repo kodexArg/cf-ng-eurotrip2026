@@ -3,6 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { ToggleButton } from 'primeng/togglebutton';
 import { ItineraryFilterService } from '../itinerary-filter.service';
 
+/**
+ * Toolbar of toggle buttons that control which event types are visible in the itinerary.
+ *
+ * @remarks
+ * Reads and writes through ItineraryFilterService so the filter state is shared
+ * across all itinerary sub-components without prop drilling.
+ * Toggles: hitos, traslados, hospedajes.
+ */
 @Component({
   selector: 'app-itinerary-filters',
   standalone: true,

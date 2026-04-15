@@ -2,6 +2,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Nav } from './shell/nav/nav';
 
+/**
+ * Root application shell: mounts the top navigation bar and the router outlet.
+ */
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Nav],
