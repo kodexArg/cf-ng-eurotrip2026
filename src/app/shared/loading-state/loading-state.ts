@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Skeleton } from 'primeng/skeleton';
 
+/**
+ * Standardized loading placeholder showing five skeleton rows.
+ */
 @Component({
   selector: 'app-loading-state',
   imports: [Skeleton],

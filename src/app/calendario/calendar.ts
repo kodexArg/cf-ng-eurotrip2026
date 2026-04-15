@@ -32,6 +32,14 @@ const HITO_SUBTYPE_TO_TIPO: Record<string, ActivityTipo> = {
   transfer: 'transport',
 };
 
+/**
+ * Full-trip calendar page showing April and May 2026.
+ *
+ * @remarks
+ * Fetches itinerary data from /api/itinerary and groups events by date.
+ * Confirmed-only mode is the default; a lightbulb toggle reveals unconfirmed ideas.
+ * Clicking a day cell opens DayDetailDialog with the full event list for that date.
+ */
 @Component({
   selector: 'app-calendar',
   imports: [CalendarMonth, EventTypeLegend, CityLegend, DayDetailDialog, LoadingState],

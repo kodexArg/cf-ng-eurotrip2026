@@ -1,6 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
 
+/**
+ * Compact inline badge for a single calendar event.
+ *
+ * @remarks
+ * Variants via inputs:
+ * - `tipo`: activity type that drives background and text colors from TIPO_CONFIG.
+ * - `confirmed`: when false the chip renders at reduced opacity to signal a tentative event.
+ * - `label`: display text rendered inside the badge.
+ */
 @Component({
   selector: 'app-event-chip',
   imports: [],

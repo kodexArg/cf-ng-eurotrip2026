@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
 import { ownerGuard } from './shared/guards/owner.guard';
+import { CITY_SLUGS } from './shared/constants/cities';
 
 export const routes: Routes = [
   {
@@ -51,11 +52,11 @@ export const routes: Routes = [
     loadComponent: () => import('./admin/admin').then((m) => m.AdminPage),
     canActivate: [ownerGuard],
   },
-  { path: 'madrid', redirectTo: '/sitios?c=madrid' },
-  { path: 'barcelona', redirectTo: '/sitios?c=barcelona' },
-  { path: 'palma', redirectTo: '/sitios?c=palma' },
-  { path: 'londres', redirectTo: '/sitios?c=londres' },
-  { path: 'roma', redirectTo: '/sitios?c=roma' },
+  { path: CITY_SLUGS.MADRID,    redirectTo: `/sitios?c=${CITY_SLUGS.MADRID}` },
+  { path: CITY_SLUGS.BARCELONA, redirectTo: `/sitios?c=${CITY_SLUGS.BARCELONA}` },
+  { path: CITY_SLUGS.PALMA,     redirectTo: `/sitios?c=${CITY_SLUGS.PALMA}` },
+  { path: CITY_SLUGS.LONDRES,   redirectTo: `/sitios?c=${CITY_SLUGS.LONDRES}` },
+  { path: CITY_SLUGS.ROMA,      redirectTo: `/sitios?c=${CITY_SLUGS.ROMA}` },
   {
     path: '**',
     loadComponent: () => import('./not-found/not-found').then((m) => m.NotFound),

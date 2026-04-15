@@ -10,6 +10,13 @@ import { BookingCard } from './booking-card/booking-card';
 
 type FilterValue = EventType | 'all';
 
+/**
+ * Bookings page listing all trip events filterable by type.
+ *
+ * @remarks
+ * Fetches { cities, events } from /api/reservas. A SelectButton allows filtering
+ * by event type: all, hito, traslado, or estadia.
+ */
 @Component({
   selector: 'app-reservas',
   standalone: true,

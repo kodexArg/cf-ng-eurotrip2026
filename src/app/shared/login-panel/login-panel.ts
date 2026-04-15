@@ -6,6 +6,13 @@ import { InputText } from 'primeng/inputtext';
 import { SelectButton } from 'primeng/selectbutton';
 import { AuthService } from '../services/auth.service';
 
+/**
+ * Full-page login panel shown when an authenticated-only route is accessed without a session.
+ *
+ * @remarks
+ * Provides user name selector and passphrase input inline (no dialog).
+ * Includes a back link to the itinerary page.
+ */
 @Component({
   selector: 'app-login-panel',
   standalone: true,

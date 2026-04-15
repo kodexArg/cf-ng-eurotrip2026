@@ -9,6 +9,15 @@ import { renderEventsOnMap } from '../map-utils/route-renderer';
 // Unwrap once here so the rest of the file gets the real Leaflet namespace.
 const L = ((LeafletNs as any).default ?? LeafletNs) as typeof LeafletNs;
 
+/**
+ * Leaflet map container that renders city markers and travel route overlays.
+ *
+ * @remarks
+ * Initializes the map after the first render using `afterNextRender` to avoid SSR issues.
+ * - `cities`: drives city marker placement and popup content via marker-factory.
+ * - `events`: drives route polylines via route-renderer.
+ * Clicking a city marker navigates to its detail route.
+ */
 @Component({
   selector: 'app-map-container',
   template: `<div id="leaflet-map" style="height: 100%; width: 100%;"></div>`,

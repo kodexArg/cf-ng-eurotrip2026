@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Card } from 'primeng/card';
 
+/**
+ * Map legend card listing transport line styles (flight, train, metro, bus).
+ */
 @Component({
   selector: 'app-map-legend',
   imports: [Card],

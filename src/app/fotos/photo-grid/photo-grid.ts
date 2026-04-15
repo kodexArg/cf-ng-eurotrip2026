@@ -3,6 +3,13 @@ import { PhotoItem } from '../photo-item/photo-item';
 import { LightboxOverlay } from '../lightbox-overlay/lightbox-overlay';
 import { Photo } from '../../shared/models';
 
+/**
+ * Responsive grid of photo thumbnails with integrated lightbox.
+ *
+ * @remarks
+ * Renders PhotoItem tiles in a 2-column (mobile) / 3-column (desktop) grid.
+ * Selecting a tile opens LightboxOverlay at the corresponding index.
+ */
 @Component({
   selector: 'app-photo-grid',
   imports: [PhotoItem, LightboxOverlay],

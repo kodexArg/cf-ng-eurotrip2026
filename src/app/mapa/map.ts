@@ -4,6 +4,13 @@ import { MapContainer } from './map-container/map-container';
 import { MapLegend } from './map-legend/map-legend';
 import type { City, TripEventBase } from '../shared/models';
 
+/**
+ * Map page: full-viewport Leaflet map with an overlaid transport legend.
+ *
+ * @remarks
+ * Fetches cities and map events in parallel from /api/cities and /api/map/events.
+ * Delegates rendering to MapContainer; the legend is absolutely positioned over the map.
+ */
 @Component({
   selector: 'app-map',
   imports: [MapContainer, MapLegend],

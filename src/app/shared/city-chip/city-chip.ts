@@ -2,6 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { Chip } from 'primeng/chip';
 import { CITY_MAP } from '../city-map';
 
+/**
+ * Renders a city chip badge using the city's color from CITY_MAP.
+ *
+ * @remarks
+ * - `slug`: city identifier used to look up color and display name.
+ * Falls back to the raw slug and grey color when the city is not found in CITY_MAP.
+ */
 @Component({
   selector: 'app-city-chip',
   imports: [Chip],

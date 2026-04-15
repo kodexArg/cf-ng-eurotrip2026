@@ -3,6 +3,13 @@ import { CityChip } from '../../shared/city-chip/city-chip';
 import { Photo } from '../../shared/models';
 import { environment } from '../../../environments/environment';
 
+/**
+ * Single photo thumbnail card with caption, city badge, and date.
+ *
+ * @remarks
+ * Emits `select` when the card is clicked so the parent can open the lightbox.
+ * The image URL is resolved from `environment.r2BaseUrl` + `photo.r2Key`.
+ */
 @Component({
   selector: 'app-photo-item',
   imports: [CityChip],

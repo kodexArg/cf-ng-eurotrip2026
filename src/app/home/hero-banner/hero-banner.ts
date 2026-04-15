@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+/**
+ * Hero banner displayed at the top of the home page with trip title and date range.
+ */
 @Component({
   selector: 'app-hero-banner',
   imports: [],

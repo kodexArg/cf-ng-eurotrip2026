@@ -2,6 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { Photo } from '../../shared/models';
 import { environment } from '../../../environments/environment';
 
+/**
+ * Full-screen lightbox overlay that displays one photo at a time.
+ *
+ * @remarks
+ * Visibility and the active index are controlled by the parent via inputs.
+ * Clicking anywhere on the backdrop emits `close`.
+ * The photo URL is constructed from the R2 base URL and the photo's r2Key.
+ */
 @Component({
   selector: 'app-lightbox-overlay',
   imports: [],
