@@ -17,10 +17,10 @@ export const ICON_GREYS = {
 
 /** Background and text colors per activity tipo — calendar chip palette. */
 export const ACTIVITY_TIPO_COLORS: Record<string, { bg: string; text: string }> = {
-  event:     { bg: 'rgba(255,255,255,0.25)', text: '#f87171' },
-  hotel:     { bg: 'rgba(255,255,255,0.25)', text: '#a78bfa' },
-  transport: { bg: 'rgba(241,245,249,0.25)', text: '#94a3b8' },
-  visit:     { bg: 'rgba(239,246,255,0.25)', text: '#60a5fa' },
-  food:      { bg: 'rgba(254,243,199,0.25)', text: '#fbbf24' },
-  leisure:   { bg: 'rgba(240,253,244,0.25)', text: '#34d399' },
+  event:     { bg: 'rgba(255,255,255,0.75)', text: '#f87171' },
+  hotel:     { bg: 'rgba(255,255,255,0.75)', text: '#a78bfa' },
+  transport: { bg: 'rgba(255,255,255,0.75)', text: '#94a3b8' },
+  visit:     { bg: 'rgba(255,255,255,0.75)', text: '#60a5fa' },
+  food:      { bg: 'rgba(255,255,255,0.75)', text: '#fbbf24' },
+  leisure:   { bg: 'rgba(255,255,255,0.75)', text: '#34d399' },
 };
