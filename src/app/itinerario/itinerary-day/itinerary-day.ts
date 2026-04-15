@@ -3,7 +3,7 @@ import { DatePipe, TitleCasePipe } from '@angular/common';
 import { City, DayWeather, TripEvent } from '../../shared/models';
 import { EventSlot } from '../event-slot/event-slot';
 import { InfoRow } from '../info-row/info-row';
-import { ItineraryFilterService } from '../itinerary-filter.service';
+import { TypeFilterService } from '../../shared/type-filter/type-filter.service';
 
 interface SpecialEvent {
   text: string;
@@ -79,7 +79,7 @@ export interface ItineraryDayInput {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryDay {
-  private readonly filterService = inject(ItineraryFilterService);
+  private readonly filterService = inject(TypeFilterService);
 
   readonly day = input.required<ItineraryDayInput>();
   readonly cities = input<readonly City[]>([]);
@@ -90,12 +90,11 @@ export class ItineraryDay {
 
   protected readonly displayEvents = computed(() => {
     const show = this.showUnconfirmed();
-    const filter = this.filterService.filter();
     const events = [...this.day().events].sort((a, b) =>
       a.timestampIn.localeCompare(b.timestampIn)
     );
     return (show ? events : events.filter((e) => e.confirmed)).filter((e) =>
-      filter === 'all' || filter === e.type
+      this.filterService.isVisible(e.type)
     );
   });
 
