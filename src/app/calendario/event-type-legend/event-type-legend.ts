@@ -20,5 +20,7 @@ import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventTypeLegend {
-  readonly tipos = Object.entries(TIPO_CONFIG) as [ActivityTipo, (typeof TIPO_CONFIG)[ActivityTipo]][];
+  // traslados ocultos en calendario — transport entry excluded from legend
+  readonly tipos = (Object.entries(TIPO_CONFIG) as [ActivityTipo, (typeof TIPO_CONFIG)[ActivityTipo]][])
+    .filter(([key]) => key !== 'transport');
 }
