@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { TripEvent } from '../shared/models/event.model';
 import { City } from '../shared/models/city.model';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from './booking-card/booking-card';
-import { TypeFilter, FilterValue } from '../shared/type-filter/type-filter';
+import { TypeFilter, isTypeActive } from '../shared/type-filter/type-filter';
+import { TypeFilterService } from '../shared/type-filter/type-filter.service';
 
 /**
  * Bookings page listing all trip events filterable by type.
  *
  * @remarks
- * Fetches { cities, events } from /api/reservas. A SelectButton allows filtering
- * by event type: all, hito, traslado, or estadia.
+ * Fetches { cities, events } from /api/reservas. A multi-toggle SelectButton allows
+ * filtering by event type: hito, traslado, or estadia — each independently on or off.
+ * Filter state is shared and persisted via TypeFilterService.
  */
 @Component({
   selector: 'app-reservas',
@@ -23,7 +25,7 @@ import { TypeFilter, FilterValue } from '../shared/type-filter/type-filter';
       <h1 class="text-2xl font-bold select-none mb-4" style="color: var(--p-surface-800)">Reservas</h1>
 
       <div class="mb-4">
-        <app-type-filter [value]="typeFilter()" (valueChange)="typeFilter.set($event)" />
+        <app-type-filter />
       </div>
 
       @if (reservasResource.isLoading()) { <app-loading-state /> }
@@ -45,16 +47,15 @@ import { TypeFilter, FilterValue } from '../shared/type-filter/type-filter';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReservasPage {
+  private readonly typeFilters = inject(TypeFilterService);
+
   readonly reservasResource = httpResource<{ cities: City[]; events: TripEvent[] }>(() => '/api/reservas');
 
   readonly cities = computed<readonly City[]>(() => this.reservasResource.value()?.cities ?? []);
 
-  readonly typeFilter = signal<FilterValue>('all');
-
   readonly filteredEvents = computed(() => {
     const events = this.reservasResource.value()?.events ?? [];
-    const filter = this.typeFilter();
-    if (filter === 'all') return events;
-    return events.filter((e) => e.type === filter);
+    const tuple = this.typeFilters.active();
+    return events.filter((e) => isTypeActive(tuple, e.type));
   });
 }

@@ -1,12 +1,18 @@
-import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectButton } from 'primeng/selectbutton';
 import { EventType } from '../models/event.model';
+import { TypeFilterService } from './type-filter.service';
 
-export type FilterValue = EventType | 'all';
+export type TypeFilterTuple = readonly [hito: boolean, traslado: boolean, estadia: boolean];
 
-const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
-  { label: 'Todos',     value: 'all' },
+export const TYPE_FILTER_INDEX = { hito: 0, traslado: 1, estadia: 2 } as const satisfies Record<EventType, number>;
+
+export function isTypeActive(tuple: TypeFilterTuple, type: EventType): boolean {
+  return tuple[TYPE_FILTER_INDEX[type]];
+}
+
+const FILTER_OPTIONS: { label: string; value: EventType }[] = [
   { label: 'Hitos',     value: 'hito' },
   { label: 'Viajes',    value: 'traslado' },
   { label: 'Hospedaje', value: 'estadia' },
@@ -16,9 +22,11 @@ const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
  * Reusable event-type filter using a PrimeNG SelectButton.
  *
  * @remarks
- * Single-select, four options: Todos, Hitos, Viajes, Hospedaje.
- * - `value`: two-way `model<FilterValue>` signal. 'all' means no filter.
- * Use on any page that lists TripEvents and wants a stock filter toolbar.
+ * Multi-toggle, three options: Hitos, Viajes, Hospedaje — each independently on or off.
+ * The "Todos" option has been removed. All state is owned by TypeFilterService,
+ * which persists selections to localStorage so they survive page reloads.
+ * The component is self-contained via the service — no input/output bindings needed.
+ * Consumed types: hito / traslado / estadia (mapped from EventType).
  */
 @Component({
   selector: 'app-type-filter',
@@ -27,7 +35,9 @@ const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
   template: `
     <p-selectbutton
       [options]="options"
-      [(ngModel)]="value"
+      [ngModel]="selected()"
+      (ngModelChange)="onChange($event)"
+      [multiple]="true"
       optionLabel="label"
       optionValue="value"
     />
@@ -35,6 +45,23 @@ const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypeFilter {
-  readonly value = model<FilterValue>('all');
+  protected readonly filters = inject(TypeFilterService);
   protected readonly options = FILTER_OPTIONS;
+
+  protected readonly selected = computed<EventType[]>(() => {
+    const tuple = this.filters.active();
+    const result: EventType[] = [];
+    if (tuple[0]) result.push('hito');
+    if (tuple[1]) result.push('traslado');
+    if (tuple[2]) result.push('estadia');
+    return result;
+  });
+
+  protected onChange(values: EventType[]): void {
+    this.filters.set([
+      values.includes('hito'),
+      values.includes('traslado'),
+      values.includes('estadia'),
+    ] as const);
+  }
 }
