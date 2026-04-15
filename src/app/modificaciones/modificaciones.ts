@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { httpResource } from '@angular/common/http';
 import { SelectButton } from 'primeng/selectbutton';
@@ -7,40 +7,48 @@ import { City } from '../shared/models/city.model';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from '../reservas/booking-card/booking-card';
+import { AuthService } from '../shared/services/auth.service';
+import { LoginPanel } from '../shared/login-panel/login-panel';
 
 type FilterValue = EventType | 'all';
 
 @Component({
   selector: 'app-modificaciones',
   standalone: true,
-  imports: [FormsModule, SelectButton, LoadingState, ErrorState, BookingCard],
+  imports: [FormsModule, SelectButton, LoadingState, ErrorState, BookingCard, LoginPanel],
   template: `
-    <div class="max-w-2xl mx-auto p-4">
-      <h1 class="text-2xl font-bold select-none mb-4" style="color: var(--p-surface-800)">Modificaciones</h1>
+    @if (auth.isOwner()) {
+      <div class="max-w-2xl mx-auto p-4">
+        <h1 class="text-2xl font-bold select-none mb-4" style="color: var(--p-surface-800)">Modificaciones</h1>
 
-      <div class="mb-4">
-        <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
-      </div>
+        <div class="mb-4">
+          <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
+        </div>
 
-      @if (reservasResource.isLoading()) { <app-loading-state /> }
-      @if (reservasResource.error()) {
-        <app-error-state message="No se pudieron cargar los eventos." (retry)="reservasResource.reload()" />
-      }
-
-      @if (reservasResource.value()) {
-        @for (event of filteredEvents(); track event.id) {
-          <div class="mb-2">
-            <app-booking-card [event]="event" [cities]="cities()" />
-          </div>
-        } @empty {
-          <p class="text-center text-sm py-8" style="color: var(--p-surface-400)">No hay eventos</p>
+        @if (reservasResource.isLoading()) { <app-loading-state /> }
+        @if (reservasResource.error()) {
+          <app-error-state message="No se pudieron cargar los eventos." (retry)="reservasResource.reload()" />
         }
-      }
-    </div>
+
+        @if (reservasResource.value()) {
+          @for (event of filteredEvents(); track event.id) {
+            <div class="mb-2">
+              <app-booking-card [event]="event" [cities]="cities()" />
+            </div>
+          } @empty {
+            <p class="text-center text-sm py-8" style="color: var(--p-surface-400)">No hay eventos</p>
+          }
+        }
+      </div>
+    } @else {
+      <app-login-panel />
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModificacionesPage {
+  readonly auth = inject(AuthService);
+
   readonly reservasResource = httpResource<{ cities: City[]; events: TripEvent[] }>(() => '/api/reservas');
 
   readonly cities = computed<readonly City[]>(() => this.reservasResource.value()?.cities ?? []);
