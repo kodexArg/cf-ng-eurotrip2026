@@ -1,6 +1,20 @@
 import type { City } from '../../shared/models/city.model';
 import type { TripEventBase } from '../../shared/models/event.model';
 import { timeOf } from '../../shared/models/event.model';
+import {
+  MARKER_POPUP_MAX_WIDTH,
+  MARKER_POPUP_MIN_WIDTH,
+  MARKER_POPUP_LIST_MAX_HEIGHT,
+} from '../../shared/theme/spacing';
+import {
+  MARKER_TITLE_FS,
+  MARKER_META_FS,
+  MARKER_DAY_HEADER_FS,
+  MARKER_HITO_TITLE_FS,
+  MARKER_SMALL_FS,
+  MARKER_ICON_FS,
+  MARKER_BADGE_FS,
+} from '../../shared/theme/typography';
 
 const escapeHtml = (s: string): string =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
@@ -77,14 +91,14 @@ function buildCityPopupHtml(city: City, hitos: TripEventBase[]): string {
       border-radius:2px 2px 0 0;
     ">
       <div style="
-        font-size:14px;
+        font-size:${MARKER_TITLE_FS};
         font-weight:700;
         color:${color};
         letter-spacing:0.2px;
         line-height:1.2;
       ">${escapeHtml(city.name)}</div>
       <div style="
-        font-size:10.5px;
+        font-size:${MARKER_META_FS};
         color:#555;
         margin-top:3px;
         display:flex;
@@ -131,7 +145,7 @@ function buildCityPopupHtml(city: City, hitos: TripEventBase[]): string {
   for (const [date, dayHitos] of byDate) {
     const dayHeader = `
       <div style="
-        font-size:10px;
+        font-size:${MARKER_DAY_HEADER_FS};
         font-weight:600;
         color:${color};
         text-transform:uppercase;
@@ -147,7 +161,7 @@ function buildCityPopupHtml(city: City, hitos: TripEventBase[]): string {
 
   return header + `
     <div style="
-      max-height:280px;
+      max-height:${MARKER_POPUP_LIST_MAX_HEIGHT};
       overflow-y:auto;
       padding-right:2px;
     ">${dayBlocks.join('')}</div>`;
@@ -163,7 +177,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
   // Left gutter: time or a thin placeholder so icons align.
   const timeCell = time
     ? `<span style="
-        font-size:9.5px;
+        font-size:${MARKER_SMALL_FS};
         color:#777;
         font-variant-numeric:tabular-nums;
         min-width:30px;
@@ -198,7 +212,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
   // Optional $ before the status badge.
   const usdBadge = typeof h.usd === 'number' && h.usd > 0
     ? `<span style="
-        font-size:9px;
+        font-size:${MARKER_BADGE_FS};
         color:#16a34a;
         font-weight:600;
         display:inline-flex;
@@ -211,7 +225,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
   // Optional one-line description underneath the title.
   const desc = h.description
     ? `<div style="
-        font-size:10px;
+        font-size:${MARKER_DAY_HEADER_FS};
         color:#777;
         line-height:1.3;
         margin-top:1px;
@@ -221,7 +235,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
   // Optional notes (shorter, even dimmer).
   const notes = h.notes
     ? `<div style="
-        font-size:9.5px;
+        font-size:${MARKER_SMALL_FS};
         color:#999;
         font-style:italic;
         line-height:1.3;
@@ -239,7 +253,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
     ">
       ${timeCell}
       <i class="pi ${escapeHtml(iconName)}" style="
-        font-size:12px;
+        font-size:${MARKER_ICON_FS};
         color:${cityColor};
         width:14px;
         text-align:center;
@@ -248,7 +262,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
       "></i>
       <div style="flex:1;min-width:0">
         <div style="
-          font-size:11.5px;
+          font-size:${MARKER_HITO_TITLE_FS};
           color:#222;
           line-height:1.3;
           font-weight:${confirmed ? '500' : '400'};
@@ -302,8 +316,8 @@ export function createCityMarker(
 
   marker.bindPopup(buildCityPopupHtml(city, hitos), {
     offset: [0, -8],
-    maxWidth: 280,
-    minWidth: 220,
+    maxWidth: MARKER_POPUP_MAX_WIDTH,
+    minWidth: MARKER_POPUP_MIN_WIDTH,
     className: 'city-hitos-popup',
     closeButton: false,
     autoPan: false,

@@ -9,13 +9,15 @@
  * (see event.model.ts).
  */
 
+import { ACTIVITY_TIPO_COLORS } from '../theme/colors';
+
 export type ActivityTipo = 'visit' | 'food' | 'transport' | 'hotel' | 'leisure' | 'event';
 
 export const TIPO_CONFIG: Record<ActivityTipo, { bg: string; text: string; label: string; icon: string }> = {
-  event:     { bg: 'rgba(255,255,255,0.25)',  text: '#f87171', label: 'Evento',      icon: 'pi-sparkles' },
-  hotel:     { bg: 'rgba(255,255,255,0.25)',  text: '#a78bfa', label: 'Alojamiento', icon: 'pi-home' },
-  transport: { bg: 'rgba(241,245,249,0.25)',  text: '#94a3b8', label: 'Transporte',  icon: 'pi-car' },
-  visit:     { bg: 'rgba(239,246,255,0.25)',  text: '#60a5fa', label: 'Visita',      icon: 'pi-eye' },
-  food:      { bg: 'rgba(254,243,199,0.25)',  text: '#fbbf24', label: 'Comida',      icon: 'pi-receipt' },
-  leisure:   { bg: 'rgba(240,253,244,0.25)',  text: '#34d399', label: 'Ocio',        icon: 'pi-heart' },
+  event:     { bg: ACTIVITY_TIPO_COLORS['event'].bg,     text: ACTIVITY_TIPO_COLORS['event'].text,     label: 'Evento',      icon: 'pi-sparkles' },
+  hotel:     { bg: ACTIVITY_TIPO_COLORS['hotel'].bg,     text: ACTIVITY_TIPO_COLORS['hotel'].text,     label: 'Alojamiento', icon: 'pi-home' },
+  transport: { bg: ACTIVITY_TIPO_COLORS['transport'].bg, text: ACTIVITY_TIPO_COLORS['transport'].text, label: 'Transporte',  icon: 'pi-car' },
+  visit:     { bg: ACTIVITY_TIPO_COLORS['visit'].bg,     text: ACTIVITY_TIPO_COLORS['visit'].text,     label: 'Visita',      icon: 'pi-eye' },
+  food:      { bg: ACTIVITY_TIPO_COLORS['food'].bg,      text: ACTIVITY_TIPO_COLORS['food'].text,      label: 'Comida',      icon: 'pi-receipt' },
+  leisure:   { bg: ACTIVITY_TIPO_COLORS['leisure'].bg,   text: ACTIVITY_TIPO_COLORS['leisure'].text,   label: 'Ocio',        icon: 'pi-heart' },
 };

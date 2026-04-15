@@ -8,6 +8,11 @@ import {
   isTraslado,
   timeOf,
 } from '../../shared/models';
+import {
+  DIALOG_WIDTH,
+  DIALOG_MAX_WIDTH,
+  DIALOG_MAX_HEIGHT_VH,
+} from '../../shared/theme/spacing';
 
 const DOW_ES_FULL = [
   'Domingo',
@@ -62,8 +67,8 @@ function formatLongDate(ymd: string): string {
       [dismissableMask]="true"
       [closable]="true"
       [showHeader]="false"
-      [style]="{ width: '520px', maxWidth: '95vw' }"
-      [contentStyle]="{ padding: '0', maxHeight: '80vh', overflowY: 'auto' }"
+      [style]="dialogStyle"
+      [contentStyle]="dialogContentStyle"
       styleClass="day-detail-dialog"
     >
       @if (date(); as d) {
@@ -343,6 +348,9 @@ function formatLongDate(ymd: string): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DayDetailDialog {
+  protected readonly dialogStyle = { width: DIALOG_WIDTH, maxWidth: DIALOG_MAX_WIDTH };
+  protected readonly dialogContentStyle = { padding: '0', maxHeight: DIALOG_MAX_HEIGHT_VH, overflowY: 'auto' };
+
   readonly visible = input<boolean>(false);
   readonly date = input<string | null>(null);
   readonly events = input<readonly TripEvent[]>([]);

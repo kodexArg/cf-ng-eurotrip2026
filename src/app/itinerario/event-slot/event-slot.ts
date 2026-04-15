@@ -3,6 +3,7 @@ import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../sh
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
+import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -131,8 +132,8 @@ export class EventSlot {
   protected readonly iconColor = computed((): string => {
     const e = this.event();
     if (e.type === 'traslado') return transportColor(e.subtype);
-    if (e.type === 'hito')    return '#f59e0b';   // amber — matches hito marker on /maps
-    if (e.type === 'estadia') return '#10b981';   // emerald — matches estadia marker on /maps
+    if (e.type === 'hito')    return EVENT_TYPE_COLORS['hito'];
+    if (e.type === 'estadia') return EVENT_TYPE_COLORS['estadia'];
     return 'var(--p-surface-600)';
   });
 
