@@ -1,0 +1,164 @@
+name: Validate D1 Migrations
+
+on:
+  pull_request:
+    paths:
+      - "migrations/**"
+
+jobs:
+  validate:
+    name: Lint, replay, smoke test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Test 1: Syntax ────────────────────────────────────────────────
+      # Execute each new .sql file added in this PR against a local D1 DB
+      # that already has the schema baseline applied. Wrangler exits non-zero
+      # on SQL syntax errors or references to non-existent columns/tables.
+      - name: Test 1 — Syntax check new migrations
+        run: |
+          BASE=${{ github.event.pull_request.base.sha }}
+          HEAD=${{ github.event.pull_request.head.sha }}
+
+          NEW_FILES=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'migrations/*.sql' | sort)
+
+          if [ -z "$NEW_FILES" ]; then
+            echo "No new migration files in this PR — skipping syntax test."
+            exit 0
+          fi
+
+          echo "New migration files to validate:"
+          echo "$NEW_FILES"
+
+          # Bootstrap syntax-check DB with schema baseline.
+          # ci/schema_baseline.sql captures the pre-repo schema (migrations 0001–0010).
+          # It lives in ci/ (not migrations/) so wrangler does NOT track it as a migration.
+          echo "Bootstrapping syntax-check DB with schema baseline..."
+          npx wrangler d1 execute eurotrip2026 --local \
+            --persist-to=".wrangler/syntax-check" \
+            --file="ci/schema_baseline.sql"
+
+          # Run each new file; fail fast on any error
+          for file in $NEW_FILES; do
+            echo ""
+            echo ">>> Checking syntax: $file"
+            npx wrangler d1 execute eurotrip2026 --local \
+              --persist-to=".wrangler/syntax-check" \
+              --file="$file"
+          done
+        env:
+          CLOUDFLARE_API_TOKEN: "not-used-local-mode" # wrangler requires this env var even for --local; never sent to API
+
+      # ── Test 2: Selective replay from scratch ─────────────────────────
+      # Bootstrap a clean local DB with the schema baseline, then replay
+      # all migration files one by one via explicit --file calls.
+      #
+      # Known pre-existing duplicate prefixes (applied to prod manually in
+      # a different order than alphabetical — cannot be renamed without
+      # wrangler re-applying them):
+      #   0014_routing_london_paris_rome_may2to5.sql  ← excluded from replay
+      #   0020_traslado_labels_and_precise_coords.sql ← excluded from replay
+      #
+      # The first file alphabetically for each duplicate prefix is applied;
+      # the second is skipped. This matches the logical order in prod.
+      # If any OTHER migration file causes a failure, the job fails (no
+      # continue-on-error) — giving a real gate on new additions.
+      - name: Test 2 — Selective replay from scratch
+        run: |
+          # Remove any previous local D1 state
+          rm -rf .wrangler/state
+
+          # Bootstrap with the pre-repo schema (not tracked as a migration)
+          echo "Bootstrapping replay DB with schema baseline..."
+          npx wrangler d1 execute eurotrip2026 --local \
+            --persist-to=".wrangler/state" \
+            --file="ci/schema_baseline.sql"
+
+          # Known duplicate-prefix files to skip in replay (pre-existing conflict).
+          # These are the alphabetically-later duplicates; the earlier file in each
+          # pair is applied, matching the logical order used in production.
+          SKIP_FILES="migrations/0014_routing_london_paris_rome_may2to5.sql migrations/0020_traslado_labels_and_precise_coords.sql"
+
+          echo "Applying migrations in order (skipping known duplicate-prefix conflicts)..."
+          for file in $(ls migrations/*.sql | sort); do
+            # Check if this file is in the skip list
+            skip=false
+            for skip_file in $SKIP_FILES; do
+              if [ "$file" = "$skip_file" ]; then
+                skip=true
+                break
+              fi
+            done
+
+            if [ "$skip" = "true" ]; then
+              echo ">>> SKIP (known duplicate prefix): $file"
+              continue
+            fi
+
+            echo ">>> Applying: $file"
+            npx wrangler d1 execute eurotrip2026 --local \
+              --persist-to=".wrangler/state" \
+              --file="$file"
+          done
+
+          echo "Selective replay completed successfully."
+        env:
+          CLOUDFLARE_API_TOKEN: "not-used-local-mode" # wrangler requires this env var even for --local; never sent to API
+
+      # ── Test 3: Smoke queries ─────────────────────────────────────────
+      # Run a handful of SELECT statements against the replayed DB to
+      # confirm core tables are intact and readable.
+      - name: Test 3 — Smoke queries
+        run: |
+          run_query() {
+            echo ">>> $1"
+            npx wrangler d1 execute eurotrip2026 --local \
+              --persist-to=".wrangler/state" \
+              --command="$1"
+          }
+
+          run_query "SELECT COUNT(*) AS city_count FROM cities;"
+          run_query "SELECT COUNT(*) AS event_count FROM events;"
+          run_query "SELECT COUNT(*) AS card_count FROM cards;"
+          run_query "SELECT id, name, arrival, departure FROM cities ORDER BY arrival ASC;"
+          run_query "SELECT id, type, title, date FROM events ORDER BY timestamp_in ASC LIMIT 5;"
+        env:
+          CLOUDFLARE_API_TOKEN: "not-used-local-mode" # wrangler requires this env var even for --local; never sent to API
+
+      # ── Test 4: Schema dump ───────────────────────────────────────────
+      # Export the resulting schema so reviewers can inspect it in the
+      # Artifacts tab without running anything locally.
+      # Uses sqlite_master instead of `.schema` (wrangler does not support
+      # SQLite dot-commands via --command).
+      - name: Test 4 — Export schema dump
+        run: |
+          npx wrangler d1 execute eurotrip2026 --local \
+            --persist-to=".wrangler/state" \
+            --command="SELECT name, sql FROM sqlite_master WHERE type='table' AND name NOT LIKE '_cf_%' ORDER BY name;" \
+            2>&1 | tee schema-dump.txt
+          echo ""
+          echo "Schema dump written to schema-dump.txt (attached as artifact)"
+        env:
+          CLOUDFLARE_API_TOKEN: "not-used-local-mode" # wrangler requires this env var even for --local; never sent to API
+
+      - name: Upload schema artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: schema-dump
+          path: schema-dump.txt
+          retention-days: 14
