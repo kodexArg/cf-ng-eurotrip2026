@@ -58,7 +58,9 @@ function dateToUtcMs(dateStr: string): number {
   imports: [ItineraryCity, LoadingState, ErrorState, SiteInfoModal, ItineraryFilters],
   template: `
     <div class="max-w-2xl mx-auto p-4">
-      <app-itinerary-filters />
+      <div class="mb-4">
+        <app-itinerary-filters />
+      </div>
 
       @if (itineraryResource.isLoading()) {
         <app-loading-state />
