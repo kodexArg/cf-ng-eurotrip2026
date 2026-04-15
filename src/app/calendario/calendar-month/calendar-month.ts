@@ -74,13 +74,12 @@ export class CalendarMonth {
     const firstDay    = new Date(year, month - 1, 1).getDay();
     const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
-    // traslados ocultos en calendario
     const gradientsByDay = new Map<string, string>();
-    // for (const [date, evs] of eByDay) {
-    //   if (!evs.some(isTraslado)) continue;
-    //   const g = getTravelGradientFromEvents(evs, cities);
-    //   if (g) gradientsByDay.set(date, g);
-    // }
+    for (const [date, evs] of eByDay) {
+      if (!evs.some(isTraslado)) continue;
+      const g = getTravelGradientFromEvents(evs, cities);
+      if (g) gradientsByDay.set(date, g);
+    }
 
     const cells: CellData[] = [];
 
