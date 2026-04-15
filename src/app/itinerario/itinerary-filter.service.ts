@@ -1,5 +1,6 @@
 import { Injectable, effect, signal } from '@angular/core';
 import { EventType } from '../shared/models/event.model';
+import { EVENT_TYPES } from '../shared/constants/event-types';
 
 const COOKIE_NAME = 'itinerary-filters';
 const MAX_AGE = 365 * 24 * 60 * 60;
@@ -55,8 +56,8 @@ export class ItineraryFilterService {
   }
 
   toggle(type: EventType): void {
-    if (type === 'hito') this.showHitos.update((v) => !v);
-    else if (type === 'traslado') this.showTraslados.update((v) => !v);
-    else if (type === 'estadia') this.showHospedajes.update((v) => !v);
+    if (type === EVENT_TYPES.HITO) this.showHitos.update((v) => !v);
+    else if (type === EVENT_TYPES.TRASLADO) this.showTraslados.update((v) => !v);
+    else if (type === EVENT_TYPES.ESTADIA) this.showHospedajes.update((v) => !v);
   }
 }
