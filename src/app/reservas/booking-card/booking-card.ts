@@ -14,11 +14,13 @@ import {
 import { City } from '../../shared/models/city.model';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
+import { LocationRow } from './parts/location-row';
+import { MapsLinkButton } from './parts/maps-link-button';
 
 interface LocationPoint {
-  label: string;       // human-readable (station / airport / POI / accommodation)
-  cityName?: string;   // resolved city name when available
-  time?: string;       // HH:MM when the event has a wall-clock
+  label: string;
+  cityName?: string;
+  time?: string;
   lat?: number;
   lon?: number;
 }
@@ -27,14 +29,25 @@ interface TrasladoView {
   origin: LocationPoint;
   destination: LocationPoint;
   durationLabel: string | null;
-  service: string;                // "Ryanair FR28", "Eurostar 9001", etc.
+  service: string;
   fare: string | null;
 }
 
+/**
+ * Booking card displaying a single trip event (traslado, estadia, or hito).
+ *
+ * @remarks
+ * Input variants:
+ * - `event` (required): the `TripEvent` to display.
+ * - `cities` (optional, default `[]`): city list used to resolve city names from IDs.
+ * - `showPrice` (optional, default `false`): shows a price indicator icon when `event.usd` is set.
+ * - `selectable` (optional, default `false`): renders a vertical selection toggle on the left edge.
+ * - `selected` (optional, default `false`): highlights the card when `selectable` is true.
+ */
 @Component({
   selector: 'app-booking-card',
   standalone: true,
-  imports: [DatePipe, ConfirmedBadge, BookingTypeChip, Tooltip],
+  imports: [DatePipe, ConfirmedBadge, BookingTypeChip, Tooltip, LocationRow, MapsLinkButton],
   template: `
     <div class="flex rounded-lg">
       @if (selectable()) {
@@ -60,7 +73,6 @@ interface TrasladoView {
           ? 'border-color: var(--p-primary-color)'
           : 'border-color: var(--p-surface-200)'"
       >
-      <!-- Header: chip + badges -->
       <div class="flex items-center justify-between mb-2">
         <app-booking-type-chip [type]="event().type" />
         <div class="flex items-center gap-1">
@@ -79,73 +91,38 @@ interface TrasladoView {
         </div>
       </div>
 
-      <!-- Content -->
       <div class="min-w-0">
         @if (trasladoView(); as t) {
-          <!-- Title: company + vehicle -->
           <div class="text-sm font-semibold select-none" style="color: var(--p-surface-900)">
             {{ t.service }}
           </div>
 
-          <!-- Date -->
           <div class="text-xs mt-0.5 select-none" style="color: var(--p-surface-500)">
             {{ event().date | date:'EEE d MMM' }}
             @if (t.durationLabel) { · {{ t.durationLabel }} }
             @if (t.fare) { · {{ t.fare }} }
           </div>
 
-          <!-- Origin row -->
-          <div class="mt-2 flex items-start gap-2">
-            <span class="pi pi-arrow-up-right text-xs mt-0.5 shrink-0" style="color: var(--p-surface-500)"></span>
-            <div class="flex-1 min-w-0">
-              <div class="text-sm" style="color: var(--p-surface-800)">
-                <span class="font-medium">{{ t.origin.time || '—' }}</span>
-                <span class="mx-1" style="color: var(--p-surface-400)">·</span>
-                <span>{{ t.origin.label }}</span>
-              </div>
-              @if (t.origin.cityName) {
-                <div class="text-xs" style="color: var(--p-surface-500)">{{ t.origin.cityName }}</div>
-              }
-            </div>
-            @if (mapsUrl(t.origin); as url) {
-              <a
-                [href]="url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="pi pi-map-marker text-sm shrink-0 no-underline hover:opacity-80"
-                style="color: var(--p-primary-color)"
-                [pTooltip]="'Abrir en Google Maps'"
-                tooltipPosition="left"
-                [showDelay]="300"
-              ></a>
-            }
+          <div class="mt-2">
+            <app-location-row
+              icon="pi pi-arrow-up-right"
+              [time]="t.origin.time"
+              [label]="t.origin.label"
+              [city]="t.origin.cityName"
+              [mapsUrl]="mapsUrl(t.origin) ?? undefined"
+              variant="origin"
+            />
           </div>
 
-          <!-- Destination row -->
-          <div class="mt-1 flex items-start gap-2">
-            <span class="pi pi-arrow-down-right text-xs mt-0.5 shrink-0" style="color: var(--p-surface-500)"></span>
-            <div class="flex-1 min-w-0">
-              <div class="text-sm" style="color: var(--p-surface-800)">
-                <span class="font-medium">{{ t.destination.time || '—' }}</span>
-                <span class="mx-1" style="color: var(--p-surface-400)">·</span>
-                <span>{{ t.destination.label }}</span>
-              </div>
-              @if (t.destination.cityName) {
-                <div class="text-xs" style="color: var(--p-surface-500)">{{ t.destination.cityName }}</div>
-              }
-            </div>
-            @if (mapsUrl(t.destination); as url) {
-              <a
-                [href]="url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="pi pi-map-marker text-sm shrink-0 no-underline hover:opacity-80"
-                style="color: var(--p-primary-color)"
-                [pTooltip]="'Abrir en Google Maps'"
-                tooltipPosition="left"
-                [showDelay]="300"
-              ></a>
-            }
+          <div class="mt-1">
+            <app-location-row
+              icon="pi pi-arrow-down-right"
+              [time]="t.destination.time"
+              [label]="t.destination.label"
+              [city]="t.destination.cityName"
+              [mapsUrl]="mapsUrl(t.destination) ?? undefined"
+              variant="destination"
+            />
           </div>
         } @else if (estadia(); as s) {
           <div class="flex items-start gap-2">
@@ -173,16 +150,7 @@ interface TrasladoView {
               }
             </div>
             @if (mapsUrlFor(s.originLat, s.originLon, s.accommodation || s.title); as url) {
-              <a
-                [href]="url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="pi pi-map-marker text-sm shrink-0 mt-1 no-underline hover:opacity-80"
-                style="color: var(--p-primary-color)"
-                [pTooltip]="'Abrir en Google Maps'"
-                tooltipPosition="left"
-                [showDelay]="300"
-              ></a>
+              <app-maps-link-button [url]="url" class="mt-1" />
             }
           </div>
         } @else if (hito(); as h) {
@@ -201,16 +169,7 @@ interface TrasladoView {
               </div>
             </div>
             @if (mapsUrlFor(h.originLat, h.originLon, h.title); as url) {
-              <a
-                [href]="url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="pi pi-map-marker text-sm shrink-0 mt-1 no-underline hover:opacity-80"
-                style="color: var(--p-primary-color)"
-                [pTooltip]="'Abrir en Google Maps'"
-                tooltipPosition="left"
-                [showDelay]="300"
-              ></a>
+              <app-maps-link-button [url]="url" class="mt-1" />
             }
           </div>
         }

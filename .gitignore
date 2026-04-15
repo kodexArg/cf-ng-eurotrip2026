@@ -38,6 +38,9 @@ yarn-error.log*
 testem.log
 __screenshots__/
 
+# root-level screenshot artifacts
+/*.png
+
 # ─── Environment & secrets ───────────────────────────────────────────────────
 .env
 .env.*
