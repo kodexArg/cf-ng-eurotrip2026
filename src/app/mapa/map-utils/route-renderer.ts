@@ -9,14 +9,20 @@ const TRASLADO_STYLES: Record<string, import('leaflet').PolylineOptions> = {
   train:  { color: '#16a34a', weight: 2.5, dashArray: '10,6', opacity: 0.85 },
   ferry:  { color: '#0891b2', weight: 2.0, dashArray: '8,5',  opacity: 0.75 },
   metro:  { color: '#a855f7', weight: 2.0, dashArray: '6,4',  opacity: 0.80 },
-  bus:    { color: '#f97316', weight: 2.0, dashArray: '6,4',  opacity: 0.80 },
+  bus:    { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.85 },
+  coach:  { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.85 },
+  taxi:   { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.85 },
+  uber:   { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.85 },
   car:    { color: '#6b7280', weight: 1.8, opacity: 0.75 },
   // ── pending (not confirmed) ────────────────────────────────────────────────
   'flight-pending': { color: '#3b82f6', weight: 1.8, dashArray: '4,8', opacity: 0.40 },
   'train-pending':  { color: '#16a34a', weight: 2.5, dashArray: '4,8', opacity: 0.40 },
   'ferry-pending':  { color: '#0891b2', weight: 2.0, dashArray: '4,8', opacity: 0.40 },
   'metro-pending':  { color: '#a855f7', weight: 2.0, dashArray: '4,8', opacity: 0.40 },
-  'bus-pending':    { color: '#f97316', weight: 2.0, dashArray: '4,8', opacity: 0.40 },
+  'bus-pending':    { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.40 },
+  'coach-pending':  { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.40 },
+  'taxi-pending':   { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.40 },
+  'uber-pending':   { color: '#f97316', weight: 2.5, dashArray: '1,5', lineCap: 'round', opacity: 0.40 },
   'car-pending':    { color: '#6b7280', weight: 1.8, dashArray: '4,8', opacity: 0.40 },
 };
 
