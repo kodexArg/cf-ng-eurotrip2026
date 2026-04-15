@@ -1,32 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { TypeFilter, FilterValue } from '../../shared/type-filter/type-filter';
-import { ItineraryFilterService } from '../itinerary-filter.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TypeFilter } from '../../shared/type-filter/type-filter';
 
 /**
- * Toolbar that controls which event type is visible in the itinerary.
+ * Thin wrapper that renders the shared TypeFilter toolbar inside the itinerary layout.
  *
  * @remarks
- * Reads and writes through ItineraryFilterService so the filter state is shared
- * across all itinerary sub-components without prop drilling.
- * Single-select: Todos, Hitos, Viajes, or Hospedaje.
+ * No bridge getters or setters — filter state is owned entirely by TypeFilterService,
+ * which is injected directly by TypeFilter. This component exists solely so the
+ * itinerary parent template can use a stable selector without change.
  */
 @Component({
   selector: 'app-itinerary-filters',
   standalone: true,
   imports: [TypeFilter],
-  template: `
-    <app-type-filter [value]="filterValue" (valueChange)="filterValue = $event" />
-  `,
+  template: `<app-type-filter />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItineraryFilters {
-  protected readonly filters = inject(ItineraryFilterService);
-
-  protected get filterValue(): FilterValue {
-    return this.filters.filter();
-  }
-
-  protected set filterValue(v: FilterValue) {
-    this.filters.setFilter(v);
-  }
-}
+export class ItineraryFilters {}
