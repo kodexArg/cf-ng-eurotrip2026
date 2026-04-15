@@ -9,17 +9,26 @@ import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from '../reservas/booking-card/booking-card';
 import { AuthService } from '../shared/services/auth.service';
 import { LoginPanel } from '../shared/login-panel/login-panel';
+import { EventForm } from './event-form/event-form';
 
 type FilterValue = EventType | 'all';
 
 @Component({
   selector: 'app-modificaciones',
   standalone: true,
-  imports: [FormsModule, SelectButton, LoadingState, ErrorState, BookingCard, LoginPanel],
+  imports: [FormsModule, SelectButton, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm],
   template: `
     @if (auth.isOwner()) {
       <div class="max-w-2xl mx-auto p-4">
         <h1 class="text-2xl font-bold select-none mb-4" style="color: var(--p-surface-800)">Modificaciones</h1>
+
+        <app-event-form
+          [event]="selectedEvent()"
+          [cities]="cities()"
+          (saved)="onSaved()"
+          (deleted)="onDeleted()"
+          (cleared)="onCleared()"
+        />
 
         <div class="mb-4">
           <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
@@ -33,7 +42,13 @@ type FilterValue = EventType | 'all';
         @if (reservasResource.value()) {
           @for (event of filteredEvents(); track event.id) {
             <div class="mb-2">
-              <app-booking-card [event]="event" [cities]="cities()" />
+              <app-booking-card
+                [event]="event"
+                [cities]="cities()"
+                [selectable]="true"
+                [selected]="selectedEvent()?.id === event.id"
+                (selectToggle)="onSelectToggle(event)"
+              />
             </div>
           } @empty {
             <p class="text-center text-sm py-8" style="color: var(--p-surface-400)">No hay eventos</p>
@@ -61,6 +76,15 @@ export class ModificacionesPage {
     { label: 'Viajes',    value: 'traslado' },
     { label: 'Hospedaje', value: 'estadia' },
   ];
+
+  readonly selectedEvent = signal<TripEvent | null>(null);
+
+  onSelectToggle(event: TripEvent): void {
+    this.selectedEvent.set(this.selectedEvent()?.id === event.id ? null : event);
+  }
+  onSaved(): void { this.reservasResource.reload(); this.selectedEvent.set(null); }
+  onDeleted(): void { this.reservasResource.reload(); this.selectedEvent.set(null); }
+  onCleared(): void { this.selectedEvent.set(null); }
 
   readonly filteredEvents = computed(() => {
     const events = this.reservasResource.value()?.events ?? [];

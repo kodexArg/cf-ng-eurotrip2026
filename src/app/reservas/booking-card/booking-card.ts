@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Tooltip } from 'primeng/tooltip';
 import {
@@ -36,7 +36,30 @@ interface TrasladoView {
   standalone: true,
   imports: [DatePipe, ConfirmedBadge, BookingTypeChip, Tooltip],
   template: `
-    <div class="flex flex-col py-3 px-4 rounded-lg border" style="border-color: var(--p-surface-200)">
+    <div class="flex rounded-lg">
+      @if (selectable()) {
+        <button
+          type="button"
+          class="w-6 shrink-0 flex items-center justify-center rounded-l-lg border border-r-0 cursor-pointer transition-colors"
+          [style]="selected()
+            ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
+            : 'background: var(--p-surface-50); color: var(--p-surface-400); border-color: var(--p-surface-200)'"
+          (click)="selectToggle.emit()"
+        >
+          <span class="text-[9px] font-medium tracking-widest select-none"
+                style="writing-mode: vertical-rl; transform: rotate(180deg)">
+            Seleccionar
+          </span>
+        </button>
+      }
+      <div
+        class="flex flex-col py-3 px-4 flex-1 border"
+        [class.rounded-lg]="!selectable()"
+        [class.rounded-r-lg]="selectable()"
+        [style]="selected()
+          ? 'border-color: var(--p-primary-color)'
+          : 'border-color: var(--p-surface-200)'"
+      >
       <!-- Header: chip + badges -->
       <div class="flex items-center justify-between mb-2">
         <app-booking-type-chip [type]="event().type" />
@@ -193,6 +216,7 @@ interface TrasladoView {
         }
       </div>
     </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -200,6 +224,9 @@ export class BookingCard {
   readonly event = input.required<TripEvent>();
   readonly cities = input<readonly City[]>([]);
   readonly showPrice = input(false);
+  readonly selectable = input(false);
+  readonly selected = input(false);
+  readonly selectToggle = output<void>();
 
   readonly timeOf = timeOf;
 
