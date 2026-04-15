@@ -13,6 +13,7 @@ import {
   DIALOG_MAX_WIDTH,
   DIALOG_MAX_HEIGHT_VH,
 } from '../../shared/theme/spacing';
+import { EventDetailRow } from './parts/event-detail-row';
 
 const DOW_ES_FULL = [
   'Domingo',
@@ -56,7 +57,7 @@ function formatLongDate(ymd: string): string {
  */
 @Component({
   selector: 'app-day-detail-dialog',
-  imports: [Dialog],
+  imports: [Dialog, EventDetailRow],
   template: `
     <p-dialog
       [visible]="visible()"
@@ -133,206 +134,13 @@ function formatLongDate(ymd: string): string {
 
         <div class="flex flex-col px-4 py-3 gap-2">
           @for (e of sortedEvents(); track e.id) {
-            <div
-              class="rounded-lg border p-3"
-              [style.borderColor]="rowBorderColor(e)"
-              [style.backgroundColor]="rowBgColor(e)"
-              [style.opacity]="e.confirmed ? '1' : '0.7'"
-            >
-              <div class="flex items-start gap-2">
-                <i
-                  [class]="'pi ' + (e.icon || 'pi-circle')"
-                  [style.color]="rowIconColor(e)"
-                  style="font-size: 14px; padding-top: 2px; width: 18px; text-align: center; flex-shrink: 0"
-                ></i>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2">
-                    <div class="flex-1 min-w-0">
-                      <div
-                        class="text-sm font-semibold leading-snug"
-                        style="color: var(--p-surface-800); word-wrap: break-word"
-                      >
-                        {{ e.title }}
-                      </div>
-                      <div
-                        class="text-xs mt-0.5 flex items-center gap-1.5 flex-wrap"
-                        style="color: var(--p-surface-500)"
-                      >
-                        <span
-                          class="uppercase font-semibold tracking-wide"
-                          style="font-size: 9px"
-                          [style.color]="rowIconColor(e)"
-                        >
-                          {{ typeLabel(e) }}
-                        </span>
-                        @if (timeRange(e); as tr) {
-                          <span style="color: var(--p-surface-300)">·</span>
-                          <span style="font-variant-numeric: tabular-nums">
-                            <i
-                              class="pi pi-clock"
-                              style="font-size: 9px; margin-right: 2px"
-                            ></i>
-                            {{ tr }}
-                          </span>
-                        }
-                      </div>
-                    </div>
-                    <div class="flex items-center gap-1.5 flex-shrink-0 pt-0.5">
-                      @if (e.usd && e.usd > 0) {
-                        <span
-                          class="text-xs font-semibold flex items-center"
-                          style="color: #16a34a"
-                        >
-                          <i
-                            class="pi pi-dollar"
-                            style="font-size: 9px"
-                          ></i>{{ e.usd }}
-                        </span>
-                      }
-                      @if (e.confirmed) {
-                        <i
-                          class="pi pi-check-circle"
-                          title="Confirmado"
-                          style="font-size: 12px; color: #16a34a"
-                        ></i>
-                      } @else {
-                        <i
-                          class="pi pi-circle"
-                          title="Planeado"
-                          style="font-size: 11px; color: #cbd5e1"
-                        ></i>
-                      }
-                    </div>
-                  </div>
-
-                  @if (e.description) {
-                    <div
-                      class="text-xs mt-1.5 leading-snug"
-                      style="color: var(--p-surface-600)"
-                    >
-                      {{ e.description }}
-                    </div>
-                  }
-
-                  @if (asTraslado(e); as t) {
-                    <div
-                      class="mt-2 rounded p-2 text-xs"
-                      style="background-color: rgba(0,0,0,0.03)"
-                    >
-                      <div
-                        class="flex items-center gap-1.5"
-                        style="color: var(--p-surface-700)"
-                      >
-                        <i class="pi pi-send" style="font-size: 10px"></i>
-                        <span class="font-medium">{{ trasladoRoute(t) }}</span>
-                      </div>
-                      <div
-                        class="grid grid-cols-2 gap-x-3 gap-y-1 mt-1.5"
-                        style="color: var(--p-surface-600)"
-                      >
-                        @if (t.company) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Compañía:</span>
-                            {{ t.company }}
-                          </div>
-                        }
-                        @if (t.vehicleCode) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Código:</span>
-                            {{ t.vehicleCode }}
-                          </div>
-                        }
-                        @if (t.fare) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Tarifa:</span>
-                            {{ t.fare }}
-                          </div>
-                        }
-                        @if (t.seat) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Asiento:</span>
-                            {{ t.seat }}
-                          </div>
-                        }
-                        @if (t.durationMin) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Duración:</span>
-                            {{ formatDuration(t.durationMin) }}
-                          </div>
-                        }
-                      </div>
-                    </div>
-                  }
-
-                  @if (asEstadia(e); as s) {
-                    <div
-                      class="mt-2 rounded p-2 text-xs"
-                      style="background-color: rgba(0,0,0,0.03)"
-                    >
-                      <div
-                        class="flex items-center gap-1.5"
-                        style="color: var(--p-surface-700)"
-                      >
-                        <i class="pi pi-home" style="font-size: 10px"></i>
-                        <span class="font-medium">{{ s.accommodation }}</span>
-                      </div>
-                      <div
-                        class="flex flex-col gap-1 mt-1.5"
-                        style="color: var(--p-surface-600)"
-                      >
-                        @if (s.address) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Dirección:</span>
-                            {{ s.address }}
-                          </div>
-                        }
-                        @if (s.checkinTime || s.checkoutTime) {
-                          <div class="flex gap-3">
-                            @if (s.checkinTime) {
-                              <span>
-                                <span style="color: var(--p-surface-400)">Check-in:</span>
-                                {{ s.checkinTime }}
-                              </span>
-                            }
-                            @if (s.checkoutTime) {
-                              <span>
-                                <span style="color: var(--p-surface-400)">Check-out:</span>
-                                {{ s.checkoutTime }}
-                              </span>
-                            }
-                          </div>
-                        }
-                        @if (s.platform) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Plataforma:</span>
-                            {{ s.platform }}
-                          </div>
-                        }
-                        @if (s.bookingRef) {
-                          <div>
-                            <span style="color: var(--p-surface-400)">Reserva:</span>
-                            {{ s.bookingRef }}
-                          </div>
-                        }
-                      </div>
-                    </div>
-                  }
-
-                  @if (e.notes) {
-                    <div
-                      class="text-xs mt-1.5 italic flex items-start gap-1"
-                      style="color: var(--p-surface-500)"
-                    >
-                      <i
-                        class="pi pi-info-circle"
-                        style="font-size: 10px; padding-top: 2px"
-                      ></i>
-                      <span>{{ e.notes }}</span>
-                    </div>
-                  }
-                </div>
-              </div>
-            </div>
+            <app-event-detail-row
+              [event]="e"
+              [iconColor]="rowIconColor(e)"
+              [borderColor]="rowBorderColor(e)"
+              [bgColor]="rowBgColor(e)"
+              [trasladoRoute]="trasladoRouteFor(e)"
+            />
           } @empty {
             <div
               class="text-center text-sm py-6"
@@ -372,7 +180,6 @@ export class DayDetailDialog {
 
   protected readonly sortedEvents = computed((): TripEvent[] =>
     [...this.events()].sort((a, b) => {
-      // Hito-first vs traslado is irrelevant — chronological is clearer.
       const ta = a.timestampIn ?? '';
       const tb = b.timestampIn ?? '';
       if (ta && tb) return ta.localeCompare(tb);
@@ -392,24 +199,9 @@ export class DayDetailDialog {
     return tintHex(c, 0.1);
   });
 
-  protected asTraslado(e: TripEvent) {
-    return isTraslado(e) ? e : null;
-  }
-
-  protected asEstadia(e: TripEvent) {
-    return isEstadia(e) ? e : null;
-  }
-
-  protected typeLabel(e: TripEvent): string {
-    if (isHito(e)) return 'hito';
-    if (isTraslado(e)) return 'traslado';
-    if (isEstadia(e)) return 'estadía';
-    return '';
-  }
-
   protected rowIconColor(e: TripEvent): string {
-    if (isTraslado(e)) return '#475569'; // slate
-    if (isEstadia(e)) return '#7c3aed'; // violet
+    if (isTraslado(e)) return '#475569';
+    if (isEstadia(e)) return '#7c3aed';
     return this.cityColor() || 'var(--p-surface-600)';
   }
 
@@ -425,29 +217,14 @@ export class DayDetailDialog {
     return 'var(--p-surface-50)';
   }
 
-  protected timeRange(e: TripEvent): string | null {
-    const tin = e.timestampIn ? timeOf(e.timestampIn) : '';
-    const tout = e.timestampOut ? timeOf(e.timestampOut) : '';
-    if (tin && tout) return `${tin} – ${tout}`;
-    if (tin) return tin;
-    return null;
-  }
-
-  protected trasladoRoute(t: ReturnType<DayDetailDialog['asTraslado']>): string {
-    if (!t) return '';
+  protected trasladoRouteFor(e: TripEvent): string {
+    if (!isTraslado(e)) return '';
     const cityById = new Map(this.cities().map((c) => [c.id, c.name]));
-    const from = t.cityOut
-      ? cityById.get(t.cityOut) ?? t.cityOut.toUpperCase()
+    const from = e.cityOut
+      ? cityById.get(e.cityOut) ?? e.cityOut.toUpperCase()
       : '—';
-    const to = cityById.get(t.cityIn) ?? t.cityIn.toUpperCase();
+    const to = cityById.get(e.cityIn) ?? e.cityIn.toUpperCase();
     return `${from} → ${to}`;
-  }
-
-  protected formatDuration(min: number): string {
-    if (min < 60) return `${min} min`;
-    const h = Math.floor(min / 60);
-    const m = min % 60;
-    return m > 0 ? `${h}h ${m}min` : `${h}h`;
   }
 }
 

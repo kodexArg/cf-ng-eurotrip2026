@@ -1,5 +1,10 @@
+/**
+ * Renders trip events (traslados, hitos, estadias) onto a Leaflet LayerGroup
+ * using polylines for routes and DivIcon badges for point-of-interest markers.
+ */
 import type { TripEventBase } from '../../shared/models/event.model';
 import { greatCirclePoints } from './great-circle';
+import { bearing, makeArrowIcon, makeIconBadge } from './geometry';
 
 // ─── Style constants ────────────────────────────────────────────────────────
 
@@ -30,49 +35,6 @@ const MARKER_COLORS = {
   hito:    '#f59e0b',
   estadia: '#10b981',
 };
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
-function bearing(p1: [number, number], p2: [number, number]): number {
-  const toRad = (d: number) => (d * Math.PI) / 180;
-  const toDeg = (r: number) => (r * 180) / Math.PI;
-  const lat1 = toRad(p1[0]);
-  const lat2 = toRad(p2[0]);
-  const dLon = toRad(p2[1] - p1[1]);
-  const y = Math.sin(dLon) * Math.cos(lat2);
-  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-  return (toDeg(Math.atan2(y, x)) + 360) % 360;
-}
-
-function makeArrowIcon(L: typeof import('leaflet'), deg: number, color: string): import('leaflet').DivIcon {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
-    <polygon points="6,1 11,11 6,8 1,11" fill="${color}" fill-opacity="0.85" stroke="white" stroke-width="0.8"/>
-  </svg>`;
-  return L.divIcon({
-    html: `<div style="transform:rotate(${deg}deg);transform-origin:center;width:12px;height:12px;line-height:1">${svg}</div>`,
-    className: '',
-    iconSize:   [12, 12],
-    iconAnchor: [6, 6],
-  });
-}
-
-function makeIconBadge(L: typeof import('leaflet'), color: string, iconClass: string, size = 22): import('leaflet').DivIcon {
-  const glyph = size * 0.55;
-  return L.divIcon({
-    html: `<div style="
-      width:${size}px; height:${size}px;
-      background:${color};
-      border-radius:50%;
-      border:2px solid #fff;
-      box-shadow:0 2px 6px rgba(0,0,0,0.3);
-      display:flex; align-items:center; justify-content:center;
-      color:#fff;
-    "><i class="pi ${iconClass}" style="font-size:${glyph}px;line-height:1"></i></div>`,
-    className: '',
-    iconSize:   [size, size],
-    iconAnchor: [size / 2, size / 2],
-  });
-}
 
 // ─── Main renderer ──────────────────────────────────────────────────────────
 
