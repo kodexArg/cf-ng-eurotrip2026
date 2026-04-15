@@ -1,0 +1,59 @@
+name: Apply D1 Migrations (manual / standalone)
+
+# Standalone trigger for manual migration runs.
+# On push to prod, migrations are applied automatically as a gated job
+# inside deploy.yml (migrate job, which deploy job depends on via `needs`).
+# This file exists for:
+#   - Manual one-off runs via workflow_dispatch
+#   - A clear audit trail of migration-only runs separate from deploys
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — print pending migrations without applying"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  migrate:
+    name: Apply migrations to remote D1
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: List pending migrations (dry run)
+        if: inputs.dry_run == 'true'
+        run: |
+          echo "Pending migrations (dry run — not applying):"
+          npx wrangler d1 migrations list eurotrip2026 --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Apply migrations (remote)
+        if: inputs.dry_run != 'true'
+        run: |
+          echo "Applying pending D1 migrations to production database..."
+          npx wrangler d1 migrations apply eurotrip2026 --remote
+          echo "Done."
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
