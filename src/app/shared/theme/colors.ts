@@ -8,11 +8,12 @@ export const CITY_COLORS: Record<string, string> = {
   roma:      '#c27ba0',
 };
 
-/** Accent color per event type — drives icon and text tint in itinerary rows. */
-export const EVENT_TYPE_COLORS: Record<string, string> = {
-  hito:    '#f59e0b',
-  estadia: '#c2410c',
-};
+/** Icon greys for itinerary rows — darker = more important event. */
+export const ICON_GREYS = {
+  hito:           '#0f172a',
+  estadia:        '#64748b',
+  transportIntra: '#94a3b8',
+} as const;
 
 /** Background and text colors per activity tipo — calendar chip palette. */
 export const ACTIVITY_TIPO_COLORS: Record<string, { bg: string; text: string }> = {

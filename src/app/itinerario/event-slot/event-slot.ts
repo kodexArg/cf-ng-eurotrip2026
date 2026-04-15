@@ -3,7 +3,7 @@ import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../sh
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
-import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
+import { ICON_GREYS } from '../../shared/theme/colors';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -23,7 +23,6 @@ import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
           <app-info-row
             [icon]="h.icon"
             [iconColor]="iconColor()"
-            [textColor]="iconColor()"
             [text]="h.title"
             [class.opacity-60]="!h.confirmed"
           >
@@ -48,7 +47,6 @@ import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
             <app-info-row
               [icon]="intraCityIcon()"
               [iconColor]="iconColor()"
-              [textColor]="iconColor()"
               [text]="intraCityText()"
               [class.opacity-60]="!t.confirmed"
             >
@@ -61,7 +59,6 @@ import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
               <app-info-row
                 [icon]="trasladoPartidaIcon()"
                 [iconColor]="iconColor()"
-                [textColor]="iconColor()"
                 [text]="trasladoPartidaText()"
                 [class.opacity-60]="!t.confirmed"
               >
@@ -74,7 +71,6 @@ import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
               <app-info-row
                 [icon]="trasladoArriboIcon()"
                 [iconColor]="iconColor()"
-                [textColor]="iconColor()"
                 [text]="trasladoArriboText()"
                 [class.opacity-60]="!t.confirmed"
               >
@@ -91,7 +87,6 @@ import { EVENT_TYPE_COLORS } from '../../shared/theme/colors';
           <app-info-row
             [icon]="s.icon"
             [iconColor]="iconColor()"
-            [textColor]="iconColor()"
             [text]="stayText()"
             [class.opacity-60]="!s.confirmed"
           >
@@ -131,9 +126,12 @@ export class EventSlot {
 
   protected readonly iconColor = computed((): string => {
     const e = this.event();
-    if (e.type === 'traslado') return transportColor(e.subtype);
-    if (e.type === 'hito')    return EVENT_TYPE_COLORS['hito'];
-    if (e.type === 'estadia') return EVENT_TYPE_COLORS['estadia'];
+    if (e.type === 'hito') return ICON_GREYS.hito;
+    if (e.type === 'estadia') return ICON_GREYS.estadia;
+    if (e.type === 'traslado') {
+      if (this.isIntraCity()) return ICON_GREYS.transportIntra;
+      return transportColor(e.subtype);
+    }
     return 'var(--p-surface-600)';
   });
 
