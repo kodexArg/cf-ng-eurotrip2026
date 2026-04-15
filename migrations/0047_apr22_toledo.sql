@@ -18,18 +18,7 @@
 -- Fare modelado en traslado de ida (cubre RT para 2), vuelta en €0.
 
 -- ─────────────────────────────────────────────────────────────────────
--- 1. DELETE actividades Apr 22 (tabla activities — seed legacy)
--- ─────────────────────────────────────────────────────────────────────
-DELETE FROM activities
-WHERE id IN (
-  'mad-apr22-prado',
-  'mad-apr22-palacio',
-  'mad-apr22-debod',
-  'mad-apr22-letras'
-);
-
--- ─────────────────────────────────────────────────────────────────────
--- 2. Traslado: AirBnB Sol → Atocha (Metro L1, ~25 min)
+-- 1. Traslado: AirBnB Sol → Atocha (Metro L1, ~25 min)
 -- ─────────────────────────────────────────────────────────────────────
 INSERT INTO events (
   id, type, subtype, slug, title, description, date,
