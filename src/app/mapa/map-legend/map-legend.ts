@@ -19,6 +19,10 @@ import { Card } from 'primeng/card';
           <span class="w-6 h-0.5 inline-block" style="border-top: 2px solid #3b82f6"></span>
           <span>Vuelo</span>
         </div>
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-0.5 inline-block" style="border-top: 2px dashed #6b7280; opacity: 0.5"></span>
+          <span>Planeado / no confirmado</span>
+        </div>
       </div>
     </p-card>
   `,
