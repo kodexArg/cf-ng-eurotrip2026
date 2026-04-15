@@ -22,6 +22,7 @@ import { transportColor } from '../../shared/transport-colors';
           <app-info-row
             [icon]="h.icon"
             [iconColor]="iconColor()"
+            [textColor]="iconColor()"
             [text]="h.title"
             [class.opacity-60]="!h.confirmed"
           >
@@ -46,6 +47,7 @@ import { transportColor } from '../../shared/transport-colors';
             <app-info-row
               [icon]="intraCityIcon()"
               [iconColor]="iconColor()"
+              [textColor]="iconColor()"
               [text]="intraCityText()"
               [class.opacity-60]="!t.confirmed"
             >
@@ -58,6 +60,7 @@ import { transportColor } from '../../shared/transport-colors';
               <app-info-row
                 [icon]="trasladoPartidaIcon()"
                 [iconColor]="iconColor()"
+                [textColor]="iconColor()"
                 [text]="trasladoPartidaText()"
                 [class.opacity-60]="!t.confirmed"
               >
@@ -70,6 +73,7 @@ import { transportColor } from '../../shared/transport-colors';
               <app-info-row
                 [icon]="trasladoArriboIcon()"
                 [iconColor]="iconColor()"
+                [textColor]="iconColor()"
                 [text]="trasladoArriboText()"
                 [class.opacity-60]="!t.confirmed"
               >
@@ -86,6 +90,7 @@ import { transportColor } from '../../shared/transport-colors';
           <app-info-row
             [icon]="s.icon"
             [iconColor]="iconColor()"
+            [textColor]="iconColor()"
             [text]="stayText()"
             [class.opacity-60]="!s.confirmed"
           >
