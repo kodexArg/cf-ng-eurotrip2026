@@ -4,9 +4,20 @@ import { greatCirclePoints } from './great-circle';
 // ─── Style constants ────────────────────────────────────────────────────────
 
 const TRASLADO_STYLES: Record<string, import('leaflet').PolylineOptions> = {
+  // ── confirmed ──────────────────────────────────────────────────────────────
   flight: { color: '#3b82f6', weight: 1.8, opacity: 0.75 },
   train:  { color: '#16a34a', weight: 2.5, dashArray: '10,6', opacity: 0.85 },
   ferry:  { color: '#0891b2', weight: 2.0, dashArray: '8,5',  opacity: 0.75 },
+  metro:  { color: '#a855f7', weight: 2.0, dashArray: '6,4',  opacity: 0.80 },
+  bus:    { color: '#f97316', weight: 2.0, dashArray: '6,4',  opacity: 0.80 },
+  car:    { color: '#6b7280', weight: 1.8, opacity: 0.75 },
+  // ── pending (not confirmed) ────────────────────────────────────────────────
+  'flight-pending': { color: '#3b82f6', weight: 1.8, dashArray: '4,8', opacity: 0.40 },
+  'train-pending':  { color: '#16a34a', weight: 2.5, dashArray: '4,8', opacity: 0.40 },
+  'ferry-pending':  { color: '#0891b2', weight: 2.0, dashArray: '4,8', opacity: 0.40 },
+  'metro-pending':  { color: '#a855f7', weight: 2.0, dashArray: '4,8', opacity: 0.40 },
+  'bus-pending':    { color: '#f97316', weight: 2.0, dashArray: '4,8', opacity: 0.40 },
+  'car-pending':    { color: '#6b7280', weight: 1.8, dashArray: '4,8', opacity: 0.40 },
 };
 
 const MARKER_COLORS = {
@@ -87,7 +98,8 @@ export function renderEventsOnMap(
       const pts: [number, number][] = ev.waypoints && ev.waypoints.length > 0
         ? [origin, ...ev.waypoints, dest]
         : greatCirclePoints(origin, dest, 30);
-      const opts = TRASLADO_STYLES[subtype] ?? TRASLADO_STYLES['flight'];
+      const styleKey = ev.confirmed ? subtype : `${subtype}-pending`;
+      const opts = TRASLADO_STYLES[styleKey] ?? TRASLADO_STYLES[subtype] ?? TRASLADO_STYLES['flight'];
       L.polyline(pts, opts).addTo(group);
 
       const midIdx = Math.floor((pts.length - 1) / 2);
