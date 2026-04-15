@@ -20,6 +20,10 @@ import { Card } from 'primeng/card';
           <span>Vuelo</span>
         </div>
         <div class="flex items-center gap-2">
+          <svg width="24" height="4" style="flex-shrink:0"><line x1="0" y1="2" x2="24" y2="2" stroke="#f97316" stroke-width="2.5" stroke-dasharray="1,5" stroke-linecap="round"/></svg>
+          <span>Bus / Coach</span>
+        </div>
+        <div class="flex items-center gap-2">
           <span class="w-6 h-0.5 inline-block" style="border-top: 2px dashed #6b7280; opacity: 0.5"></span>
           <span>Planeado / no confirmado</span>
         </div>
