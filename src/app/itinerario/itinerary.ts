@@ -14,7 +14,6 @@ import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { SiteInfoModal } from '../shared/site-info-modal/site-info-modal';
 import { ItineraryEnrichmentService } from '../shared/services/itinerary-enrichment.service';
-import { ItineraryFilters } from './itinerary-filters/itinerary-filters';
 
 interface ItineraryPayload {
   cities: City[];
@@ -49,11 +48,9 @@ interface EventModalState {
  */
 @Component({
   selector: 'app-itinerary',
-  imports: [ItineraryCity, LoadingState, ErrorState, SiteInfoModal, ItineraryFilters],
+  imports: [ItineraryCity, LoadingState, ErrorState, SiteInfoModal],
   template: `
     <div class="max-w-2xl mx-auto p-4">
-      <app-itinerary-filters />
-
       @if (itineraryResource.isLoading()) {
         <app-loading-state />
       }
