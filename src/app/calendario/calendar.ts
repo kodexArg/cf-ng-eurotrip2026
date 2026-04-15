@@ -109,13 +109,16 @@ export class CalendarPage {
       let tipo: ActivityTipo;
       if (isHito(e)) {
         tipo = HITO_SUBTYPE_TO_TIPO[e.subtype] ?? 'visit';
-      } else if (isTraslado(e)) {
-        tipo = 'transport';
+      // traslados ocultos en calendario
+      // } else if (isTraslado(e)) {
+      //   tipo = 'transport';
       } else if (isEstadia(e)) {
         tipo = 'hotel';
       } else {
         continue;
       }
+      // traslados ocultos en calendario — también hitos con subtype transfer
+      if (tipo === 'transport') continue;
       const activity: CalendarActivity = {
         date: e.date,
         description: e.description ?? e.title,
