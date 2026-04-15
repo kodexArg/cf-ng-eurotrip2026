@@ -41,7 +41,7 @@ interface TrasladoView {
       <div class="flex items-center justify-between mb-2">
         <app-booking-type-chip [type]="event().type" />
         <div class="flex items-center gap-1">
-          @if (event().usd) {
+          @if (showPrice() && event().usd) {
             <i
               class="pi pi-dollar text-xs"
               style="color: var(--p-surface-400)"
@@ -199,6 +199,7 @@ interface TrasladoView {
 export class BookingCard {
   readonly event = input.required<TripEvent>();
   readonly cities = input<readonly City[]>([]);
+  readonly showPrice = input(false);
 
   readonly timeOf = timeOf;
 

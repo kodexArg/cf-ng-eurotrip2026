@@ -39,6 +39,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'modificaciones',
+    loadComponent: () => import('./modificaciones/modificaciones').then((m) => m.ModificacionesPage),
+  },
+  {
     path: 'access',
     loadComponent: () => import('./access/access-request').then((m) => m.AccessRequestPage),
   },
