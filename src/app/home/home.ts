@@ -4,13 +4,14 @@ import { CityPreviewCard, CityPreview } from './city-preview-card/city-preview-c
 import { TripStats } from './trip-stats/trip-stats';
 import { QuickNav } from './quick-nav/quick-nav';
 import { CITY_COLORS } from '../shared/theme/colors';
+import { CITY_SLUGS } from '../shared/constants/cities';
 
 const CITIES_PREVIEW: CityPreview[] = [
-  { slug: 'madrid',    name: 'Madrid',    color: CITY_COLORS['madrid'],    dates: '20–24 abr',       nights: 4 },
-  { slug: 'barcelona', name: 'Barcelona', color: CITY_COLORS['barcelona'], dates: '24–28 abr',       nights: 4 },
-  { slug: 'palma',     name: 'Palma',     color: CITY_COLORS['palma'],     dates: '28 abr – 2 may',  nights: 4 },
-  { slug: 'londres',   name: 'Londres',   color: CITY_COLORS['londres'],   dates: '2–5 may',         nights: 3 },
-  { slug: 'roma',      name: 'Roma',      color: CITY_COLORS['roma'],      dates: '5–9 may',         nights: 4 },
+  { slug: CITY_SLUGS.MADRID,    name: 'Madrid',    color: CITY_COLORS[CITY_SLUGS.MADRID],    dates: '20–24 abr',      nights: 4 },
+  { slug: CITY_SLUGS.BARCELONA, name: 'Barcelona', color: CITY_COLORS[CITY_SLUGS.BARCELONA], dates: '24–28 abr',      nights: 4 },
+  { slug: CITY_SLUGS.PALMA,     name: 'Palma',     color: CITY_COLORS[CITY_SLUGS.PALMA],     dates: '28 abr – 2 may', nights: 4 },
+  { slug: CITY_SLUGS.LONDRES,   name: 'Londres',   color: CITY_COLORS[CITY_SLUGS.LONDRES],   dates: '2–5 may',        nights: 3 },
+  { slug: CITY_SLUGS.ROMA,      name: 'Roma',      color: CITY_COLORS[CITY_SLUGS.ROMA],      dates: '5–9 may',        nights: 4 },
 ];
 
 @Component({

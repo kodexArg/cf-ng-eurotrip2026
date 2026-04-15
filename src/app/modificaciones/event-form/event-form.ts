@@ -24,6 +24,7 @@ import {
   EstadiaEvent,
 } from '../../shared/models/event.model';
 import { City } from '../../shared/models/city.model';
+import { EVENT_TYPES } from '../../shared/constants/event-types';
 
 @Component({
   selector: 'app-event-form',
@@ -101,7 +102,7 @@ import { City } from '../../shared/models/city.model';
   </div>
 
   <!-- Traslado extras -->
-  @if (formType === 'traslado') {
+  @if (formType === EVENT_TYPES.TRASLADO) {
     <div class="grid grid-cols-2 gap-3 mb-3">
       <div class="flex flex-col gap-1">
         <label class="text-xs" style="color: var(--p-surface-500)">Compañía</label>
@@ -127,7 +128,7 @@ import { City } from '../../shared/models/city.model';
   }
 
   <!-- Estadia extras -->
-  @if (formType === 'estadia') {
+  @if (formType === EVENT_TYPES.ESTADIA) {
     <div class="grid grid-cols-2 gap-3 mb-3">
       <div class="flex flex-col gap-1">
         <label class="text-xs" style="color: var(--p-surface-500)">Alojamiento *</label>
@@ -186,6 +187,8 @@ import { City } from '../../shared/models/city.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventForm {
+  readonly EVENT_TYPES = EVENT_TYPES;
+
   readonly event = input<TripEvent | null>(null);
   readonly cities = input<readonly City[]>([]);
 
@@ -230,9 +233,9 @@ export class EventForm {
   );
 
   readonly typeOptions = [
-    { label: 'Hito', value: 'hito' as const },
-    { label: 'Viaje', value: 'traslado' as const },
-    { label: 'Hospedaje', value: 'estadia' as const },
+    { label: 'Hito',     value: EVENT_TYPES.HITO },
+    { label: 'Viaje',    value: EVENT_TYPES.TRASLADO },
+    { label: 'Hospedaje', value: EVENT_TYPES.ESTADIA },
   ];
 
   get isFormValid(): boolean {
@@ -269,7 +272,7 @@ export class EventForm {
         this.formCityOut = e.cityOut ?? '';
         this.formUsd = e.usd;
         this.formConfirmed = e.confirmed;
-        if (e.type === 'traslado') {
+        if (e.type === EVENT_TYPES.TRASLADO) {
           const t = e as TrasladoEvent;
           this.formCompany = t.company ?? '';
           this.formFare = t.fare ?? '';
@@ -279,7 +282,7 @@ export class EventForm {
         } else {
           this.formCompany = ''; this.formFare = ''; this.formVehicleCode = ''; this.formSeat = ''; this.formDurationMin = null;
         }
-        if (e.type === 'estadia') {
+        if (e.type === EVENT_TYPES.ESTADIA) {
           const s = e as EstadiaEvent;
           this.formAccommodation = s.accommodation;
           this.formAddress = s.address ?? '';
@@ -366,11 +369,11 @@ export class EventForm {
       cityIn: this.formCityIn, cityOut: this.formCityOut || null,
       usd: this.formUsd, confirmed: this.formConfirmed,
     };
-    if (this.formType === 'traslado') {
+    if (this.formType === EVENT_TYPES.TRASLADO) {
       Object.assign(base, { company: this.formCompany || null, fare: this.formFare || null,
         vehicleCode: this.formVehicleCode || null, seat: this.formSeat || null, durationMin: this.formDurationMin });
     }
-    if (this.formType === 'estadia') {
+    if (this.formType === EVENT_TYPES.ESTADIA) {
       Object.assign(base, { accommodation: this.formAccommodation, address: this.formAddress || null,
         checkinTime: this.formCheckinTime || null, checkoutTime: this.formCheckoutTime || null,
         bookingRef: this.formBookingRef || null, platform: this.formPlatform || null });
