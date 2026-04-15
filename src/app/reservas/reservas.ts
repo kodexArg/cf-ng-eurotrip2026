@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { httpResource } from '@angular/common/http';
-import { SelectButton } from 'primeng/selectbutton';
-import { TripEvent, EventType } from '../shared/models/event.model';
+import { TripEvent } from '../shared/models/event.model';
 import { City } from '../shared/models/city.model';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from './booking-card/booking-card';
-
-type FilterValue = EventType | 'all';
+import { TypeFilter, FilterValue } from '../shared/type-filter/type-filter';
 
 /**
  * Bookings page listing all trip events filterable by type.
@@ -20,13 +17,13 @@ type FilterValue = EventType | 'all';
 @Component({
   selector: 'app-reservas',
   standalone: true,
-  imports: [FormsModule, SelectButton, LoadingState, ErrorState, BookingCard],
+  imports: [TypeFilter, LoadingState, ErrorState, BookingCard],
   template: `
     <div class="max-w-2xl mx-auto p-4">
       <h1 class="text-2xl font-bold select-none mb-4" style="color: var(--p-surface-800)">Reservas</h1>
 
       <div class="mb-4">
-        <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
+        <app-type-filter [value]="typeFilter()" (valueChange)="typeFilter.set($event)" />
       </div>
 
       @if (reservasResource.isLoading()) { <app-loading-state /> }
@@ -53,13 +50,6 @@ export class ReservasPage {
   readonly cities = computed<readonly City[]>(() => this.reservasResource.value()?.cities ?? []);
 
   readonly typeFilter = signal<FilterValue>('all');
-
-  readonly filterOptions = [
-    { label: 'Todos',     value: 'all' },
-    { label: 'Hitos',     value: 'hito' },
-    { label: 'Viajes',    value: 'traslado' },
-    { label: 'Hospedaje', value: 'estadia' },
-  ];
 
   readonly filteredEvents = computed(() => {
     const events = this.reservasResource.value()?.events ?? [];
