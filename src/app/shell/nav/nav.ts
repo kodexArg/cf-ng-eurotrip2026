@@ -38,6 +38,9 @@ import { MenuItem } from 'primeng/api';
       <a routerLink="/reservas" routerLinkActive="text-primary">
         <p-button icon="pi pi-wallet" label="Reservas" [text]="true" size="small" />
       </a>
+      <a routerLink="/modificaciones" routerLinkActive="text-primary">
+        <p-button icon="pi pi-pencil" label="Editar" [text]="true" size="small" />
+      </a>
       <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
       <a routerLink="/admin" routerLinkActive="text-primary">
         <p-button icon="pi pi-cog" [text]="true" size="small" />
@@ -55,5 +58,6 @@ export class Nav {
     { label: 'Sitios', icon: 'pi pi-building', routerLink: '/sitios' },
     { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
     { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
+    { label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' },
   ];
 }
