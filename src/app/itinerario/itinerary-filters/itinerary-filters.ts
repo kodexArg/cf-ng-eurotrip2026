@@ -1,45 +1,32 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { ToggleButton } from 'primeng/togglebutton';
+import { TypeFilter, FilterValue } from '../../shared/type-filter/type-filter';
 import { ItineraryFilterService } from '../itinerary-filter.service';
 
 /**
- * Toolbar of toggle buttons that control which event types are visible in the itinerary.
+ * Toolbar that controls which event type is visible in the itinerary.
  *
  * @remarks
  * Reads and writes through ItineraryFilterService so the filter state is shared
  * across all itinerary sub-components without prop drilling.
- * Toggles: hitos, traslados, hospedajes.
+ * Single-select: Todos, Hitos, Viajes, or Hospedaje.
  */
 @Component({
   selector: 'app-itinerary-filters',
   standalone: true,
-  imports: [FormsModule, ToggleButton],
-  templateUrl: './itinerary-filters.html',
-  styleUrl: './itinerary-filters.css',
+  imports: [TypeFilter],
+  template: `
+    <app-type-filter [value]="filterValue" (valueChange)="filterValue = $event" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryFilters {
   protected readonly filters = inject(ItineraryFilterService);
 
-  get showHitos(): boolean {
-    return this.filters.showHitos();
-  }
-  set showHitos(v: boolean) {
-    if (v !== this.filters.showHitos()) this.filters.toggle('hito');
+  protected get filterValue(): FilterValue {
+    return this.filters.filter();
   }
 
-  get showTraslados(): boolean {
-    return this.filters.showTraslados();
-  }
-  set showTraslados(v: boolean) {
-    if (v !== this.filters.showTraslados()) this.filters.toggle('traslado');
-  }
-
-  get showHospedajes(): boolean {
-    return this.filters.showHospedajes();
-  }
-  set showHospedajes(v: boolean) {
-    if (v !== this.filters.showHospedajes()) this.filters.toggle('estadia');
+  protected set filterValue(v: FilterValue) {
+    this.filters.setFilter(v);
   }
 }

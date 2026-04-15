@@ -1,63 +1,25 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { EventType } from '../shared/models/event.model';
-import { EVENT_TYPES } from '../shared/constants/event-types';
+import { FilterValue } from '../shared/type-filter/type-filter';
 
-const COOKIE_NAME = 'itinerary-filters';
-const MAX_AGE = 365 * 24 * 60 * 60;
-
-interface FilterState {
-  hitos: boolean;
-  traslados: boolean;
-  hospedajes: boolean;
-}
-
-function readCookie(): FilterState {
-  const match = document.cookie
-    .split('; ')
-    .find((row) => row.startsWith(COOKIE_NAME + '='));
-  if (!match) return { hitos: true, traslados: true, hospedajes: true };
-  try {
-    const value = decodeURIComponent(match.split('=').slice(1).join('='));
-    const parsed = JSON.parse(value) as Partial<FilterState>;
-    return {
-      hitos: parsed.hitos ?? true,
-      traslados: parsed.traslados ?? true,
-      hospedajes: parsed.hospedajes ?? true,
-    };
-  } catch {
-    return { hitos: true, traslados: true, hospedajes: true };
-  }
-}
-
-function writeCookie(state: FilterState): void {
-  const value = encodeURIComponent(JSON.stringify(state));
-  document.cookie = `${COOKIE_NAME}=${value}; max-age=${MAX_AGE}; path=/`;
-}
-
+/**
+ * Shared state for the itinerary event-type filter.
+ *
+ * @remarks
+ * Single-select: one of 'all' | 'hito' | 'traslado' | 'estadia'.
+ * 'all' means no filter — every event type is visible.
+ * Consumers call `isVisible(type)` to gate rendering.
+ */
 @Injectable({ providedIn: 'root' })
 export class ItineraryFilterService {
-  readonly showHitos = signal(true);
-  readonly showTraslados = signal(true);
-  readonly showHospedajes = signal(true);
+  readonly filter = signal<FilterValue>('all');
 
-  constructor() {
-    const saved = readCookie();
-    this.showHitos.set(saved.hitos);
-    this.showTraslados.set(saved.traslados);
-    this.showHospedajes.set(saved.hospedajes);
-
-    effect(() => {
-      writeCookie({
-        hitos: this.showHitos(),
-        traslados: this.showTraslados(),
-        hospedajes: this.showHospedajes(),
-      });
-    });
+  isVisible(type: EventType): boolean {
+    const f = this.filter();
+    return f === 'all' || f === type;
   }
 
-  toggle(type: EventType): void {
-    if (type === EVENT_TYPES.HITO) this.showHitos.update((v) => !v);
-    else if (type === EVENT_TYPES.TRASLADO) this.showTraslados.update((v) => !v);
-    else if (type === EVENT_TYPES.ESTADIA) this.showHospedajes.update((v) => !v);
+  setFilter(value: FilterValue): void {
+    this.filter.set(value);
   }
 }
