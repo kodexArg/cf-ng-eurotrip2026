@@ -27,11 +27,15 @@
 }
 .city-label::before { display: none !important; }
 
-.p-selectbutton.filter-wrap {
+p-selectbutton:has(> p-togglebutton.filter-wrap) {
   flex-wrap: wrap;
   gap: 4px;
 }
-.p-selectbutton.filter-wrap .p-togglebutton {
+p-togglebutton.filter-wrap {
   white-space: nowrap;
   flex-shrink: 0;
+  overflow: visible;
+}
+p-togglebutton.filter-wrap .p-togglebutton-label {
+  white-space: nowrap;
 }
