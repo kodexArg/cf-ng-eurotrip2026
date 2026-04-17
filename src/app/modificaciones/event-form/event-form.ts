@@ -42,13 +42,13 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
   template: `
 <div class="max-w-2xl mx-auto mb-6 p-4 rounded-xl border" style="border-color: var(--p-surface-200)">
 
-  <!-- Type selector -->
+  <!-- Row 1: Type selector (full width) -->
   <div class="mb-4">
     <div class="text-xs font-medium mb-1 select-none" style="color: var(--p-surface-500)">Tipo *</div>
     <div class="flex gap-2">
       @for (opt of typeOptions; track opt.value) {
         <button type="button"
-          class="px-3 py-1 rounded-md text-sm border transition-colors cursor-pointer"
+          class="flex-1 px-3 py-1 rounded-md text-sm border transition-colors cursor-pointer"
           [style]="formType === opt.value
             ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
             : 'border-color: var(--p-surface-300); color: var(--p-surface-700)'"
@@ -59,33 +59,62 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Common fields -->
-  <div class="grid grid-cols-2 gap-3 mb-3">
+  <!-- Row 2: Título + Confirmado -->
+  <div class="grid grid-cols-[1fr_auto] gap-3 mb-3 items-end">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Título *</label>
       <input pInputText [(ngModel)]="formTitle" placeholder="Título del evento" class="w-full" />
     </div>
+    <div class="flex items-center gap-2 pb-2">
+      <p-checkbox [(ngModel)]="formConfirmed" [binary]="true" inputId="evt-confirmed" />
+      <label for="evt-confirmed" class="text-sm select-none" style="color: var(--p-surface-700)">Confirmado</label>
+    </div>
+  </div>
+
+  <!-- Row 3: Fecha + hora entrada + hora salida + offset UTC -->
+  <div class="grid grid-cols-[1.4fr_1fr_1fr_auto] gap-3 mb-3">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Fecha *</label>
       <input pInputText type="date" [(ngModel)]="formDate" class="w-full" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Ciudad origen *</label>
-      <p-select [options]="cityOptions()" [(ngModel)]="formCityIn" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
+      <label class="text-xs" style="color: var(--p-surface-500)">Hora entrada</label>
+      <input pInputText type="time" [(ngModel)]="formTimeIn" class="w-full" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Ciudad destino</label>
-      <p-select [options]="cityOptions()" [(ngModel)]="formCityOut" optionLabel="name" optionValue="id" placeholder="(opcional)" [showClear]="true" styleClass="w-full" />
+      <label class="text-xs" style="color: var(--p-surface-500)">Hora salida</label>
+      <input pInputText type="time" [(ngModel)]="formTimeOut" class="w-full" />
     </div>
-    <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Timestamp entrada</label>
-      <input pInputText [(ngModel)]="formTimestampIn" placeholder="2026-05-01T10:00:00+02:00" class="w-full" />
+    <div class="flex flex-col gap-1 min-w-[90px]">
+      <label class="text-xs" style="color: var(--p-surface-500)">UTC</label>
+      <p-select [options]="offsetOptions" [(ngModel)]="formTimezoneOffset" optionLabel="label" optionValue="value" styleClass="w-full" />
     </div>
-    <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Timestamp salida</label>
-      <input pInputText [(ngModel)]="formTimestampOut" placeholder="(opcional)" class="w-full" />
+  </div>
+
+  <!-- Row 4: Ciudades -->
+  @if (formType === EVENT_TYPES.TRASLADO) {
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs" style="color: var(--p-surface-500)">Ciudad origen *</label>
+        <p-select [options]="cityOptions()" [(ngModel)]="formCityIn" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-xs" style="color: var(--p-surface-500)">Ciudad destino</label>
+        <p-select [options]="cityOptions()" [(ngModel)]="formCityOut" optionLabel="name" optionValue="id" placeholder="(opcional)" [showClear]="true" styleClass="w-full" />
+      </div>
     </div>
-    <div class="flex flex-col gap-1">
+  } @else {
+    <div class="grid grid-cols-1 gap-3 mb-3">
+      <div class="flex flex-col gap-1">
+        <label class="text-xs" style="color: var(--p-surface-500)">Ciudad *</label>
+        <p-select [options]="cityOptions()" [(ngModel)]="formCityIn" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
+      </div>
+    </div>
+  }
+
+  <!-- Row 5: USD + Descripción -->
+  <div class="grid grid-cols-[auto_1fr] gap-3 mb-3">
+    <div class="flex flex-col gap-1 min-w-[120px]">
       <label class="text-xs" style="color: var(--p-surface-500)">USD</label>
       <p-inputnumber [(ngModel)]="formUsd" [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="0.00" styleClass="w-full" />
     </div>
@@ -95,75 +124,81 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Confirmed -->
-  <div class="mb-3 flex items-center gap-2">
-    <p-checkbox [(ngModel)]="formConfirmed" [binary]="true" inputId="evt-confirmed" />
-    <label for="evt-confirmed" class="text-sm select-none" style="color: var(--p-surface-700)">Confirmado</label>
-  </div>
-
   <!-- Traslado extras -->
   @if (formType === EVENT_TYPES.TRASLADO) {
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Compañía</label>
-        <input pInputText [(ngModel)]="formCompany" placeholder="ej. Ryanair" class="w-full" />
+    <div class="mt-4 pt-3 border-t" style="border-color: var(--p-surface-200)">
+      <div class="text-xs font-medium mb-2 select-none uppercase tracking-wide" style="color: var(--p-surface-500)">Detalles de traslado</div>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Compañía</label>
+          <input pInputText [(ngModel)]="formCompany" placeholder="ej. Ryanair" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Código vuelo/tren</label>
+          <input pInputText [(ngModel)]="formVehicleCode" placeholder="ej. FR28" class="w-full" />
+        </div>
       </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Código vuelo/tren</label>
-        <input pInputText [(ngModel)]="formVehicleCode" placeholder="ej. FR28" class="w-full" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Tarifa</label>
-        <input pInputText [(ngModel)]="formFare" placeholder="ej. €49" class="w-full" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Asiento</label>
-        <input pInputText [(ngModel)]="formSeat" placeholder="ej. 14A" class="w-full" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Duración (min)</label>
-        <p-inputnumber [(ngModel)]="formDurationMin" [useGrouping]="false" placeholder="ej. 120" styleClass="w-full" />
+      <div class="grid grid-cols-3 gap-3 mb-1">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Tarifa</label>
+          <input pInputText [(ngModel)]="formFare" placeholder="ej. €49" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Asiento</label>
+          <input pInputText [(ngModel)]="formSeat" placeholder="ej. 14A" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Duración (min)</label>
+          <p-inputnumber [(ngModel)]="formDurationMin" [useGrouping]="false" placeholder="ej. 120" styleClass="w-full" />
+        </div>
       </div>
     </div>
   }
 
   <!-- Estadia extras -->
   @if (formType === EVENT_TYPES.ESTADIA) {
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Alojamiento *</label>
-        <input pInputText [(ngModel)]="formAccommodation" placeholder="Nombre del hotel/airbnb" class="w-full" />
+    <div class="mt-4 pt-3 border-t" style="border-color: var(--p-surface-200)">
+      <div class="text-xs font-medium mb-2 select-none uppercase tracking-wide" style="color: var(--p-surface-500)">Detalles de estadía</div>
+      <div class="grid grid-cols-1 gap-3 mb-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Alojamiento *</label>
+          <input pInputText [(ngModel)]="formAccommodation" placeholder="Nombre del hotel/airbnb" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Dirección</label>
+          <input pInputText [(ngModel)]="formAddress" placeholder="(opcional)" class="w-full" />
+        </div>
       </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Dirección</label>
-        <input pInputText [(ngModel)]="formAddress" placeholder="(opcional)" class="w-full" />
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Check-in</label>
+          <input pInputText [(ngModel)]="formCheckinTime" placeholder="ej. 15:00" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Check-out</label>
+          <input pInputText [(ngModel)]="formCheckoutTime" placeholder="ej. 11:00" class="w-full" />
+        </div>
       </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Check-in</label>
-        <input pInputText [(ngModel)]="formCheckinTime" placeholder="ej. 15:00" class="w-full" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Check-out</label>
-        <input pInputText [(ngModel)]="formCheckoutTime" placeholder="ej. 11:00" class="w-full" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Ref. reserva</label>
-        <input pInputText [(ngModel)]="formBookingRef" placeholder="(opcional)" class="w-full" />
-      </div>
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Plataforma</label>
-        <input pInputText [(ngModel)]="formPlatform" placeholder="ej. Booking.com" class="w-full" />
+      <div class="grid grid-cols-2 gap-3 mb-1">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Ref. reserva</label>
+          <input pInputText [(ngModel)]="formBookingRef" placeholder="(opcional)" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500)">Plataforma</label>
+          <input pInputText [(ngModel)]="formPlatform" placeholder="ej. Booking.com" class="w-full" />
+        </div>
       </div>
     </div>
   }
 
   <!-- Error -->
   @if (error()) {
-    <small class="block mb-2 text-red-500">{{ error() }}</small>
+    <small class="block mb-2 mt-3 text-red-500">{{ error() }}</small>
   }
 
   <!-- Buttons -->
-  <div class="flex gap-2 justify-end pt-2">
+  <div class="flex gap-2 justify-end pt-4 mt-3 border-t" style="border-color: var(--p-surface-200)">
     <p-button label="Limpiar" icon="pi pi-times" severity="secondary" (onClick)="handleClear()" />
     <p-button
       label="Eliminar"
@@ -206,8 +241,12 @@ export class EventForm {
   formTitle = '';
   formDescription = '';
   formDate = '';
+  // Timestamps: not bound to inputs. Composed in buildPayload() from formTimeIn/Out + offset.
   formTimestampIn = '';
   formTimestampOut = '';
+  formTimeIn = '';
+  formTimeOut = '';
+  formTimezoneOffset = '+02:00';
   formCityIn = '';
   formCityOut = '';
   formUsd: number | null = null;
@@ -233,24 +272,35 @@ export class EventForm {
   );
 
   readonly typeOptions = [
-    { label: 'Hito',     value: EVENT_TYPES.HITO },
-    { label: 'Viaje',    value: EVENT_TYPES.TRASLADO },
+    { label: 'Hito',      value: EVENT_TYPES.HITO },
+    { label: 'Viaje',     value: EVENT_TYPES.TRASLADO },
     { label: 'Hospedaje', value: EVENT_TYPES.ESTADIA },
   ];
 
+  readonly offsetOptions = [
+    { label: 'UTC',   value: '+00:00' },
+    { label: '+01',   value: '+01:00' },
+    { label: '+02',   value: '+02:00' },
+    { label: '-03',   value: '-03:00' },
+  ];
+
   get isFormValid(): boolean {
+    // formTimeIn empty is acceptable (timestamp will be null).
     return !!this.formTitle && !!this.formDate && !!this.formCityIn && !!this.formType;
   }
 
   get isDirty(): boolean {
     const e = this.event();
     if (!e) return true;
+    const parsed = this.parseTimestamp(e.timestampIn);
+    const parsedOut = this.parseTimestamp(e.timestampOut ?? '');
     return (
       this.formTitle !== e.title ||
       this.formDescription !== (e.description ?? '') ||
       this.formDate !== e.date ||
-      this.formTimestampIn !== e.timestampIn ||
-      this.formTimestampOut !== (e.timestampOut ?? '') ||
+      this.formTimeIn !== parsed.time ||
+      this.formTimeOut !== parsedOut.time ||
+      this.formTimezoneOffset !== (parsed.offset || this.formTimezoneOffset) ||
       this.formCityIn !== e.cityIn ||
       this.formCityOut !== (e.cityOut ?? '') ||
       this.formUsd !== e.usd ||
@@ -268,6 +318,11 @@ export class EventForm {
         this.formDate = e.date;
         this.formTimestampIn = e.timestampIn;
         this.formTimestampOut = e.timestampOut ?? '';
+        const parsedIn = this.parseTimestamp(e.timestampIn);
+        const parsedOut = this.parseTimestamp(e.timestampOut ?? '');
+        this.formTimeIn = parsedIn.time;
+        this.formTimeOut = parsedOut.time;
+        if (parsedIn.offset) this.formTimezoneOffset = parsedIn.offset;
         this.formCityIn = e.cityIn;
         this.formCityOut = e.cityOut ?? '';
         this.formUsd = e.usd;
@@ -299,9 +354,20 @@ export class EventForm {
     });
   }
 
+  private parseTimestamp(ts: string): { time: string; offset: string } {
+    if (!ts) return { time: '', offset: '' };
+    const match = ts.match(/T(\d{2}:\d{2})(?::\d{2})?([+-]\d{2}:\d{2}|Z)?/);
+    if (!match) return { time: '', offset: '' };
+    const time = match[1] ?? '';
+    let offset = match[2] ?? '';
+    if (offset === 'Z') offset = '+00:00';
+    return { time, offset };
+  }
+
   resetForm(): void {
     this.formType = ''; this.formTitle = ''; this.formDescription = '';
     this.formDate = ''; this.formTimestampIn = ''; this.formTimestampOut = '';
+    this.formTimeIn = ''; this.formTimeOut = ''; this.formTimezoneOffset = '+02:00';
     this.formCityIn = ''; this.formCityOut = ''; this.formUsd = null; this.formConfirmed = false;
     this.formCompany = ''; this.formFare = ''; this.formVehicleCode = ''; this.formSeat = ''; this.formDurationMin = null;
     this.formAccommodation = ''; this.formAddress = ''; this.formCheckinTime = ''; this.formCheckoutTime = ''; this.formBookingRef = ''; this.formPlatform = '';
@@ -361,12 +427,22 @@ export class EventForm {
     }
   }
 
+  private composeTimestamp(time: string): string | null {
+    if (!time || !this.formDate) return null;
+    return `${this.formDate}T${time}:00${this.formTimezoneOffset}`;
+  }
+
   private buildPayload(): Record<string, unknown> {
+    this.formTimestampIn = this.composeTimestamp(this.formTimeIn) ?? '';
+    this.formTimestampOut = this.composeTimestamp(this.formTimeOut) ?? '';
+
     const base: Record<string, unknown> = {
       type: this.formType, title: this.formTitle, description: this.formDescription || null,
-      date: this.formDate, timestampIn: this.formTimestampIn,
-      timestampOut: this.formTimestampOut || null,
-      cityIn: this.formCityIn, cityOut: this.formCityOut || null,
+      date: this.formDate,
+      timestampIn: this.composeTimestamp(this.formTimeIn),
+      timestampOut: this.composeTimestamp(this.formTimeOut),
+      cityIn: this.formCityIn,
+      cityOut: this.formType === EVENT_TYPES.TRASLADO ? (this.formCityOut || null) : null,
       usd: this.formUsd, confirmed: this.formConfirmed,
     };
     if (this.formType === EVENT_TYPES.TRASLADO) {
