@@ -7,7 +7,7 @@
 
 export const TRANSPORT_COLORS: Record<string, string> = {
   flight: '#60a5fa',   // blue-400  (softened from map #3b82f6)
-  train:  '#4ade80',   // green-400 (softened from map #16a34a)
+  train:  '#16a34a',   // green-600 (matches map palette for stronger contrast)
   ferry:  '#22d3ee',   // cyan-400  (softened from map #0891b2)
   metro:  '#c084fc',   // purple-400 (softened from map #a855f7)
   bus:    '#fb923c',   // orange-400 (softened from map #f97316)
