@@ -16,13 +16,6 @@ import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import type { City, Card } from '../shared/models';
 
-/**
- * Lazy content panel for a single city tab in the sitios page.
- *
- * @remarks
- * Only fetches cards when `active` is true to avoid unnecessary API calls for
- * non-visible tabs. Cards are loaded from /api/cards/:slug.
- */
 @Component({
   selector: 'app-city-tab-content',
   imports: [CityCardList, LoadingState, ErrorState],
@@ -59,14 +52,12 @@ export class CityTabContent {
   });
 }
 
-/**
- * Sitios page: tabbed view of per-city activity and point-of-interest cards.
- *
- * @remarks
- * Fetches the city list from /api/cities and renders one tab per city.
- * The active tab is synced to the `c` query parameter so deep-linking works.
- * Card data is loaded lazily by CityTabContent only when its tab is active.
- */
+interface DatePill {
+  date: string;   // YYYY-MM-DD
+  label: string;  // "28 Abr"
+  citySlug: string;
+}
+
 @Component({
   selector: 'app-sitios-page',
   imports: [Tabs, TabList, Tab, TabPanels, TabPanel, CityTabContent, LoadingState, ErrorState],
@@ -84,6 +75,28 @@ export class CityTabContent {
       }
 
       @if (cities().length > 0) {
+        <!-- Date filter pills -->
+        <div class="flex gap-2 mb-4 overflow-x-auto nav-scroll pb-1">
+          <button type="button"
+            class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
+            [style]="selectedDate() === null
+              ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
+              : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
+            (click)="selectDate(null)">
+            Todas
+          </button>
+          @for (pill of datePills(); track pill.date) {
+            <button type="button"
+              class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
+              [style]="selectedDate() === pill.date
+                ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
+                : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
+              (click)="selectDate(pill.date)">
+              {{ pill.label }}
+            </button>
+          }
+        </div>
+
         <p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
           <p-tablist>
             @for (city of cities(); track city.slug) {
@@ -124,6 +137,26 @@ export class SitiosPage {
   readonly cities = computed(() => this.citiesResource.value() ?? []);
 
   readonly activeTab = signal<string>('');
+  readonly selectedDate = signal<string | null>(null);
+
+  // Generate one pill per day across all city stays: arrival <= day < departure
+  readonly datePills = computed<DatePill[]>(() => {
+    const pills: DatePill[] = [];
+    for (const city of this.cities()) {
+      const arrival = new Date(city.arrival + 'T00:00:00');
+      const departure = new Date(city.departure + 'T00:00:00');
+      const cur = new Date(arrival);
+      while (cur < departure) {
+        pills.push({
+          date: cur.toISOString().slice(0, 10),
+          label: cur.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+          citySlug: city.slug,
+        });
+        cur.setDate(cur.getDate() + 1);
+      }
+    }
+    return pills;
+  });
 
   private readonly _initEffect = effect(() => {
     const cities = this.cities();
@@ -136,6 +169,13 @@ export class SitiosPage {
       this.activeTab.set(initial);
     });
   });
+
+  selectDate(date: string | null): void {
+    this.selectedDate.set(date);
+    if (date === null) return;
+    const pill = this.datePills().find(p => p.date === date);
+    if (pill) this.onTabChange(pill.citySlug);
+  }
 
   onTabChange(slug: string | number | undefined): void {
     if (slug === undefined) return;

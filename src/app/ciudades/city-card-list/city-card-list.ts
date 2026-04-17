@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { Message } from 'primeng/message';
 import { Accordion, AccordionPanel, AccordionHeader, AccordionContent } from 'primeng/accordion';
 import { Tag } from 'primeng/tag';
@@ -10,13 +11,13 @@ import type { Card } from '../../shared/models';
 
 @Component({
   selector: 'app-city-card-list',
-  imports: [Message, Accordion, AccordionPanel, AccordionHeader, AccordionContent, Tag, InfoCard, LinkCard, NoteCard, PhotoCard],
+  imports: [NgClass, Message, Accordion, AccordionPanel, AccordionHeader, AccordionContent, Tag, InfoCard, LinkCard, NoteCard, PhotoCard],
   template: `
     @if (cards().length === 0) {
       <p-message severity="info" text="Aun no hay informacion para esta ciudad." />
     } @else {
       @if (photoCards().length) {
-        <div class="flex flex-col gap-3 mb-4">
+        <div class="flex flex-col gap-5 mb-6">
           @for (card of photoCards(); track card.id) {
             <app-photo-card [card]="card" />
           }
@@ -24,8 +25,8 @@ import type { Card } from '../../shared/models';
       }
       @if (contentCards().length) {
         <p-accordion [value]="defaultOpenPanels()" [multiple]="true">
-          @for (card of contentCards(); track card.id) {
-            <p-accordionpanel [value]="card.id">
+          @for (card of contentCards(); track card.id; let last = $last) {
+            <p-accordionpanel [value]="card.id" [ngClass]="{'mb-3': !last}">
               <p-accordionheader>
                 <div class="flex items-center gap-2 w-full">
                   <p-tag [value]="typeLabel(card.type)" [severity]="typeSeverity(card.type)" class="text-xs" />
