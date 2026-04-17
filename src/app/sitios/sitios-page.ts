@@ -9,7 +9,9 @@ import {
   untracked,
 } from '@angular/core';
 import { httpResource } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SelectButton } from 'primeng/selectbutton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
 import { CityCardList } from '../ciudades/city-card-list/city-card-list';
 import { LoadingState } from '../shared/loading-state/loading-state';
@@ -74,7 +76,7 @@ function cityDatePills(city: City): DatePill[] {
 
 @Component({
   selector: 'app-sitios-page',
-  imports: [Tabs, TabList, Tab, TabPanels, TabPanel, CityTabContent, LoadingState, ErrorState],
+  imports: [FormsModule, SelectButton, Tabs, TabList, Tab, TabPanels, TabPanel, CityTabContent, LoadingState, ErrorState],
   template: `
     <div class="max-w-4xl mx-auto px-4 py-6">
       @if (citiesResource.isLoading()) {
@@ -108,25 +110,14 @@ function cityDatePills(city: City): DatePill[] {
             @for (city of cities(); track city.slug) {
               <p-tabpanel [value]="city.slug">
                 <!-- Date pills for this city -->
-                <div class="flex gap-2 mt-3 overflow-x-auto nav-scroll pb-1">
-                  <button type="button"
-                    class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
-                    [style]="selectedDate() === null
-                      ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
-                      : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
-                    (click)="selectedDate.set(null)">
-                    Todas
-                  </button>
-                  @for (pill of pillsFor(city); track pill.date) {
-                    <button type="button"
-                      class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
-                      [style]="selectedDate() === pill.date
-                        ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
-                        : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
-                      (click)="selectedDate.set(pill.date)">
-                      {{ pill.label }}
-                    </button>
-                  }
+                <div class="mt-3">
+                  <p-selectbutton
+                    [options]="dateOptions(city)"
+                    [(ngModel)]="selectedDate"
+                    optionLabel="label"
+                    optionValue="value"
+                    styleClass="filter-wrap"
+                  />
                 </div>
                 <app-city-tab-content
                   [slug]="city.slug"
@@ -150,7 +141,7 @@ export class SitiosPage {
   readonly cities = computed(() => this.citiesResource.value() ?? []);
 
   readonly activeTab = signal<string>('');
-  readonly selectedDate = signal<string | null>(null);
+  readonly selectedDate = signal<string>('all');
 
   private readonly _initEffect = effect(() => {
     const cities = this.cities();
@@ -164,15 +155,18 @@ export class SitiosPage {
     });
   });
 
-  pillsFor(city: City): DatePill[] {
-    return cityDatePills(city);
+  dateOptions(city: City): { label: string; value: string }[] {
+    return [
+      { label: 'Todas', value: 'all' },
+      ...cityDatePills(city).map(p => ({ label: p.label, value: p.date })),
+    ];
   }
 
   onTabChange(slug: string | number | undefined): void {
     if (slug === undefined) return;
     const s = String(slug);
     this.activeTab.set(s);
-    this.selectedDate.set(null);
+    this.selectedDate.set('all');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { c: s },
