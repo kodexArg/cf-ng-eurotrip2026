@@ -4,6 +4,7 @@ import { httpResource } from '@angular/common/http';
 import { SelectButton } from 'primeng/selectbutton';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
+import { Select } from 'primeng/select';
 import { TripEvent, EventType } from '../shared/models/event.model';
 import { City } from '../shared/models/city.model';
 import { LoadingState } from '../shared/loading-state/loading-state';
@@ -19,6 +20,8 @@ import {
 } from '../shared/theme/spacing';
 
 type FilterValue = EventType | 'all';
+type CityFilterValue = string | 'all';
+type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
 
 /**
  * Owner-only event management page for creating, editing, and deleting trip events.
@@ -32,7 +35,7 @@ type FilterValue = EventType | 'all';
 @Component({
   selector: 'app-modificaciones',
   standalone: true,
-  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm],
+  imports: [FormsModule, SelectButton, Dialog, Button, Select, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm],
   template: `
     @if (auth.isOwner()) {
       <div class="max-w-2xl mx-auto p-4">
@@ -47,6 +50,15 @@ type FilterValue = EventType | 'all';
             (onClick)="onAddNew()"
           />
           <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
+          <span class="ms-auto">
+            <p-button
+              icon="pi pi-sliders-h"
+              severity="secondary"
+              [rounded]="true"
+              aria-label="Filtros avanzados"
+              (onClick)="filtersDialogVisible.set(true)"
+            />
+          </span>
         </div>
 
         @if (reservasResource.isLoading()) { <app-loading-state /> }
@@ -95,6 +107,36 @@ type FilterValue = EventType | 'all';
         (cleared)="onCleared()"
       />
     </p-dialog>
+
+    <p-dialog
+      header="Filtros"
+      [visible]="filtersDialogVisible()"
+      (visibleChange)="filtersDialogVisible.set($event)"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [dismissableMask]="true"
+      [closable]="true"
+      [style]="dialogStyle"
+    >
+      <div class="flex flex-col gap-4 py-2">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500);">Tipo</label>
+          <p-selectbutton [options]="filterOptions" [(ngModel)]="typeFilter" optionLabel="label" optionValue="value" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500);">Ciudad</label>
+          <p-select [options]="cityFilterOptions()" [(ngModel)]="cityFilter" optionLabel="label" optionValue="value" placeholder="Todas" styleClass="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs" style="color: var(--p-surface-500);">Estado</label>
+          <p-selectbutton [options]="confirmedFilterOptions" [(ngModel)]="confirmedFilter" optionLabel="label" optionValue="value" />
+        </div>
+      </div>
+      <div class="flex justify-end pt-2">
+        <p-button label="Limpiar filtros" icon="pi pi-times" severity="secondary" (onClick)="clearFilters()" />
+      </div>
+    </p-dialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -106,6 +148,9 @@ export class ModificacionesPage {
   readonly cities = computed<readonly City[]>(() => this.reservasResource.value()?.cities ?? []);
 
   readonly typeFilter = signal<FilterValue>('all');
+  readonly cityFilter = signal<CityFilterValue>('all');
+  readonly confirmedFilter = signal<ConfirmedFilterValue>('all');
+  readonly filtersDialogVisible = signal<boolean>(false);
 
   readonly filterOptions = [
     { label: 'Todos',     value: 'all' },
@@ -113,6 +158,17 @@ export class ModificacionesPage {
     { label: 'Viajes',    value: 'traslado' },
     { label: 'Hospedaje', value: 'estadia' },
   ];
+
+  readonly confirmedFilterOptions = [
+    { label: 'Todos',          value: 'all' as ConfirmedFilterValue },
+    { label: 'Confirmados',    value: 'confirmed' as ConfirmedFilterValue },
+    { label: 'No confirmados', value: 'unconfirmed' as ConfirmedFilterValue },
+  ];
+
+  readonly cityFilterOptions = computed(() => [
+    { label: 'Todas', value: 'all' as CityFilterValue },
+    ...this.cities().map(c => ({ label: c.name, value: c.id as CityFilterValue })),
+  ]);
 
   readonly selectedEvent = signal<TripEvent | null>(null);
   readonly dialogVisible = signal<boolean>(false);
@@ -155,10 +211,24 @@ export class ModificacionesPage {
     // cleared only resets form fields; dialog stays open
   }
 
+  clearFilters(): void {
+    this.typeFilter.set('all');
+    this.cityFilter.set('all');
+    this.confirmedFilter.set('all');
+  }
+
   readonly filteredEvents = computed(() => {
     const events = this.reservasResource.value()?.events ?? [];
-    const filter = this.typeFilter();
-    if (filter === 'all') return events;
-    return events.filter((e) => e.type === filter);
+    const typeFilter = this.typeFilter();
+    const cityFilter = this.cityFilter();
+    const confirmedFilter = this.confirmedFilter();
+
+    return events.filter(e => {
+      if (typeFilter !== 'all' && e.type !== typeFilter) return false;
+      if (cityFilter !== 'all' && e.cityIn !== cityFilter) return false;
+      if (confirmedFilter === 'confirmed' && !e.confirmed) return false;
+      if (confirmedFilter === 'unconfirmed' && e.confirmed) return false;
+      return true;
+    });
   });
 }
