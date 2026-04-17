@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../shared/models';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
+import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
 import { ICON_GREYS } from '../../shared/theme/colors';
@@ -15,7 +16,7 @@ import { ICON_GREYS } from '../../shared/theme/colors';
  */
 @Component({
   selector: 'app-event-slot',
-  imports: [InfoRow, ConfirmedBadge],
+  imports: [InfoRow, ConfirmedBadge, MandatoryBadge],
   template: `
     @switch (event().type) {
       @case ('hito') {
@@ -24,7 +25,7 @@ import { ICON_GREYS } from '../../shared/theme/colors';
             [icon]="h.icon"
             [iconColor]="iconColor()"
             [text]="h.title"
-            [class.opacity-60]="!h.confirmed"
+            [class.opacity-60]="!h.confirmed && !h.mandatory"
           >
             @if (h.cardId) {
               <button
@@ -37,6 +38,8 @@ import { ICON_GREYS } from '../../shared/theme/colors';
             }
             @if (h.confirmed) {
               <app-confirmed-badge />
+            } @else if (h.mandatory) {
+              <app-mandatory-badge />
             }
           </app-info-row>
         }
@@ -48,10 +51,12 @@ import { ICON_GREYS } from '../../shared/theme/colors';
               [icon]="intraCityIcon()"
               [iconColor]="iconColor()"
               [text]="intraCityText()"
-              [class.opacity-60]="!t.confirmed"
+              [class.opacity-60]="!t.confirmed && !t.mandatory"
             >
               @if (t.confirmed) {
                 <app-confirmed-badge />
+              } @else if (t.mandatory) {
+                <app-mandatory-badge />
               }
             </app-info-row>
           } @else {
@@ -60,10 +65,12 @@ import { ICON_GREYS } from '../../shared/theme/colors';
                 [icon]="trasladoPartidaIcon()"
                 [iconColor]="iconColor()"
                 [text]="trasladoPartidaText()"
-                [class.opacity-60]="!t.confirmed"
+                [class.opacity-60]="!t.confirmed && !t.mandatory"
               >
                 @if (t.confirmed && t.renderMode === 'partida') {
                   <app-confirmed-badge />
+                } @else if (t.mandatory && t.renderMode === 'partida') {
+                  <app-mandatory-badge />
                 }
               </app-info-row>
             }
@@ -72,10 +79,12 @@ import { ICON_GREYS } from '../../shared/theme/colors';
                 [icon]="trasladoArriboIcon()"
                 [iconColor]="iconColor()"
                 [text]="trasladoArriboText()"
-                [class.opacity-60]="!t.confirmed"
+                [class.opacity-60]="!t.confirmed && !t.mandatory"
               >
                 @if (t.confirmed) {
                   <app-confirmed-badge />
+                } @else if (t.mandatory) {
+                  <app-mandatory-badge />
                 }
               </app-info-row>
             }
@@ -88,10 +97,12 @@ import { ICON_GREYS } from '../../shared/theme/colors';
             [icon]="s.icon"
             [iconColor]="iconColor()"
             [text]="stayText()"
-            [class.opacity-60]="!s.confirmed"
+            [class.opacity-60]="!s.confirmed && !s.mandatory"
           >
             @if (s.confirmed) {
               <app-confirmed-badge />
+            } @else if (s.mandatory) {
+              <app-mandatory-badge />
             }
           </app-info-row>
         }

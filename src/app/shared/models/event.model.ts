@@ -23,6 +23,7 @@ export interface TripEventBase {
   usd: number | null;
   icon: string;
   confirmed: boolean;
+  mandatory: boolean;
   variant: EventVariant;
   cardId: string | null;
   notes: string | null;
