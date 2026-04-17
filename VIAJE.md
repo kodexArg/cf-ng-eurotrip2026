@@ -66,6 +66,8 @@
 - **Jue 23 abr** · **Museo Reina Sofía** (10:00–13:00, €12 pp, reservar online) · Almuerzo tapas Lavapiés · **Museo Thyssen** (Hammershøi + Rauschenberg — 2 temporales TOP, €15 pp) · Caminata Thyssen → Lavapiés · Descanso Airbnb + cena ligera barrio · **Opcional: El Junco jam session jazz gratis** (22:00, consumición mín. €10-15)
 - **Vie 24 abr** · Metro Sol→Atocha Renfe 08:15 · **AVE 08:57 Madrid Atocha → Barcelona Sants (llega 12:06)** — CONFIRMADO
 
+> **Nota Madrid Apr 20-23:** plan **CONFIRMADO** en D1 (migration 0068). Incluye walkings Retiro→Lavapiés (Apr 20), Lavapiés↔Reina Sofía/Thyssen + Metro L3 a El Junco (Apr 23), y caminata cuesta abajo Mirador del Valle → Estación RENFE Toledo (Apr 22). Precios verificados 2026: EMT 203 T4→Atocha €5.00 pp, Thyssen €14 pp.
+
 ### Barcelona — 24 al 28 de abril (4 noches)
 
 - **Vie 24 abr** · Llegada en AVE 12:06 · Check-in Airbnb Poble Sec (15:00) · Barrio Gótico a pie · La Rambla · Barri Gòtic · Bicicleta: El Born + Arc de Triomf (17:30–19:30) · Noche: El Born → Raval
