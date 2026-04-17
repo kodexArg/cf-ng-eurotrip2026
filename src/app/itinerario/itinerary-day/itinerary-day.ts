@@ -64,7 +64,7 @@ export interface ItineraryDayInput {
             />
           }
           @if (showUnconfirmed() && weather()) {
-            <div class="flex items-center gap-0.5 mt-0.5 select-none text-xxs leading-none" [style.color]="weatherIconColor()">
+            <div class="flex items-center gap-1 mt-0.5 select-none text-xs leading-none" [style.color]="weatherIconColor()">
               <i [class]="'pi ' + weatherIcon()"></i>
               <span>{{ weatherTempText() }}</span>
             </div>
