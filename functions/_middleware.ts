@@ -4,6 +4,7 @@ interface Env {
   DB: D1Database;
   AUTH_PASSPHRASE: string;
   AUTH_SECRET: string;
+  SITE_GATE_PASSWORD: string;
   APP_URL: string;
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_CHAT_ID: string;
@@ -17,6 +18,8 @@ const ALLOWLISTED: Set<string> = new Set([
   'GET /api/auth/me',
   'POST /api/access-requests',
   'GET /api/auth/magic-link',
+  'POST /api/site-gate/login',
+  'GET /api/site-gate/me',
 ]);
 
 const PUBLIC_GET = true; // disable auth on all GET requests
