@@ -15,6 +15,7 @@ import { ErrorState } from '../shared/error-state/error-state';
 import { SiteInfoModal } from '../shared/site-info-modal/site-info-modal';
 import { ItineraryEnrichmentService } from '../shared/services/itinerary-enrichment.service';
 import { ItineraryFilters } from './itinerary-filters/itinerary-filters';
+import { formatUtcOffset, getCityUtcOffset } from '../shared/city-timezone';
 
 interface ItineraryPayload {
   cities: City[];
@@ -29,6 +30,21 @@ interface CityBlock {
   nightCount: number;
   firstTimestamp: string;
 }
+
+/**
+ * Soft divider rendered between two consecutive CityBlocks when the
+ * destination city sits in a different UTC offset than the origin.
+ */
+interface TimezoneChangeRow {
+  kind: 'tz-change';
+  fromLabel: string;  // e.g. "UTC+2"
+  toLabel: string;    // e.g. "UTC+1"
+  diffHours: number;  // signed (toOffset - fromOffset)
+}
+
+type ItineraryRow =
+  | { kind: 'city'; block: CityBlock }
+  | TimezoneChangeRow;
 
 interface EventModalState {
   event: TripEvent;
@@ -74,16 +90,29 @@ function dateToUtcMs(dateStr: string): number {
       }
 
       @if (itineraryResource.value()) {
-        @for (block of blocks(); track $index) {
-          <app-itinerary-city
-            [city]="block.city"
-            [allCities]="cities()"
-            [events]="block.events"
-            [firstDay]="block.firstDay"
-            [lastDay]="block.lastDay"
-            [nightCount]="block.nightCount"
-            (openEventInfo)="openEventInfo($event, block.city)"
-          />
+        @for (row of rows(); track $index) {
+          @if (row.kind === 'city') {
+            <app-itinerary-city
+              [city]="row.block.city"
+              [allCities]="cities()"
+              [events]="row.block.events"
+              [firstDay]="row.block.firstDay"
+              [lastDay]="row.block.lastDay"
+              [nightCount]="row.block.nightCount"
+              (openEventInfo)="openEventInfo($event, row.block.city)"
+            />
+          } @else {
+            <div
+              class="mb-6 -mt-4 flex items-center gap-2 px-4 py-2 text-surface-600 select-none"
+              role="note"
+              [attr.aria-label]="'Cambio de huso horario de ' + row.fromLabel + ' a ' + row.toLabel"
+            >
+              <i class="pi pi-clock text-xl" aria-hidden="true"></i>
+              <span class="text-xl font-bold">
+                Cambio de horario: {{ row.fromLabel }} → {{ row.toLabel }}
+              </span>
+            </div>
+          }
         }
       }
     </div>
@@ -202,6 +231,37 @@ export class ItineraryPage {
       if (byDay !== 0) return byDay;
       return a.firstTimestamp.localeCompare(b.firstTimestamp);
     });
+    return out;
+  });
+
+  /**
+   * Interleave CityBlocks with soft timezone-change notices. A notice
+   * is inserted between two consecutive blocks whose cities sit in
+   * different UTC offsets (known from `city-timezone.ts`). Blocks with
+   * unknown offsets are passed through without generating a notice so
+   * we don't invent information.
+   */
+  readonly rows = computed((): ItineraryRow[] => {
+    const blocks = this.blocks();
+    const out: ItineraryRow[] = [];
+    let prevOffset: number | null = null;
+    for (const block of blocks) {
+      const offset = getCityUtcOffset(block.city.slug);
+      if (
+        prevOffset !== null &&
+        offset !== null &&
+        offset !== prevOffset
+      ) {
+        out.push({
+          kind: 'tz-change',
+          fromLabel: formatUtcOffset(prevOffset),
+          toLabel: formatUtcOffset(offset),
+          diffHours: offset - prevOffset,
+        });
+      }
+      out.push({ kind: 'city', block });
+      if (offset !== null) prevOffset = offset;
+    }
     return out;
   });
 
