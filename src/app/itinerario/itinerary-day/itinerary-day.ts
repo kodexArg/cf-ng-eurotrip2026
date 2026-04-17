@@ -97,7 +97,7 @@ export class ItineraryDay {
     const events = [...this.day().events].sort((a, b) =>
       a.timestampIn.localeCompare(b.timestampIn)
     );
-    return (show ? events : events.filter((e) => e.confirmed)).filter((e) =>
+    return (show ? events : events.filter((e) => e.confirmed || e.mandatory)).filter((e) =>
       this.filterService.isVisible(e.type)
     );
   });

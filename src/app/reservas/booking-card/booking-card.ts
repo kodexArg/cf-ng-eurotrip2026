@@ -11,6 +11,7 @@ import {
 } from '../../shared/models/event.model';
 import { City } from '../../shared/models/city.model';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
+import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
 import { TrasladoBody } from './parts/traslado-body';
 import { EstadiaBody } from './parts/estadia-body';
@@ -30,7 +31,7 @@ import { HitoBody } from './parts/hito-body';
 @Component({
   selector: 'app-booking-card',
   standalone: true,
-  imports: [ConfirmedBadge, BookingTypeChip, Tooltip, TrasladoBody, EstadiaBody, HitoBody],
+  imports: [ConfirmedBadge, MandatoryBadge, BookingTypeChip, Tooltip, TrasladoBody, EstadiaBody, HitoBody],
   template: `
     <div class="flex rounded-lg">
       @if (selectable()) {
@@ -78,6 +79,8 @@ import { HitoBody } from './parts/hito-body';
             }
             @if (event().confirmed) {
               <app-confirmed-badge />
+            } @else if (event().mandatory) {
+              <app-mandatory-badge />
             }
           </div>
         </div>

@@ -60,6 +60,7 @@ export class ItineraryEnrichmentService {
         usd: null,
         icon: 'pi-map-marker',
         confirmed: e.confirmed,
+        mandatory: e.mandatory,
         variant: e.variant,
         cardId: null,
         notes: null,
