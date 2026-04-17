@@ -4,7 +4,6 @@ import { httpResource } from '@angular/common/http';
 import { SelectButton } from 'primeng/selectbutton';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
-import { Select } from 'primeng/select';
 import { TripEvent, EventType } from '../shared/models/event.model';
 import { City } from '../shared/models/city.model';
 import { LoadingState } from '../shared/loading-state/loading-state';
@@ -35,7 +34,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
 @Component({
   selector: 'app-modificaciones',
   standalone: true,
-  imports: [FormsModule, SelectButton, Dialog, Button, Select, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm],
+  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm],
   template: `
     @if (auth.isOwner()) {
       <div class="max-w-2xl mx-auto p-4">
@@ -109,7 +108,6 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
     </p-dialog>
 
     <p-dialog
-      header="Filtros"
       [visible]="filtersDialogVisible()"
       (visibleChange)="filtersDialogVisible.set($event)"
       [modal]="true"
@@ -119,6 +117,16 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
       [closable]="true"
       [style]="dialogStyle"
     >
+      <ng-template pTemplate="header" let-ariaLabelledBy="ariaLabelledBy">
+        <span [id]="ariaLabelledBy" class="p-dialog-title">Filtros</span>
+        <button type="button"
+                class="p-dialog-header-icon p-link"
+                aria-label="Limpiar filtros"
+                title="Limpiar filtros"
+                (click)="clearFilters()">
+          <i class="pi pi-filter-slash"></i>
+        </button>
+      </ng-template>
       <div class="flex flex-col gap-4 py-2">
         <div class="flex flex-col gap-1">
           <label class="text-xs" style="color: var(--p-surface-500);">Tipo</label>
@@ -126,15 +134,12 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs" style="color: var(--p-surface-500);">Ciudad</label>
-          <p-select [options]="cityFilterOptions()" [(ngModel)]="cityFilter" optionLabel="label" optionValue="value" placeholder="Todas" styleClass="w-full" />
+          <p-selectbutton [options]="cityFilterOptions()" [(ngModel)]="cityFilter" optionLabel="label" optionValue="value" styleClass="filter-wrap" />
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs" style="color: var(--p-surface-500);">Estado</label>
           <p-selectbutton [options]="confirmedFilterOptions" [(ngModel)]="confirmedFilter" optionLabel="label" optionValue="value" />
         </div>
-      </div>
-      <div class="flex justify-end pt-2">
-        <p-button label="Limpiar filtros" icon="pi pi-times" severity="secondary" (onClick)="clearFilters()" />
       </div>
     </p-dialog>
   `,
