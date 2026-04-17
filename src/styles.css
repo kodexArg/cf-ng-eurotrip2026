@@ -39,3 +39,13 @@ p-togglebutton.filter-wrap {
 p-togglebutton.filter-wrap .p-togglebutton-label {
   white-space: nowrap;
 }
+
+/* date pills in /sitios — styleClass="filter-wrap" lands on root div */
+.p-selectbutton.filter-wrap {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.p-selectbutton.filter-wrap .p-selectbutton-option {
+  border-radius: 999px !important;
+  margin: 0 !important;
+}
