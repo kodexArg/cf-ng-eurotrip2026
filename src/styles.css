@@ -31,3 +31,7 @@
   flex-wrap: wrap;
   gap: 4px;
 }
+.p-selectbutton.filter-wrap .p-togglebutton {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
