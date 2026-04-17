@@ -59,7 +59,7 @@ import { HitoBody } from './parts/hito-body';
         <div class="flex items-center justify-between mb-2">
           <app-booking-type-chip [type]="event().type" />
           <div class="flex items-center gap-1">
-            @if (showPrice() && event().usd) {
+            @if (showPrice() && event().usd != null && event().usd! > 0) {
               <i
                 class="pi pi-dollar text-xs"
                 style="color: var(--p-surface-400)"
@@ -67,6 +67,14 @@ import { HitoBody } from './parts/hito-body';
                 tooltipPosition="top"
                 [showDelay]="300"
               ></i>
+            } @else if (showPrice() && event().usd === 0) {
+              <span
+                class="uppercase tracking-wide"
+                style="font-size: 9px; color: var(--p-surface-400); letter-spacing: 0.05em"
+                pTooltip="Gratis"
+                tooltipPosition="top"
+                [showDelay]="300"
+              >gratis</span>
             }
             @if (event().confirmed) {
               <app-confirmed-badge />
