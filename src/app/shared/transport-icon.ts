@@ -10,6 +10,7 @@
  * component that applies the class directly via `<i class="..."></i>` or
  * a `<span class="material-symbols-outlined">`.
  */
+import { iconFromType } from './icon-registry';
 
 const TRANSPORT_ICONS: Record<string, string> = {
   flight:   'ms-flight_takeoff',
@@ -40,11 +41,25 @@ export function transportIcon(subtype: string | null | undefined): string {
 }
 
 /**
- * Resolves the display icon for an event, preferring the explicit `icon`
- * field over the subtype-derived fallback.
+ * Resolves the display icon for an event.
  *
- * Priority: event.icon (if non-empty) > transportIcon(event.subtype)
+ * Priority:
+ *  1. Semantic key in ICON_REGISTRY (e.g. "avion" → "ms-flight_takeoff")
+ *  2. Raw `ms-*` / `pi-*` / `pi pi-*` value (backward-compat; "pi pi-heart" → "pi-heart")
+ *  3. transportIcon(event.subtype) fallback
  */
 export function resolveEventIcon(event: { icon?: string | null; subtype?: string | null }): string {
-  return event.icon && event.icon.trim() ? event.icon : transportIcon(event.subtype);
+  const iconField = event.icon?.trim();
+  if (iconField) {
+    // 1. Semantic lookup
+    const fromRegistry = iconFromType(iconField);
+    if (fromRegistry) return fromRegistry;
+
+    // 2. Raw icon value — normalise legacy "pi pi-*" → "pi-*"
+    if (iconField.startsWith('ms-')) return iconField;
+    if (iconField.startsWith('pi-')) return iconField;
+    if (iconField.startsWith('pi ')) return iconField.replace(/^pi /, 'pi-');
+  }
+  // 3. Subtype fallback
+  return transportIcon(event.subtype);
 }
