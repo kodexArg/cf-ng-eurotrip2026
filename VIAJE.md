@@ -67,6 +67,8 @@
 - **Vie 24 abr** · Metro Sol→Atocha Renfe 08:15 · **AVE 08:57 Madrid Atocha → Barcelona Sants (llega 12:06)** — CONFIRMADO
 
 > **Nota Madrid Apr 20-23:** plan propuesto (sin reservar museos/entradas). Solo la estadía Airbnb Lavapiés figura como CONFIRMADA en D1 (migration 0069 unconfirm el resto). Política: `confirmed=1` SOLO eventos con erogación real.
+>
+> **Meals Madrid (unconfirmed, migration 0071):** Apr 20 almuerzo+cena · Apr 21 almuerzo (cena cubierta por Café Central jazz 20-23h) · Apr 22 almuerzo+café+cena post-Prado · Apr 23 almuerzo+cena.
 
 ### Barcelona — 24 al 28 de abril (4 noches)
 
@@ -77,6 +79,8 @@
 - **Mar 28 abr** · Salida muy temprana · **Vueling BCN → PMI 09:05** (El Prat, booking UMSDND) — CONFIRMADO
 
 > **Nota Barcelona Apr 24-27:** plan propuesto (migration 0069). CONFIRMADO solo Airbnb Poble Sec, AVE MAD→BCN, Park Güell Apr 26 y Sagrada Apr 27 17h. Museos via **Articket BCN** (€38 pp × 2 = USD 82.60, cubre 6: Tàpies + Miró + MNAC + Picasso + MACBA + CCCB). Jazz: Jamboree (sáb) y Harlem (lun) sin reservar — confirmar 1-2 días antes.
+>
+> **Meals BCN (unconfirmed, 0071):** Apr 24 almuerzo+merienda+cena · Apr 25 almuerzo+cena pre-Jamboree · Apr 26 almuerzo+cena descanso · Apr 27 almuerzo+cena pre-Harlem.
 
 ### Palma de Mallorca — 28 de abril al 2 de mayo (4 noches)
 
@@ -87,6 +91,8 @@
 - **Sáb 2 may** · Salida muy temprana · **Ryanair FR28 PMI → Londres Stansted 06:00 CEST → 07:35 BST** — CONFIRMADO (ref EZTYVZ, €39/pax)
 
 > **Nota Peguera:** FLOR Apartamento estándar 2 personas, Airbnb ref 48003319, check-in 14:00 / check-out 11:00. Vuelo FR28 sale a las 06:00 — salir del apartamento ~03:30, taxi a aeropuerto PMI (~30 km, ~€50–60).
+>
+> **Meals Mallorca (unconfirmed, 0071):** Apr 28 almuerzo Peguera + cena La Lonja · Apr 29 lunch Palma + cena Borne · Apr 30 almuerzo Es Trenc + cena Peguera · May 1 almuerzo Port Sóller + cena La Calatrava.
 
 ### Londres — 2 al 5 de mayo (3 noches)
 
@@ -95,12 +101,16 @@
 - **Lun 4 may** · Tube King's Cross → Soho — **House of MinaLima** (Harry Potter, 11:30–13:30) · Tube Soho → Sky Garden · **Sky Garden · 20 Fenchurch** (16:00–17:30 BST, reserva gratuita) — CONFIRMADO · Tube → ABBA Arena · ABBA Voyage show (18:45–20:15, pendiente confirmar) · Regreso King's Cross ~21:05
 - **Mar 5 may, madrugada** · Salida muy temprana hacia London St Pancras · **Eurostar 08:01 BST → París Gare du Nord 11:20 CEST** (~2h19m, USD 328 / ~€103 pp) — CONFIRMADO
 
+> **Meals Londres (unconfirmed, 0071):** May 2 almuerzo city tour + cena Soho pre-bars · May 3 cena post-excursión (lunch/brunch cubierto por Windsor/Stonehenge/Oxford tour) · May 4 almuerzo Soho + cena post-ABBA.
+
 ### París — 5 al 6 de mayo (1 noche)
 
 - **Mar 5 may** · Llegada Gare du Nord 11:20 CEST · Métro Gare du Nord → alojamiento (€2.55 pp) · Check-in hotel París (12:00) · **Día paseable en París** (13:00–21:00): Le Marais, Notre-Dame, Île de la Cité, Montmartre
 - **Mié 6 may** · Métro alojamiento → Louvre (09:00 CEST) · **Museo del Louvre** — timed-entry **09:30 CEST** (hasta ~13:00, USD 22 pp) — CONFIRMADO · Check-out hotel (hasta 14:00) · **Métro Ligne 14 Pyramides → Orly** (14:10–14:40 CEST, ~€10.30 pp) · **easyJet EJU4957 París Orly → Roma Fiumicino 16:50 CEST → 18:55 CEST** (USD 270 / €256.30 total, ref KCGNGF3) — CONFIRMADO
 
 > **Nota tramo París→Roma:** El vuelo sale de Orly (ORY), no de CDG. Usar Métro 14 desde Pyramides (directo, ~30 min). Buffer aeropuerto: llegar Orly ~15:00 CEST (1h50m antes del vuelo). Total Gare du Nord → Roma puerta a puerta: ~9h35m.
+>
+> **Meals París (unconfirmed, 0071):** May 5 almuerzo+cena · May 6 almuerzo rápido pre-Orly (cena Roma post-arrival).
 
 ### Roma — 6 al 9 de mayo (3 noches)
 
@@ -110,6 +120,8 @@
 - **Sáb 9 may** · **Galleria Borghese** (10:00, ~€18+€2 reserva, **RESERVAR 10+ días antes**) · Villa Borghese (15:00) · Cena de despedida · Transfer FCO ~15:00 (Leonardo Express ~€14 desde Termini, ~32 min) · **IB0656 FCO T1 → MAD 20:25 CEST → 23:00 CEST** — CONFIRMADO (ref KM99T)
 
 > **Nota check-out Airbnb Colosseo:** checkout 11:00 del 9 may. Dejar equipaje en consigna (~€5 pp) y pasar la mañana libre antes del transfer.
+>
+> **Meals Roma (unconfirmed, 0071):** May 6 cena Colosseo post-arrival · May 7 almuerzo Prati + cena Trastevere · May 8 almuerzo Villa Borghese + cena centro histórico · May 9 almuerzo pre-vuelo Roma (cena ya en Madrid escala).
 
 ### Madrid — escala nocturna, noche del 9 al 10 de mayo
 
