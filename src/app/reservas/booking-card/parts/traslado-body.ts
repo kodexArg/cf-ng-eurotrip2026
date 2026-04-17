@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TrasladoEvent, timeOf } from '../../../shared/models/event.model';
-import { resolveEventIcon } from '../../../shared/transport-icon';
-import { AppIcon } from '../../../shared/icon/icon';
 import { LocationRow } from './location-row';
 
 interface LocationPoint {
@@ -24,10 +22,9 @@ interface LocationPoint {
 @Component({
   selector: 'app-traslado-body',
   standalone: true,
-  imports: [DatePipe, LocationRow, AppIcon],
+  imports: [DatePipe, LocationRow],
   template: `
     <div class="flex items-center gap-1.5 text-sm font-semibold select-none" style="color: var(--p-surface-900)">
-      <app-icon [icon]="iconName()" color="var(--p-surface-500)" size="1rem" />
       {{ service() }}
     </div>
 
@@ -93,9 +90,6 @@ export class TrasladoBody {
     const t = this.event();
     return [t.company, t.vehicleCode].filter(Boolean).join(' ').trim() || t.title;
   });
-
-  /** Resolved icon: prefers event.icon; falls back to subtype mapping. */
-  readonly iconName = computed<string>(() => resolveEventIcon(this.event()));
 
   readonly durationLabel = computed<string | null>(() => formatDuration(this.event().durationMin));
 

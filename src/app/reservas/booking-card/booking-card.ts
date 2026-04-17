@@ -16,6 +16,8 @@ import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
 import { TrasladoBody } from './parts/traslado-body';
 import { EstadiaBody } from './parts/estadia-body';
 import { HitoBody } from './parts/hito-body';
+import { AppIcon } from '../../shared/icon/icon';
+import { resolveEventIcon } from '../../shared/transport-icon';
 
 /**
  * Booking card displaying a single trip event (traslado, estadia, or hito).
@@ -31,7 +33,7 @@ import { HitoBody } from './parts/hito-body';
 @Component({
   selector: 'app-booking-card',
   standalone: true,
-  imports: [ConfirmedBadge, MandatoryBadge, BookingTypeChip, Tooltip, TrasladoBody, EstadiaBody, HitoBody],
+  imports: [ConfirmedBadge, MandatoryBadge, BookingTypeChip, Tooltip, TrasladoBody, EstadiaBody, HitoBody, AppIcon],
   template: `
     <div class="flex rounded-lg">
       @if (selectable()) {
@@ -60,6 +62,14 @@ import { HitoBody } from './parts/hito-body';
         <div class="flex items-center justify-between mb-2">
           <app-booking-type-chip [type]="event().type" />
           <div class="flex items-center gap-1">
+            @if (headerIcon()) {
+              <app-icon
+                [icon]="headerIcon()!"
+                size="1.125rem"
+                color="var(--p-surface-600)"
+                extraClass="shrink-0"
+              />
+            }
             @if (showPrice() && event().usd != null && event().usd! > 0) {
               <i
                 class="pi pi-dollar text-xs"
@@ -115,6 +125,11 @@ export class BookingCard {
     if (!id) return null;
     return this.cityNameMap().get(id) ?? null;
   };
+
+  readonly headerIcon = computed<string | null>(() => {
+    const icon = resolveEventIcon(this.event());
+    return icon !== 'ms-directions_transit' ? icon : null;
+  });
 
   readonly traslado = computed<TrasladoEvent | null>(() => {
     const e = this.event();
