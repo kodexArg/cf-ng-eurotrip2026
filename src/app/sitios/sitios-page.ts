@@ -141,7 +141,7 @@ export class SitiosPage {
   readonly cities = computed(() => this.citiesResource.value() ?? []);
 
   readonly activeTab = signal<string>('');
-  readonly selectedDate = signal<string>('all');
+  selectedDate = 'all';
 
   private readonly _initEffect = effect(() => {
     const cities = this.cities();
@@ -166,7 +166,7 @@ export class SitiosPage {
     if (slug === undefined) return;
     const s = String(slug);
     this.activeTab.set(s);
-    this.selectedDate.set('all');
+    this.selectedDate = 'all';
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { c: s },
