@@ -26,3 +26,8 @@
   white-space: nowrap !important;
 }
 .city-label::before { display: none !important; }
+
+.p-selectbutton.filter-wrap {
+  flex-wrap: wrap;
+  gap: 4px;
+}

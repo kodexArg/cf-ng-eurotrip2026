@@ -64,9 +64,9 @@ export interface ItineraryDayInput {
             />
           }
           @if (showUnconfirmed() && weather()) {
-            <div class="flex items-center gap-0.5 mt-0.5 select-none">
-              <i [class]="'pi ' + weatherIcon()" style="font-size: 0.6rem" [style.color]="weatherIconColor()"></i>
-              <span class="text-xxs leading-none" [style.color]="weatherTextColor()">{{ weatherTempText() }}</span>
+            <div class="flex items-center gap-0.5 mt-0.5 select-none text-xxs leading-none" [style.color]="weatherIconColor()">
+              <i [class]="'pi ' + weatherIcon()"></i>
+              <span>{{ weatherTempText() }}</span>
             </div>
           }
         </div>
@@ -112,7 +112,7 @@ export class ItineraryDay {
   });
 
   protected readonly weatherIconColor = computed(() =>
-    this.weather() ? 'var(--p-surface-400)' : 'var(--p-surface-300)'
+    this.weather() ? 'var(--p-surface-300)' : 'var(--p-surface-200)'
   );
 
   protected readonly weatherTempText = computed(() => {
@@ -120,10 +120,6 @@ export class ItineraryDay {
     if (!w) return '—';
     return `↓${w.tempMin}° ↑${w.tempMax}°`;
   });
-
-  protected readonly weatherTextColor = computed(() =>
-    this.weather() ? 'var(--p-surface-400)' : 'var(--p-surface-300)'
-  );
 
   protected readonly specialEvent = computed((): SpecialEvent | null => {
     const monthDay = this.day().date.slice(5);
