@@ -229,6 +229,8 @@ export class EventSlot {
       case 'walk':
       case 'walking':
         return 'ms-directions_walk';
+      case 'scooter':
+        return 'ms-electric_scooter';
       default:
         return 'ms-directions_transit';
     }
@@ -237,7 +239,7 @@ export class EventSlot {
   protected readonly intraCityText = computed((): string => {
     const t = this.asTraslado();
     if (!t) return '';
-    const isWalk = t.subtype === 'walking' || t.subtype === 'walk';
+    const isWalk = t.subtype === 'walking' || t.subtype === 'walk' || t.subtype === 'scooter';
     const company = t.company?.trim() || '';
     const vehicle = t.vehicleCode?.trim() || '';
     // For walking the icon already conveys the mode; suppress the "walking" word.

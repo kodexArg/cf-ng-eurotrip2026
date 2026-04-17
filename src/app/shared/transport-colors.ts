@@ -17,6 +17,7 @@ export const TRANSPORT_COLORS: Record<string, string> = {
   car:    '#94a3b8',   // slate-400  (softened from map #6b7280)
   walking:'#84cc16',   // lime-500   (caminata: distinct from train-green, evokes "natural")
   walk:   '#84cc16',
+  scooter:'#facc15',   // yellow-400 (e-scooter: distinct from bus-orange, evokes "rental")
 };
 
 /** Default color for unknown subtypes (slate-400). */
