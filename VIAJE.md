@@ -1,24 +1,23 @@
 # Eurotrip 2026
 
-2 pasajeros · Solo carry-on (10 kg c/u) · 19 abril – 10 mayo 2026
+2 pasajeros · Solo carry-on (10 kg c/u) · 18 abril – 10 mayo 2026
 
 **Ruta:** Santiago → Madrid → Barcelona → Palma de Mallorca → Londres → París → Roma → Madrid (escala nocturna) → Buenos Aires
 
 ---
 
-## Vuelos confirmados
+## Vuelos y trenes confirmados
 
-| Tramo | Vuelo | Fecha | Salida | Llegada | Costo | Booking ref | Estado |
+| Tramo | Vuelo / Servicio | Fecha | Salida | Llegada | Costo | Booking ref | Estado |
 |---|---|---|---|---|---|---|---|
-| SCL → MAD | Iberia | Dom 19 abr 2026 | 06:40 | ~06:00 +1 | USD 1609 | — | **CONFIRMADO** |
-| MAD → BCN | Renfe AVE | Vie 24 abr 2026 | 08:57 | ~11:30 | — | — | **CONFIRMADO** |
-| BCN → PMI | Vueling (BASIC) | Mar 28 abr 2026 | 09:05 | ~10:00 | USD 95 | UMSDND | **CONFIRMADO** |
-| PMI → LON (Stansted) | Ryanair FR28 | Sáb 2 may 2026 | 06:00 | ~07:35 | €15.99 | — | **CONFIRMADO** |
-| LON (St Pancras) → PAR (Gare du Nord) | Eurostar 9001 | Mar 5 may 2026 | 05:57 BST | 09:20 CEST | ~£49 | — | pendiente |
-| PAR (Gare de Lyon) → LYS (Saint-Exupéry TGV) | TGV INOUI 6923 | Mar 5 may 2026 | 17:13 | 19:07 CEST | — | — | pendiente |
-| LYS → FCO (Roma Fiumicino) | easyJet U2 4421 | Mar 5 may 2026 | 20:20 | 21:55 CEST | ~€55–125 p/p | — | pendiente |
-| FCO → MAD | Iberia IB0656 | Sáb 9 may 2026 | 20:25 | 23:00 | — | KM99T | **CONFIRMADO** |
-| MAD → EZE | Iberia IB0105 | Dom 10 may 2026 | 08:45 | 16:25 | — | KM99T | **CONFIRMADO** |
+| SCL → MAD | Iberia | Dom 19 abr 2026 | 06:40 CLT | ~06:00 CEST +1 | USD 1609 | — | **CONFIRMADO** |
+| MAD → BCN | Renfe AVE | Vie 24 abr 2026 | 08:57 CEST | 12:06 CEST | — | — | **CONFIRMADO** |
+| BCN → PMI | Vueling (BASIC) | Mar 28 abr 2026 | 09:05 CEST | 10:00 CEST | USD 95 | UMSDND | **CONFIRMADO** |
+| PMI → LON (Stansted) | Ryanair FR28 | Sáb 2 may 2026 | 06:00 CEST | 07:35 BST | USD 42 / €39 | EZTYVZ | **CONFIRMADO** |
+| LON (St Pancras) → PAR (Gare du Nord) | Eurostar | Mar 5 may 2026 | 08:01 BST | 11:20 CEST | USD 328 (~€103 pp) | — | **CONFIRMADO** |
+| PAR (Orly) → ROM (Fiumicino) | easyJet EJU4957 | Mié 6 may 2026 | 16:50 CEST | 18:55 CEST | USD 270 / €256.30 total | KCGNGF3 | **CONFIRMADO** |
+| FCO → MAD | Iberia IB0656 | Sáb 9 may 2026 | 20:25 CEST | 23:00 CEST | — | KM99T | **CONFIRMADO** |
+| MAD → EZE | Iberia IB0105 | Dom 10 may 2026 | 08:45 CEST | 16:25 ART | — | KM99T | **CONFIRMADO** |
 
 > Billete físico vuelo de regreso: **075-2533915149**
 >
@@ -30,112 +29,124 @@
 
 | Atracción / Servicio | Fecha | Hora | Precio | Referencia | Estado |
 |---|---|---|---|---|---|
-| Park Güell — zona monumental + Casa Museo Gaudí (2 personas) | Dom 26 abr | 10:00 | USD 59 total | booking-park-guell-apr26 | **CONFIRMADO** |
-| Sagrada Família — acceso básico + Torre del Nacimiento (2 personas) | Lun 27 abr | 17:00 | ~€36 p/p | — | **CONFIRMADO** |
+| Park Güell — zona monumental + Casa Museo Gaudí (2 personas) | Dom 26 abr | 10:00 | USD 59 total | — | **CONFIRMADO** |
+| Sagrada Família — acceso básico + Torre del Nacimiento (2 personas) | Lun 27 abr | 17:00 | — | — | **CONFIRMADO** |
+| Windsor · Stonehenge · Oxford — excursión día completo (Viator) | Dom 3 may | 08:00 BST | USD 303 total | 1385295633 | **CONFIRMADO** |
+| Sky Garden · 20 Fenchurch (Walkie-Talkie) — reserva gratuita | Lun 4 may | 16:00 BST | Gratis | — | **CONFIRMADO** |
+| Museo del Louvre — timed-entry 09:30 CEST (2 personas) | Mié 6 may | 09:30 CEST | USD 22 pp | — | **CONFIRMADO** |
 
 ---
 
 ## Alojamientos
 
-| Ciudad | Fechas | Alojamiento | Precio | Estado |
-|---|---|---|---|---|
-| Madrid | 20–24 abr (4 noches) | AirBNB · C. del Ave María 42, 28012 Madrid · Barrio Lavapiés | USD 468.84 | **PAGADO** |
-| Barcelona | 24–28 abr (4 noches) | Airbnb · Poble Sec | USD 675.39 | **CONFIRMADO** |
-| Palma de Mallorca | 28 abr – 2 may (4 noches) | Por confirmar | — | SIN RESERVAR |
-| Londres | 2–5 may (3 noches) | Por confirmar | — | SIN RESERVAR |
-| Roma | 5–9 may (4 noches) | Por confirmar | — | SIN RESERVAR |
-| Madrid (escala) | Noche del sáb 9 may | Hotel cercano T4 / o noche en aeropuerto | — | SIN RESERVAR |
+| Ciudad | Fechas | Alojamiento | Precio | Ref | Estado |
+|---|---|---|---|---|---|
+| Santiago (pre-vuelo) | 18 abr (1 noche) | Hotel Diego de Almagro Pudahuel Aeropuerto · Booking | — | 6773267616 | **CONFIRMADO** |
+| Madrid | 20–24 abr (4 noches) | Lavapies fantastic location · C. del Ave María 42, Lavapiés · Airbnb | USD 468.84 | — | **PAGADO** |
+| Barcelona | 24–28 abr (4 noches) | Ndlr 2-4 · Authentic flat in Poble Sec - Paralelo · Airbnb | USD 675.39 | — | **CONFIRMADO** |
+| Palma de Mallorca | 28 abr – 2 may (4 noches) | FLOR Apartamento estándar 2 personas · Peguera, Calvià · Airbnb | USD 428.32 | 48003319 | **CONFIRMADO** |
+| Londres | 2–5 may (3 noches) | Hotel por definir en Londres | USD 320.12 | — | **CONFIRMADO** |
+| París | 5–6 may (1 noche) | Por confirmar — París | USD 213 | — | **CONFIRMADO** |
+| Roma | 6–9 may (3 noches) | Airbnb Colosseo | USD 451 | — | **CONFIRMADO** |
+| Madrid (escala) | Noche del sáb 9 may | Sin alojamiento — noche en la ciudad + regreso T4 a las 05:30 | — | — | SIN RESERVAR |
 
 ---
 
 ## Itinerario por ciudad
 
+### Santiago — 18 de abril (pre-vuelo)
+
+- **Sáb 18 abr** · Check-in Hotel Diego de Almagro Pudahuel Aeropuerto (ref 6773267616) · Descanso pre-viaje
+
 ### Madrid — 20 al 24 de abril (4 noches)
 
-- **Lun 20 abr** · Llegada vuelo ~6AM · Traslado AirBNB Lavapiés (check-in posible ~14–15h, consultar al host o usar consigna en Atocha) · Tarde: descanso y primer paseo por el barrio
-- **Mar 21 abr** · Aniversario — Parque del Retiro · Plaza Mayor · Cena en el Barrio de las Letras
-- **Mié 22 abr** · Paseo del Prado (Museo del Prado opcional) · Moncloa / Templo de Debod · Palacio Real · Cena en Barrio de las Letras
-- **Jue 23 abr** · Excursión a Toledo en AVE (~30 min desde Atocha): Catedral, casco antiguo, almuerzo, Judería · Cena de despedida en Lavapiés / Atocha
-- **Vie 24 abr** · AVE 08:57 Atocha → Sants (Barcelona)
+- **Dom 19 abr → Lun 20 abr** · Vuelo SCL → MAD · Llegada ~06:00 CEST · Metro MAD T4 → Sol (L8+L10+L1, ~€4.50 pp con suplemento) · Check-in Airbnb Lavapiés (16:00) · Tarde: Madrid City Tour opcional · Noche: Museo del Prado (entrada gratuita lunes desde 18h)
+- **Mar 21 abr** · **Aniversario 30** · Parque del Retiro · Plaza Mayor · Cena Bodega de los Secretos (Barrio de las Letras) — taxi ida ~€7 / vuelta ~€8 (tarifa nocturna)
+- **Mié 22 abr** · Excursión Toledo — RENFE Avant 09:00 Atocha→Toledo (34 min, ~€18 pp RT) · Alcázar de Toledo, Catedral, casco antiguo · Regreso 17:00 Avant → Metro Atocha→Sol · Noche: Barrio de las Letras
+- **Jue 23 abr** · Museo Reina Sofía (10:00–13:00) · Parque del Retiro (13:30–16:30) · Mercado de San Miguel (17:00) · Lavapiés · Atocha
+- **Vie 24 abr** · Metro Sol→Atocha Renfe 08:15 · **AVE 08:57 Madrid Atocha → Barcelona Sants (llega 12:06)** — CONFIRMADO
 
 ### Barcelona — 24 al 28 de abril (4 noches)
 
-- **Vie 24 abr** · Llegada en AVE desde Madrid · Check-in Airbnb Poble Sec · Tarde: La Rambla, Barri Gòtic · Noche: vermut en El Born
-- **Sáb 25 abr** · Gràcia (barrio bohemio) · Noche: feria / Parc del Fòrum
-- **Dom 26 abr** · **Park Güell — zona monumental + Casa Museo Gaudí** (USD 59 total, 2 personas) — CONFIRMADO
-- **Lun 27 abr** · **Sagrada Família** — acceso básico + Torre del Nacimiento, 17:00, presentarse con QR 15 min antes — CONFIRMADO (~€36 p/p)
-- **Mar 28 abr** · Salida temprana · Vueling BCN → PMI 09:05 (aeropuerto El Prat) — CONFIRMADO
+- **Vie 24 abr** · Llegada en AVE 12:06 · Check-in Airbnb Poble Sec (15:00) · Barrio Gótico a pie · La Rambla · Barri Gòtic · Bicicleta: El Born + Arc de Triomf (17:30–19:30) · Noche: El Born → Raval
+- **Sáb 25 abr** · Sagrada Família + Park Güell en bici (exterior, 10:00–14:00) · Gràcia (15:00) · Barceloneta en bici · Parc del Fòrum (noche) · Noche en El Born
+- **Dom 26 abr** · **Park Güell — zona monumental + Casa Museo Gaudí** (10:00, USD 59 total, 2 personas) — CONFIRMADO
+- **Lun 27 abr** · **Sagrada Família — acceso básico + Torre del Nacimiento** (17:00, presentarse 15 min antes con QR) — CONFIRMADO
+- **Mar 28 abr** · Salida muy temprana · **Vueling BCN → PMI 09:05** (El Prat, booking UMSDND) — CONFIRMADO
 
 ### Palma de Mallorca — 28 de abril al 2 de mayo (4 noches)
 
-- **Mar 28 abr** · Llegada vuelo desde BCN (~10:00) · Check-in hotel · Tarde: Casco Antiguo, Catedral La Seu exterior, Parc de la Mar, Paseo Marítimo · Noche: barrio de La Lonja, cena en Plaça de la Llotja
-- **Mié 29 abr** · Catedral La Seu interior (~€10) · Barrio Santa Catalina y mercado · Paseo del Borne al anochecer
-- **Jue 30 abr** · Excursión Valldemossa — Bus TIB 203 desde Palma (~30 min), Real Cartuja (~€12), celda de Chopin · Parada opcional en Deià / mirador Serra de Tramuntana de regreso
-- **Vie 1 may** · Excursión Sóller — tren histórico de 1912 (~1h, €23 ida / €30 ida y vuelta) hasta Port de Sóller · Tarde en el puerto, kayak o paddleboard opcional (€15–€25/hora, mar 15–16°C)
-- **Sáb 2 may** · Salida muy temprana · Ryanair FR28 Palma → Londres Stansted 06:00 — CONFIRMADO (€15.99)
+- **Mar 28 abr** · Llegada PMI ~10:00 · Bus TIB A11 Aeropuerto → Peguera (~50 min, ~€5 pp) · Check-in FLOR Apartamento, Peguera (14:00) · Playa de Peguera (16:00–19:00) · Noche: La Lonja, Casco Antiguo
+- **Mié 29 abr** · Auto alquilado desde Peguera (09:00, ~USD 40) · Catedral La Seu (10:00) · Santa Catalina · Valldemossa (10:30–12:30) · Mirador de Sa Foradada (13:00–14:30) · Deià (15:30–17:00) · Noche: Paseo del Borne, Casco Antiguo
+- **Jue 30 abr** · Valldemossa · Serra de Tramuntana · Playa Es Trenc (10:00–14:00, ~€6.53 parking) · Colònia de Sant Jordi (14:30–17:00) · Noche: Palma
+- **Vie 1 may** · Catedral de Palma La Seu (10:00–11:00, gratis) · Barrio de La Calatrava (11:00–13:00) · Sóller (Port de Sóller, 15:00) · Paseo Marítimo de Palma (17:00–19:30) · Noche: Palma
+- **Sáb 2 may** · Salida muy temprana · **Ryanair FR28 PMI → Londres Stansted 06:00 CEST → 07:35 BST** — CONFIRMADO (ref EZTYVZ, €39/pax)
+
+> **Nota Peguera:** FLOR Apartamento estándar 2 personas, Airbnb ref 48003319, check-in 14:00 / check-out 11:00. Vuelo FR28 sale a las 06:00 — salir del apartamento ~03:30, taxi a aeropuerto PMI (~30 km, ~€50–60).
 
 ### Londres — 2 al 5 de mayo (3 noches)
 
-- **Sáb 2 may** · Llegada Stansted (~07:35) · Traslado al centro (Stansted Express ~45 min, £20 aprox) · Check-in · Tarde: Covent Garden · Noche: Soho, cena
-- **Dom 3 may** · Mañana: Tower of London (~£34, reservar online) · Free Tour Londres en español (GuruWalk, ~3h, propina £10–15) · Tarde: Westminster, Big Ben, St. James's Park · Noche: West End — musical (£25–£120 según obra)
-- **Lun 4 may** · `ev-lon-may04-prep` — Prep Eurostar: cena temprana y descanso · Preparación para madrugón del día siguiente (salida 05:57 desde St Pancras)
-- **Mar 5 may, madrugada** · Salida muy temprana hacia London St Pancras · **Eurostar 9001 05:57 BST → Paris Gare du Nord 09:20 CEST** (~£49, ~2h20m)
+- **Sáb 2 may** · Aterrizaje Stansted 07:35 BST · **Stansted Express** STN → Londres (~47 min, ~£20.70) · Check-in hotel Londres (10:30) · City tour a pie por el centro (11:00–15:00) · Tube: Victoria → King's Cross (L3.10) · Westminster → Soho a pie · Noche: Denmark Street, Soho bars
+- **Dom 3 may** · **Windsor · Stonehenge · Oxford — día completo** (08:00–19:00 BST, Viator ref 1385295633, USD 303 total, 2 pax) — CONFIRMADO
+- **Lun 4 may** · Tube King's Cross → Soho — **House of MinaLima** (Harry Potter, 11:30–13:30) · Tube Soho → Sky Garden · **Sky Garden · 20 Fenchurch** (16:00–17:30 BST, reserva gratuita) — CONFIRMADO · Tube → ABBA Arena · ABBA Voyage show (18:45–20:15, pendiente confirmar) · Regreso King's Cross ~21:05
+- **Mar 5 may, madrugada** · Salida muy temprana hacia London St Pancras · **Eurostar 08:01 BST → París Gare du Nord 11:20 CEST** (~2h19m, USD 328 / ~€103 pp) — CONFIRMADO
 
-> **Nota**: el routing original London→Liverpool→Roma (FR1935 Malta Air, 4 may) fue reemplazado por London→París→Lyon→Roma el 5 may (migración 0011). El madrugón ya no es el 4 may sino el 5 may desde St Pancras.
+### París — 5 al 6 de mayo (1 noche)
 
-### París — tránsito diurno (5 may)
+- **Mar 5 may** · Llegada Gare du Nord 11:20 CEST · Métro Gare du Nord → alojamiento (€2.55 pp) · Check-in hotel París (12:00) · **Día paseable en París** (13:00–21:00): Le Marais, Notre-Dame, Île de la Cité, Montmartre
+- **Mié 6 may** · Métro alojamiento → Louvre (09:00 CEST) · **Museo del Louvre** — timed-entry **09:30 CEST** (hasta ~13:00, USD 22 pp) — CONFIRMADO · Check-out hotel (hasta 14:00) · **Métro Ligne 14 Pyramides → Orly** (14:10–14:40 CEST, ~€10.30 pp) · **easyJet EJU4957 París Orly → Roma Fiumicino 16:50 CEST → 18:55 CEST** (USD 270 / €256.30 total, ref KCGNGF3) — CONFIRMADO
 
-- **Mar 5 may** · Llegada Gare du Nord 09:20 · Consigna en Gare de Lyon (~€7–10) · Día libre ~7h: Le Marais, Notre-Dame, Île de la Cité · 17:13 **TGV INOUI 6923** Paris Gare de Lyon → Lyon Saint-Exupéry TGV (19:07, 1h54m) · 20:20 **easyJet U2 4421** LYS → Roma Fiumicino (21:55 CEST, 1h35m)
+> **Nota tramo París→Roma:** El vuelo sale de Orly (ORY), no de CDG. Usar Métro 14 desde Pyramides (directo, ~30 min). Buffer aeropuerto: llegar Orly ~15:00 CEST (1h50m antes del vuelo). Total Gare du Nord → Roma puerta a puerta: ~9h35m.
 
-> **Nota**: buffer LYS solo 1h13m — carry-on obligatorio en todos los tramos. Total París→Roma puerta a puerta: ~4h42m · ~€55–125/pax.
+### Roma — 6 al 9 de mayo (3 noches)
 
-### Roma — 5 al 9 de mayo (4 noches)
+- **Mié 6 may** · Llegada Fiumicino 18:55 CEST · **Leonardo Express** FCO → Roma Termini (19:30–20:02 CEST, €17.90 pp) — confirmado · Metro/Bus Termini → alojamiento (20:05–20:25, €1.50 pp) · Check-in Airbnb Colosseo (21:00, USD 451, checkout 9 may 11:00) — CONFIRMADO
+- **Jue 7 may** · Colosseo (10:00, **RESERVAR online con anticipación**) · Rione Monti (15:00) · Musei Vaticani
+- **Vie 8 may** · **Musei Vaticani + Capilla Sixtina** (10:00, ~€22, **RESERVAR con anticipación**) · San Pietro + Prati (15:00) · Cena en Trastevere
+- **Sáb 9 may** · **Galleria Borghese** (10:00, ~€18+€2 reserva, **RESERVAR 10+ días antes**) · Villa Borghese (15:00) · Cena de despedida · Transfer FCO ~15:00 (Leonardo Express ~€14 desde Termini, ~32 min) · **IB0656 FCO T1 → MAD 20:25 CEST → 23:00 CEST** — CONFIRMADO (ref KM99T)
 
-- **Mar 5 may** · Llegada Fiumicino (~21:55) · Traslado al centro · Check-in (llegada noche)
-- **Mié 6 may** · Colosseo + Foro Romano + Palatino (entrada combinada ~€18, **RESERVAR online con 2+ semanas de anticipación**) · Tarde: barrio Monti (gratis)
-- **Jue 7 may** · Musei Vaticani + Capilla Sixtina (~€22, timed 8:00–9:00, **RESERVAR con anticipación**) · Basílica de San Pedro + Plaza San Pedro (gratis) · Almuerzo en Prati · Cena en Trastevere
-- **Vie 8 may** · Galería Borghese (~€18 + €2 reserva, **RESERVAR 10+ días antes, se agota**) · Villa Borghese (jardines, gratis) · Cena de despedida: Ghetto Ebraico o Campo de' Fiori
-- **Sáb 9 may** · Mañana libre en Roma · Transfer a FCO ~16:00–16:30 (Leonardo Express €14 / taxi ~€50, ~45 min) · **IB0656 sale 20:25 desde FCO T1**
+> **Nota check-out Airbnb Colosseo:** checkout 11:00 del 9 may. Dejar equipaje en consigna (~€5 pp) y pasar la mañana libre antes del transfer.
 
 ### Madrid — escala nocturna, noche del 9 al 10 de mayo
 
-- **Sáb 9 may, 23:00** · Aterrizaje T4 · Metro L8 → Nuevos Ministerios → centro (servicio 24h los fines de semana, ~€5) · Carry-on únicamente: salida rápida sin espera de equipaje
-- **Sáb noche** · Cena tardía en el centro (medianoche del sábado, restaurantes en pleno servicio) · Plaza Mayor iluminada (sin turistas) · La Latina / Cava Baja (bares de vino y tapas) · Gran Vía de madrugada
-- **Dom 10 may, 04:30** · Metro L8 Nuevos Ministerios → T4 (~€5) · Desayuno en terminal · **IB0105 sale 08:45 → llega EZE 16:25**
+- **Sáb 9 may, 23:00 CEST** · Aterrizaje T4 · **Bus Exprés Aeropuerto 24h** T4 → Cibeles (23:30–00:10, €5 pp) — confirmado
+- **Sáb noche / dom madrugada** · Cena tardía en el centro · Plaza Mayor iluminada · La Latina / Cava Baja · Gran Vía de madrugada
+- **Dom 10 may, 05:30 CEST** · **Bus Exprés Aeropuerto 24h** Cibeles → MAD T4 (05:30–06:10, €5 pp) — confirmado · Desayuno en terminal · **IB0105 MAD → EZE 08:45 CEST → 16:25 ART** — CONFIRMADO (ref KM99T)
 
 ---
 
 ## Pendiente / No confirmado
 
-### Alojamientos sin reservar
+### Alojamientos por definir (reserva ya confirmada, nombre pendiente)
 
-- [ ] **Palma de Mallorca** · 4 noches (28 abr – 2 may)
-- [ ] **Londres** · 3 noches (2–5 may)
-- [ ] **Roma** · 4 noches (5–9 may)
-- [ ] **Madrid escala** · 1 noche (9–10 may) · Hotel T4 o noche en aeropuerto
+- [ ] **Londres** · 3 noches (2–5 may) · USD 320.12 reservado, hotel por definir
+- [ ] **París** · 1 noche (5–6 may) · USD 213 reservado, nombre por definir
+- [ ] **Madrid escala** · Sin alojamiento — noche en la ciudad
 
-### Actividades con reserva anticipada recomendada
+### Actividades con reserva anticipada recomendada / pendientes
 
-- [ ] **Colosseo + Foro Romano + Palatino** (Roma, 6 may) — reservar online 2+ semanas antes
-- [ ] **Musei Vaticani + Capilla Sixtina** (Roma, 7 may) — reservar con anticipación, horario fijo
-- [ ] **Galería Borghese** (Roma, 8 may) — reservar 10+ días antes, capacidad muy limitada
-- [ ] **Tower of London** (Londres, 3 may) — online más barato que en taquilla
-- [ ] **West End musical** (Londres, 3 may) — elegir obra, comprar con antelación
+- [ ] **Colosseo + Foro Romano + Palatino** (Roma, 7 may) — reservar online 2+ semanas antes (~€18)
+- [ ] **Musei Vaticani + Capilla Sixtina** (Roma, 8 may) — reservar con anticipación, horario fijo (~€22)
+- [ ] **Galleria Borghese** (Roma, 9 may) — reservar 10+ días antes, capacidad muy limitada (~€18+€2)
+- [ ] **ABBA Voyage** (Londres, 4 may) — pendiente confirmar tickets (~£50–80 pp)
 
 ---
 
 ## Notas importantes
 
-- **Equipaje**: solo carry-on, 10 kg por persona. Sin maletas despachadas en ningún tramo. Salida rápida en FCO el 9 may y en Stansted el 2 may (vuelo madrugada). FR1935 desde Liverpool (4 may) también es *solo bolso de mano pequeño*.
-- **Vuelo de regreso** (reserva KM99T / billete 075-2533915149): IB0656 FCO→MAD 9 may 20:25 + IB0105 MAD→EZE 10 may 08:45. Salir del hotel en Roma hacia FCO a más tardar las 17:30 del 9 may.
-- **Ryanair madrugadores**: el vuelo FR28 (2 may 06:00) sale antes de que abra el transporte público normal en Palma. Presupuestar taxi/Uber al aeropuerto la noche anterior, o alojamiento cerca del aeropuerto. Para FR1935 (4 may 08:50 desde Liverpool) el timing del tren London → Liverpool Lime Street en la madrugada del lunes es ajustado — confirmar primer tren y considerar pernoctar en Liverpool la noche del 3 al 4.
-- **Escala Madrid**: ~9h 45min entre vuelos. Metro L8 opera 24h los fines de semana (T4 ↔ Nuevos Ministerios). Opción: noche en la ciudad (recomendado: Cava Baja, Plaza Mayor, Gran Vía) + regreso T4 a las 04:30.
-- **Sagrada Família** (27 abr): presentarse con QR 15 min antes de la hora indicada. No fotografiar el techo de la Capilla Central con flash.
-- **Park Güell** (26 abr): acceso zona monumental + Casa Museo Gaudí, 2 personas, USD 59 ya pagados.
+- **Equipaje**: solo carry-on, 10 kg por persona. Sin maletas despachadas en ningún tramo. Salida rápida en FCO el 9 may y en Stansted el 2 may (vuelo madrugada).
+- **Vuelo de regreso** (reserva KM99T / billete 075-2533915149): IB0656 FCO→MAD 9 may 20:25 CEST + IB0105 MAD→EZE 10 may 08:45 CEST. Salir del Airbnb Roma hacia Termini a más tardar las 15:00 del 9 may.
+- **Madrid escala (corrección)**: ya no es Metro L8 — usar Bus Exprés Aeropuerto 24h (EMT, línea nocturna) T4 ↔ Cibeles, €5 pp. Opera 24h. Regreso al T4 a las 05:30 para vuelo 08:45.
+- **París — 1 noche real**: NO es tránsito diurno. Hay alojamiento confirmado (USD 213) la noche del 5 al 6 may. El vuelo a Roma sale el **6 may** a las 16:50 CEST desde Orly.
+- **Ryanair madrugadores**: FR28 (2 may 06:00 desde PMI) sale antes de que abra el transporte público en Mallorca. Presupuestar taxi/Uber desde Peguera al aeropuerto la noche anterior (~€50–60, 30 km).
+- **Sagrada Família** (27 abr): presentarse con QR 15 min antes de la hora indicada (entrada 17:00). No fotografiar el techo de la Capilla Central con flash.
+- **Park Güell** (26 abr): acceso zona monumental + Casa Museo Gaudí, 2 personas, USD 59 ya pagados. Entrada 10:00.
 - **Mallorca – UV y clima**: a finales de abril / principios de mayo UV puede llegar a 8 (alto). Llevar protector SPF50+, sombrero y gafas para actividades en exterior. Tramuntana 3–5°C más fría que la costa.
 - **Londres – clima mayo**: 13–18°C día, 7–10°C noche. Llevar capas y paraguas pequeño. Propinas 10–12.5% en restaurantes.
-- **Roma – Colosseo**: es el sitio que más se agota. Reservar con 2+ semanas de anticipación.
-- **Aniversario 21 abr (Madrid)**: Parque del Retiro, Plaza Mayor, cena en Barrio de las Letras — itinerario tentativo, ajustar en el momento.
+- **Stonehenge tour** (3 may): Windsor · Stonehenge · Oxford día completo. Salida 08:00 BST desde central Londres, regreso ~19:00. USD 303 total 2 pax. Ref Viator 1385295633.
+- **Louvre** (6 may): timed-entry 09:30 CEST. Llegar al museo ~09:15. USD 22 pp. Después del Louvre, checkout hotel (hasta 14:00) y Métro Ligne 14 a Orly para vuelo 16:50.
+- **Roma — Colosseo**: es el sitio que más se agota. Reservar con 2+ semanas de anticipación.
+- **Aniversario 21 abr (Madrid)**: Cena en Bodega de los Secretos (Barrio de las Letras) — taxi desde Lavapiés ~€7.
 
 ---
 
