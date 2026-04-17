@@ -170,3 +170,5 @@
 
 - **Datos en vivo**: base de datos Cloudflare D1 `eurotrip2026` (renderizada en <https://eurotrip2026.kodexarg.com>). Ver [`docs/db-workflow.md`](docs/db-workflow.md) para consultar o modificar datos.
 - **Fallback**: este archivo + `PRD.md`. Si la base de datos se pierde, se reconstruye desde estos markdowns.
+
+Plan itinerario completo hasta May 10: meals + transports walking + resolución overlaps aplicada (migration 0072).
