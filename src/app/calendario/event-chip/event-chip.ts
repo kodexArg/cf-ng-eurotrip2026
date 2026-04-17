@@ -30,7 +30,7 @@ export class EventChip {
   readonly chipStyle = computed(() => {
     const { bg, text } = TIPO_CONFIG[this.tipo()];
     if (this.confirmed()) {
-      return { 'background-color': 'rgba(255,255,255,0.5)', color: text };
+      return { 'background-color': 'rgba(255,255,255,0.9)', color: text };
     }
     return { 'background-color': bg, color: text };
   });
