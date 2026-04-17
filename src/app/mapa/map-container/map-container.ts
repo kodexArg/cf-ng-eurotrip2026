@@ -82,8 +82,8 @@ export class MapContainer {
   private renderCities(cities: City[], events: TripEventBase[]): void {
     if (!this.citiesLayer) return;
     this.citiesLayer.clearLayers();
-    // Pass ALL hitos per city (confirmed + planned). The popup itself
-    // visually distinguishes them; unconfirmed ones still deserve to show.
+    // Only confirmed hitos reach here (filtered upstream in MapPage).
+    // Build a per-city index for the popup.
     const hitosByCity = new Map<string, TripEventBase[]>();
     for (const ev of events) {
       if (ev.type !== 'hito') continue;
