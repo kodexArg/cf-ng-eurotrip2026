@@ -66,15 +66,17 @@
 - **Jue 23 abr** · **Museo Reina Sofía** (10:00–13:00, €12 pp, reservar online) · Almuerzo tapas Lavapiés · **Museo Thyssen** (Hammershøi + Rauschenberg — 2 temporales TOP, €15 pp) · Caminata Thyssen → Lavapiés · Descanso Airbnb + cena ligera barrio · **Opcional: El Junco jam session jazz gratis** (22:00, consumición mín. €10-15)
 - **Vie 24 abr** · Metro Sol→Atocha Renfe 08:15 · **AVE 08:57 Madrid Atocha → Barcelona Sants (llega 12:06)** — CONFIRMADO
 
-> **Nota Madrid Apr 20-23:** plan **CONFIRMADO** en D1 (migration 0068). Incluye walkings Retiro→Lavapiés (Apr 20), Lavapiés↔Reina Sofía/Thyssen + Metro L3 a El Junco (Apr 23), y caminata cuesta abajo Mirador del Valle → Estación RENFE Toledo (Apr 22). Precios verificados 2026: EMT 203 T4→Atocha €5.00 pp, Thyssen €14 pp.
+> **Nota Madrid Apr 20-23:** plan propuesto (sin reservar museos/entradas). Solo la estadía Airbnb Lavapiés figura como CONFIRMADA en D1 (migration 0069 unconfirm el resto). Política: `confirmed=1` SOLO eventos con erogación real.
 
 ### Barcelona — 24 al 28 de abril (4 noches)
 
-- **Vie 24 abr** · Llegada en AVE 12:06 · Check-in Airbnb Poble Sec (15:00) · Barrio Gótico a pie · La Rambla · Barri Gòtic · Bicicleta: El Born + Arc de Triomf (17:30–19:30) · Noche: El Born → Raval
-- **Sáb 25 abr** · Sagrada Família + Park Güell en bici (exterior, 10:00–14:00) · Gràcia (15:00) · Barceloneta en bici · Parc del Fòrum (noche) · Noche en El Born
-- **Dom 26 abr** · **Park Güell — zona monumental + Casa Museo Gaudí** (10:00, USD 59 total, 2 personas) — CONFIRMADO
-- **Lun 27 abr** · **Sagrada Família — acceso básico + Torre del Nacimiento** (17:00, presentarse 15 min antes con QR) — CONFIRMADO
+- **Vie 24 abr** · Llegada AVE 12:06 · Metro Sants→Paral·lel (L3, €2.55 pp) + walking Airbnb Poble Sec · Almuerzo Poble Sec (Carrer Blai) · Metro Paral·lel→Passeig de Gràcia · **Fundació Antoni Tàpies · Articket 1/6** (16:00-17:30, €38 pp × 2 = €76 cubre 6 museos) · Walking por Passeig Gràcia (exterior Casa Milà + Batlló) → Barri Gòtic · Catedral exterior + Plaça Reial · **Basílica Santa María del Mar** (€5 pp) · Cena El Born · Metro regreso Poble Sec
+- **Sáb 25 abr** · Metro Passeig Gràcia · **Free Walking Tour Runner Bean · Gaudí** (11:00-13:30, tip ~€15 pareja) · Almuerzo Eixample · Metro+walking Montjuïc · **Fundació Miró · Articket 2/6** (15:45-17:45) · Walking → **MNAC · Articket 3/6** (18:00-20:15, vistas +++ terrazas Palau Nacional) · **Font Màgica Montjuïc** (21:00-21:30, GRATIS) · Metro Liceu · **Jamboree Jazz Club Plaça Reial** (22:15-00:00, ~€26 pareja) · Metro regreso
+- **Dom 26 abr** · Metro+walking Lesseps · **Park Güell — zona monumental + Casa Museo Gaudí** (10:00, USD 59 total, 2 personas) — CONFIRMADO · Walking Gràcia · Almuerzo Plaça del Sol · **Casa Vicens** (15:00-16:30, Gaudí primera obra, €20 pp) · Paseo Gràcia barrio · Metro Diagonal→Paral·lel · Descanso + cena Poble Sec
+- **Lun 27 abr** · Metro Jaume I · **Museu Picasso · Articket 4/6** (10:30-12:30) · Walking Raval · Almuerzo · **MACBA · Articket 5/6** (14:00-15:30) · **CCCB · Articket 6/6** (15:35-16:45, puerta con puerta) · Metro → **Sagrada Família — acceso básico + Torre del Nacimiento** (17:00, presentarse 15 min antes con QR) — CONFIRMADO · Metro+walking cuesta · **Bunkers del Carmel sunset** (20:15-21:00, GRATIS, mirador 360° guerra civil) · Walking Guinardó + Metro Muntaner · **Harlem Jazz Club** (22:30-00:15, ~€25 pareja, más auténtico que Jamboree) · Metro regreso
 - **Mar 28 abr** · Salida muy temprana · **Vueling BCN → PMI 09:05** (El Prat, booking UMSDND) — CONFIRMADO
+
+> **Nota Barcelona Apr 24-27:** plan propuesto (migration 0069). CONFIRMADO solo Airbnb Poble Sec, AVE MAD→BCN, Park Güell Apr 26 y Sagrada Apr 27 17h. Museos via **Articket BCN** (€38 pp × 2 = USD 82.60, cubre 6: Tàpies + Miró + MNAC + Picasso + MACBA + CCCB). Jazz: Jamboree (sáb) y Harlem (lun) sin reservar — confirmar 1-2 días antes.
 
 ### Palma de Mallorca — 28 de abril al 2 de mayo (4 noches)
 
