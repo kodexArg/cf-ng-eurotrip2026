@@ -381,6 +381,8 @@ export class EventForm {
       message: this.mode() === 'add' ? '¿Agregar este evento?' : '¿Guardar los cambios?',
       header: this.mode() === 'add' ? 'Agregar' : 'Modificar',
       icon: 'pi pi-question-circle',
+      acceptButtonProps: { severity: 'success', label: this.mode() === 'add' ? 'Agregar' : 'Guardar' },
+      rejectButtonProps: { label: 'Cancelar', severity: 'secondary' },
       accept: () => this.doSave(),
     });
   }
