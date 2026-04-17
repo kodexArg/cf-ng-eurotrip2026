@@ -1,0 +1,41 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - menubar [ref=e7]:
+        - menuitem "Calendario" [ref=e8]:
+          - link " Calendario" [ref=e10] [cursor=pointer]:
+            - /url: /calendario
+            - generic [ref=e11]: 
+            - generic [ref=e12]: Calendario
+        - menuitem "Itinerario" [ref=e13]:
+          - link " Itinerario" [ref=e15] [cursor=pointer]:
+            - /url: /itinerario
+            - generic [ref=e16]: 
+            - generic [ref=e17]: Itinerario
+        - menuitem "Mapa" [ref=e18]:
+          - link " Mapa" [ref=e20] [cursor=pointer]:
+            - /url: /mapa
+            - generic [ref=e21]: 
+            - generic [ref=e22]: Mapa
+        - menuitem "Sitios" [ref=e23]:
+          - link " Sitios" [ref=e25] [cursor=pointer]:
+            - /url: /sitios
+            - generic [ref=e26]: 
+            - generic [ref=e27]: Sitios
+        - menuitem "Fotos" [ref=e28]:
+          - link " Fotos" [ref=e30] [cursor=pointer]:
+            - /url: /fotos
+            - generic [ref=e31]: 
+            - generic [ref=e32]: Fotos
+        - menuitem "Reservas" [ref=e33]:
+          - link " Reservas" [ref=e35] [cursor=pointer]:
+            - /url: /reservas
+            - generic [ref=e36]: 
+            - generic [ref=e37]: Reservas
+        - menuitem "Modificaciones" [ref=e38]:
+          - link " Modificaciones" [ref=e40] [cursor=pointer]:
+            - /url: /modificaciones
+            - generic [ref=e41]: 
+            - generic [ref=e42]: Modificaciones
+    - text:       
+  - main [ref=e43]

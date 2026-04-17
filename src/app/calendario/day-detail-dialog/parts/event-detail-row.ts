@@ -85,7 +85,7 @@ import { EstadiaDetail } from './estadia-detail';
               </div>
             </div>
             <div class="flex items-center gap-1.5 flex-shrink-0 pt-0.5">
-              @if (event().usd && event().usd! > 0) {
+              @if (event().usd != null && event().usd! > 0) {
                 <span
                   class="text-xs font-semibold flex items-center"
                   style="color: #16a34a"
@@ -95,6 +95,12 @@ import { EstadiaDetail } from './estadia-detail';
                     style="font-size: 9px"
                   ></i>{{ event().usd }}
                 </span>
+              } @else if (event().usd === 0) {
+                <span
+                  class="font-medium uppercase tracking-wide"
+                  style="font-size: 9px; color: var(--p-surface-400); letter-spacing: 0.05em"
+                  title="Gratis"
+                >gratis</span>
               }
               @if (event().confirmed) {
                 <i
