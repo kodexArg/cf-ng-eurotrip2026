@@ -65,7 +65,11 @@ export interface ItineraryDayInput {
           }
           @if (showUnconfirmed() && weather()) {
             <div class="flex items-center gap-1 mt-0.5 select-none text-xs leading-none" [style.color]="weatherIconColor()">
-              <i [class]="'pi ' + weatherIcon()"></i>
+              @if (weatherIconMaterial(); as mat) {
+                <span class="material-symbols-outlined" style="font-size: 1rem; line-height: 1">{{ mat }}</span>
+              } @else {
+                <i [class]="'pi ' + weatherIcon()"></i>
+              }
               <span>{{ weatherTempText() }}</span>
             </div>
           }
@@ -104,11 +108,18 @@ export class ItineraryDay {
     if (code === 0 || code === 1) return 'pi-sun';
     if (code === 2 || code === 3) return 'pi-cloud';
     if (code >= 45 && code <= 48) return 'pi-eye-slash';
-    if (code >= 51 && code <= 67) return 'pi-cloud-rain';
-    if (code >= 71 && code <= 77) return 'pi-snowflake';
-    if (code >= 80 && code <= 82) return 'pi-cloud-rain';
     if (code >= 95) return 'pi-bolt';
     return 'pi-cloud';
+  });
+
+  // Returns a Material Symbols Outlined name for weather codes PrimeIcons
+  // can't render (rain/drizzle/snow). Null falls through to the pi-* branch.
+  protected readonly weatherIconMaterial = computed((): string | null => {
+    const code = this.weather()?.weatherCode ?? -1;
+    if (code >= 51 && code <= 67) return 'rainy';
+    if (code >= 71 && code <= 77) return 'ac_unit';
+    if (code >= 80 && code <= 82) return 'rainy';
+    return null;
   });
 
   protected readonly weatherIconColor = computed(() =>
