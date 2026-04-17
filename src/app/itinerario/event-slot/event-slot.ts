@@ -216,6 +216,7 @@ export class EventSlot {
       case 'train':
         return 'ms-train';
       case 'walk':
+      case 'walking':
         return 'ms-directions_walk';
       default:
         return 'ms-directions_transit';
@@ -225,18 +226,20 @@ export class EventSlot {
   protected readonly intraCityText = computed((): string => {
     const t = this.asTraslado();
     if (!t) return '';
+    const isWalk = t.subtype === 'walking' || t.subtype === 'walk';
     const company = t.company?.trim() || '';
     const vehicle = t.vehicleCode?.trim() || '';
-    const service = [company, vehicle].filter(Boolean).join(' ') || t.title;
+    // For walking the icon already conveys the mode; suppress the "walking" word.
+    const service = isWalk
+      ? ''
+      : [company, vehicle].filter(Boolean).join(' ') || t.title;
     const origin = t.originLabel?.trim();
     const dest = t.destinationLabel?.trim();
     const depart = timeOf(t.timestampIn);
     const arrive = t.timestampOut ? timeOf(t.timestampOut) : '';
     const window = arrive ? `${depart}–${arrive}` : depart;
-    if (origin && dest) {
-      return `${service} · ${origin} → ${dest} · ${window}`;
-    }
-    return `${service} · ${window}`;
+    const route = origin && dest ? `${origin} → ${dest}` : '';
+    return [service, route, window].filter(Boolean).join(' · ');
   });
 
   protected readonly stayText = computed((): string => {
