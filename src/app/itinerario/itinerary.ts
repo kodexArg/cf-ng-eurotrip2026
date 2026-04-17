@@ -103,7 +103,7 @@ function dateToUtcMs(dateStr: string): number {
             />
           } @else {
             <div
-              class="mb-6 -mt-4 flex items-center gap-2 px-4 py-2 text-surface-600 select-none"
+              class="mb-6 -mt-4 flex items-center justify-center gap-2 px-4 py-2 text-surface-600 select-none"
               role="note"
               [attr.aria-label]="'Cambio de huso horario de ' + row.fromLabel + ' a ' + row.toLabel"
             >
