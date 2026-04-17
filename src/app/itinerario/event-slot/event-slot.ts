@@ -4,6 +4,7 @@ import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
+import { resolveEventIcon, transportIcon } from '../../shared/transport-icon';
 import { ICON_GREYS } from '../../shared/theme/colors';
 
 /**
@@ -169,16 +170,20 @@ export class EventSlot {
 
   protected readonly trasladoPartidaIcon = computed((): string => {
     const t = this.asTraslado();
-    if (t?.subtype === 'flight') return 'ms-flight_takeoff';
-    if (t?.subtype === 'train') return 'ms-train';
-    return 'pi-sign-out';
+    // Special case: flight arribo uses flight_land; partida uses event.icon or flight_takeoff.
+    // resolveEventIcon prefers explicit event.icon; for flights without explicit icon it maps
+    // subtype 'flight' → 'ms-flight_takeoff' which is correct for partida.
+    return resolveEventIcon({ icon: t?.icon, subtype: t?.subtype });
   });
 
   protected readonly trasladoArriboIcon = computed((): string => {
     const t = this.asTraslado();
+    // For arribo: if event has an explicit icon, honour it; otherwise:
+    //   - flight → ms-flight_land (special override)
+    //   - everything else → transportIcon(subtype)
+    if (t?.icon && t.icon.trim()) return t.icon;
     if (t?.subtype === 'flight') return 'ms-flight_land';
-    if (t?.subtype === 'train') return 'ms-train';
-    return 'pi-sign-in';
+    return transportIcon(t?.subtype);
   });
 
   protected readonly trasladoPartidaText = computed((): string => {
@@ -213,28 +218,7 @@ export class EventSlot {
     return !!t.cityOut && t.cityOut === t.cityIn;
   });
 
-  protected readonly intraCityIcon = computed((): string => {
-    const t = this.asTraslado();
-    switch (t?.subtype) {
-      case 'metro':
-        return 'ms-subway';
-      case 'tram':
-        return 'ms-tram';
-      case 'bus':
-        return 'ms-directions_bus';
-      case 'taxi':
-        return 'ms-local_taxi';
-      case 'train':
-        return 'ms-train';
-      case 'walk':
-      case 'walking':
-        return 'ms-directions_walk';
-      case 'scooter':
-        return 'ms-electric_scooter';
-      default:
-        return 'ms-directions_transit';
-    }
-  });
+  protected readonly intraCityIcon = computed((): string => resolveEventIcon(this.asTraslado() ?? {}));
 
   protected readonly intraCityText = computed((): string => {
     const t = this.asTraslado();
