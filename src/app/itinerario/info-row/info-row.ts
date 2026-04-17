@@ -11,8 +11,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 @Component({
   selector: 'app-info-row',
   template: `
-    <div class="flex items-start gap-2 py-0.5">
-      <span class="inline-flex items-center shrink-0 select-none" style="height: 1.25rem">
+    <div class="flex items-center gap-2 py-0.5">
+      <span class="inline-flex items-center justify-center shrink-0 select-none w-5" style="height: 1.25rem">
         @if (isMaterial()) {
           <span
             class="material-symbols-outlined"
