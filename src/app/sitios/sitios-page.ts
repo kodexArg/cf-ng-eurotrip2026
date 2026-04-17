@@ -55,7 +55,21 @@ export class CityTabContent {
 interface DatePill {
   date: string;   // YYYY-MM-DD
   label: string;  // "28 Abr"
-  citySlug: string;
+}
+
+function cityDatePills(city: City): DatePill[] {
+  const pills: DatePill[] = [];
+  const arrival = new Date(city.arrival + 'T00:00:00');
+  const departure = new Date(city.departure + 'T00:00:00');
+  const cur = new Date(arrival);
+  while (cur < departure) {
+    pills.push({
+      date: cur.toISOString().slice(0, 10),
+      label: cur.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+    });
+    cur.setDate(cur.getDate() + 1);
+  }
+  return pills;
 }
 
 @Component({
@@ -75,28 +89,6 @@ interface DatePill {
       }
 
       @if (cities().length > 0) {
-        <!-- Date filter pills -->
-        <div class="flex gap-2 mb-4 overflow-x-auto nav-scroll pb-1">
-          <button type="button"
-            class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
-            [style]="selectedDate() === null
-              ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
-              : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
-            (click)="selectDate(null)">
-            Todas
-          </button>
-          @for (pill of datePills(); track pill.date) {
-            <button type="button"
-              class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
-              [style]="selectedDate() === pill.date
-                ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
-                : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
-              (click)="selectDate(pill.date)">
-              {{ pill.label }}
-            </button>
-          }
-        </div>
-
         <p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
           <p-tablist>
             @for (city of cities(); track city.slug) {
@@ -115,6 +107,27 @@ interface DatePill {
           <p-tabpanels>
             @for (city of cities(); track city.slug) {
               <p-tabpanel [value]="city.slug">
+                <!-- Date pills for this city -->
+                <div class="flex gap-2 mt-3 overflow-x-auto nav-scroll pb-1">
+                  <button type="button"
+                    class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
+                    [style]="selectedDate() === null
+                      ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
+                      : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
+                    (click)="selectedDate.set(null)">
+                    Todas
+                  </button>
+                  @for (pill of pillsFor(city); track pill.date) {
+                    <button type="button"
+                      class="px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer shrink-0"
+                      [style]="selectedDate() === pill.date
+                        ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
+                        : 'border-color: var(--p-surface-300); color: var(--p-surface-600)'"
+                      (click)="selectedDate.set(pill.date)">
+                      {{ pill.label }}
+                    </button>
+                  }
+                </div>
                 <app-city-tab-content
                   [slug]="city.slug"
                   [active]="activeTab() === city.slug"
@@ -139,25 +152,6 @@ export class SitiosPage {
   readonly activeTab = signal<string>('');
   readonly selectedDate = signal<string | null>(null);
 
-  // Generate one pill per day across all city stays: arrival <= day < departure
-  readonly datePills = computed<DatePill[]>(() => {
-    const pills: DatePill[] = [];
-    for (const city of this.cities()) {
-      const arrival = new Date(city.arrival + 'T00:00:00');
-      const departure = new Date(city.departure + 'T00:00:00');
-      const cur = new Date(arrival);
-      while (cur < departure) {
-        pills.push({
-          date: cur.toISOString().slice(0, 10),
-          label: cur.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
-          citySlug: city.slug,
-        });
-        cur.setDate(cur.getDate() + 1);
-      }
-    }
-    return pills;
-  });
-
   private readonly _initEffect = effect(() => {
     const cities = this.cities();
     if (!cities.length) return;
@@ -170,17 +164,15 @@ export class SitiosPage {
     });
   });
 
-  selectDate(date: string | null): void {
-    this.selectedDate.set(date);
-    if (date === null) return;
-    const pill = this.datePills().find(p => p.date === date);
-    if (pill) this.onTabChange(pill.citySlug);
+  pillsFor(city: City): DatePill[] {
+    return cityDatePills(city);
   }
 
   onTabChange(slug: string | number | undefined): void {
     if (slug === undefined) return;
     const s = String(slug);
     this.activeTab.set(s);
+    this.selectedDate.set(null);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { c: s },
