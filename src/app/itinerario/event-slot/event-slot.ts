@@ -5,7 +5,7 @@ import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
 import { resolveEventIcon, transportIcon } from '../../shared/transport-icon';
-import { ICON_GREYS } from '../../shared/theme/colors';
+import { ESTADIA_COLOR, ICON_GREYS } from '../../shared/theme/colors';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -139,7 +139,7 @@ export class EventSlot {
   protected readonly iconColor = computed((): string => {
     const e = this.event();
     if (e.type === 'hito') return ICON_GREYS.hito;
-    if (e.type === 'estadia') return ICON_GREYS.estadia;
+    if (e.type === 'estadia') return ESTADIA_COLOR;
     if (e.type === 'traslado') {
       if (this.isIntraCity()) return ICON_GREYS.transportIntra;
       return transportColor(e.subtype);

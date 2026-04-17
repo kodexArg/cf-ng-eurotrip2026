@@ -11,9 +11,11 @@ export const CITY_COLORS: Record<string, string> = {
 /** Icon greys for itinerary rows — darker = more important event. */
 export const ICON_GREYS = {
   hito:           '#0f172a',
-  estadia:        '#64748b',
   transportIntra: '#94a3b8',
 } as const;
+
+/** Check-in / accommodation icon color — intense orange-red. */
+export const ESTADIA_COLOR = '#ea580c';
 
 /** Background and text colors per activity tipo — calendar chip palette. */
 export const ACTIVITY_TIPO_COLORS: Record<string, { bg: string; text: string }> = {
