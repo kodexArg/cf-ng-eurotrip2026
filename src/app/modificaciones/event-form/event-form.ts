@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
+import { Textarea } from 'primeng/textarea';
 import { InputNumber } from 'primeng/inputnumber';
 import { Select } from 'primeng/select';
 import { Checkbox } from 'primeng/checkbox';
@@ -33,6 +34,7 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     FormsModule,
     Button,
     InputText,
+    Textarea,
     InputNumber,
     Select,
     Checkbox,
@@ -40,15 +42,15 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
   ],
   providers: [ConfirmationService],
   template: `
-<div class="max-w-2xl mx-auto mb-6 p-4 rounded-xl border" style="border-color: var(--p-surface-200)">
+<div class="flex flex-col gap-3">
 
-  <!-- Row 1: Type selector (full width) -->
-  <div class="mb-4">
-    <div class="text-xs font-medium mb-1 select-none" style="color: var(--p-surface-500)">Tipo *</div>
+  <!-- Tipo -->
+  <div>
+    <div class="text-xs font-medium mb-1.5 select-none" style="color: var(--p-surface-500)">Tipo *</div>
     <div class="flex gap-2">
       @for (opt of typeOptions; track opt.value) {
         <button type="button"
-          class="flex-1 px-3 py-1 rounded-md text-sm border transition-colors cursor-pointer"
+          class="flex-1 px-3 py-1.5 rounded-md text-sm border transition-colors cursor-pointer"
           [style]="formType === opt.value
             ? 'background: var(--p-primary-color); color: white; border-color: var(--p-primary-color)'
             : 'border-color: var(--p-surface-300); color: var(--p-surface-700)'"
@@ -59,41 +61,41 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Row 2: Título + Confirmado -->
-  <div class="grid grid-cols-[1fr_auto] gap-3 mb-3 items-end">
+  <!-- Título + Confirmado -->
+  <div class="grid grid-cols-[1fr_auto] gap-3 items-end">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Título *</label>
       <input pInputText [(ngModel)]="formTitle" placeholder="Título del evento" class="w-full" />
     </div>
-    <div class="flex items-center gap-2 pb-2">
+    <div class="flex items-center gap-2 pb-1.5">
       <p-checkbox [(ngModel)]="formConfirmed" [binary]="true" inputId="evt-confirmed" />
       <label for="evt-confirmed" class="text-sm select-none" style="color: var(--p-surface-700)">Confirmado</label>
     </div>
   </div>
 
-  <!-- Row 3: Fecha + hora entrada + hora salida + offset UTC -->
-  <div class="grid grid-cols-[1.4fr_1fr_1fr_auto] gap-3 mb-3">
+  <!-- Fecha + hora entrada + hora salida + UTC -->
+  <div class="grid grid-cols-[1.4fr_1fr_1fr_auto] gap-3">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Fecha *</label>
       <input pInputText type="date" [(ngModel)]="formDate" class="w-full" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Hora entrada</label>
+      <label class="text-xs" style="color: var(--p-surface-500)">Entrada</label>
       <input pInputText type="time" [(ngModel)]="formTimeIn" class="w-full" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Hora salida</label>
+      <label class="text-xs" style="color: var(--p-surface-500)">Salida</label>
       <input pInputText type="time" [(ngModel)]="formTimeOut" class="w-full" />
     </div>
-    <div class="flex flex-col gap-1 min-w-[90px]">
+    <div class="flex flex-col gap-1 min-w-[80px]">
       <label class="text-xs" style="color: var(--p-surface-500)">UTC</label>
       <p-select [options]="offsetOptions" [(ngModel)]="formTimezoneOffset" optionLabel="label" optionValue="value" styleClass="w-full" />
     </div>
   </div>
 
-  <!-- Row 4: Ciudades -->
+  <!-- Ciudad(es) -->
   @if (formType === EVENT_TYPES.TRASLADO) {
-    <div class="grid grid-cols-2 gap-3 mb-3">
+    <div class="grid grid-cols-2 gap-3">
       <div class="flex flex-col gap-1">
         <label class="text-xs" style="color: var(--p-surface-500)">Ciudad origen *</label>
         <p-select [options]="cityOptions()" [(ngModel)]="formCityIn" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
@@ -104,52 +106,53 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
       </div>
     </div>
   } @else {
-    <div class="grid grid-cols-1 gap-3 mb-3">
-      <div class="flex flex-col gap-1">
-        <label class="text-xs" style="color: var(--p-surface-500)">Ciudad *</label>
-        <p-select [options]="cityOptions()" [(ngModel)]="formCityIn" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
-      </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-xs" style="color: var(--p-surface-500)">Ciudad *</label>
+      <p-select [options]="cityOptions()" [(ngModel)]="formCityIn" optionLabel="name" optionValue="id" placeholder="Seleccionar" styleClass="w-full" />
     </div>
   }
 
-  <!-- Row 5: USD + Descripción -->
-  <div class="grid grid-cols-[auto_1fr] gap-3 mb-3">
-    <div class="flex flex-col gap-1 min-w-[120px]">
-      <label class="text-xs" style="color: var(--p-surface-500)">USD</label>
-      <p-inputnumber [(ngModel)]="formUsd" [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="0.00" styleClass="w-full" />
-    </div>
-    <div class="flex flex-col gap-1">
-      <label class="text-xs" style="color: var(--p-surface-500)">Descripción</label>
-      <input pInputText [(ngModel)]="formDescription" placeholder="(opcional)" class="w-full" />
-    </div>
+  <!-- USD -->
+  <div class="flex flex-col gap-1" style="max-width: 160px">
+    <label class="text-xs" style="color: var(--p-surface-500)">Costo (USD)</label>
+    <p-inputnumber [(ngModel)]="formUsd" [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="0.00" styleClass="w-full" />
+  </div>
+
+  <!-- Descripción multilinea -->
+  <div class="flex flex-col gap-1">
+    <label class="text-xs" style="color: var(--p-surface-500)">Descripción</label>
+    <textarea pTextarea [(ngModel)]="formDescription" [autoResize]="true" rows="3"
+              placeholder="(opcional)" class="w-full resize-none"></textarea>
   </div>
 
   <!-- Traslado extras -->
   @if (formType === EVENT_TYPES.TRASLADO) {
-    <div class="mt-4 pt-3 border-t" style="border-color: var(--p-surface-200)">
+    <div class="pt-3 border-t" style="border-color: var(--p-surface-200)">
       <div class="text-xs font-medium mb-2 select-none uppercase tracking-wide" style="color: var(--p-surface-500)">Detalles de traslado</div>
-      <div class="grid grid-cols-2 gap-3 mb-3">
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Compañía</label>
-          <input pInputText [(ngModel)]="formCompany" placeholder="ej. Ryanair" class="w-full" />
+      <div class="flex flex-col gap-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Compañía</label>
+            <input pInputText [(ngModel)]="formCompany" placeholder="ej. Ryanair" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Código vuelo/tren</label>
+            <input pInputText [(ngModel)]="formVehicleCode" placeholder="ej. FR28" class="w-full" />
+          </div>
         </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Código vuelo/tren</label>
-          <input pInputText [(ngModel)]="formVehicleCode" placeholder="ej. FR28" class="w-full" />
-        </div>
-      </div>
-      <div class="grid grid-cols-3 gap-3 mb-1">
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Tarifa</label>
-          <input pInputText [(ngModel)]="formFare" placeholder="ej. €49" class="w-full" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Asiento</label>
-          <input pInputText [(ngModel)]="formSeat" placeholder="ej. 14A" class="w-full" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Duración (min)</label>
-          <p-inputnumber [(ngModel)]="formDurationMin" [useGrouping]="false" placeholder="ej. 120" styleClass="w-full" />
+        <div class="grid grid-cols-3 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Tarifa</label>
+            <input pInputText [(ngModel)]="formFare" placeholder="ej. €49" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Asiento</label>
+            <input pInputText [(ngModel)]="formSeat" placeholder="ej. 14A" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Duración (min)</label>
+            <p-inputnumber [(ngModel)]="formDurationMin" [useGrouping]="false" placeholder="ej. 120" styleClass="w-full" />
+          </div>
         </div>
       </div>
     </div>
@@ -157,9 +160,9 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
 
   <!-- Estadia extras -->
   @if (formType === EVENT_TYPES.ESTADIA) {
-    <div class="mt-4 pt-3 border-t" style="border-color: var(--p-surface-200)">
+    <div class="pt-3 border-t" style="border-color: var(--p-surface-200)">
       <div class="text-xs font-medium mb-2 select-none uppercase tracking-wide" style="color: var(--p-surface-500)">Detalles de estadía</div>
-      <div class="grid grid-cols-1 gap-3 mb-3">
+      <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
           <label class="text-xs" style="color: var(--p-surface-500)">Alojamiento *</label>
           <input pInputText [(ngModel)]="formAccommodation" placeholder="Nombre del hotel/airbnb" class="w-full" />
@@ -168,25 +171,25 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
           <label class="text-xs" style="color: var(--p-surface-500)">Dirección</label>
           <input pInputText [(ngModel)]="formAddress" placeholder="(opcional)" class="w-full" />
         </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3 mb-3">
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Check-in</label>
-          <input pInputText [(ngModel)]="formCheckinTime" placeholder="ej. 15:00" class="w-full" />
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Check-in</label>
+            <input pInputText [(ngModel)]="formCheckinTime" placeholder="ej. 15:00" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Check-out</label>
+            <input pInputText [(ngModel)]="formCheckoutTime" placeholder="ej. 11:00" class="w-full" />
+          </div>
         </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Check-out</label>
-          <input pInputText [(ngModel)]="formCheckoutTime" placeholder="ej. 11:00" class="w-full" />
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3 mb-1">
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Ref. reserva</label>
-          <input pInputText [(ngModel)]="formBookingRef" placeholder="(opcional)" class="w-full" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs" style="color: var(--p-surface-500)">Plataforma</label>
-          <input pInputText [(ngModel)]="formPlatform" placeholder="ej. Booking.com" class="w-full" />
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Ref. reserva</label>
+            <input pInputText [(ngModel)]="formBookingRef" placeholder="(opcional)" class="w-full" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="text-xs" style="color: var(--p-surface-500)">Plataforma</label>
+            <input pInputText [(ngModel)]="formPlatform" placeholder="ej. Booking.com" class="w-full" />
+          </div>
         </div>
       </div>
     </div>
@@ -194,19 +197,15 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
 
   <!-- Error -->
   @if (error()) {
-    <small class="block mb-2 mt-3 text-red-500">{{ error() }}</small>
+    <small class="text-red-500">{{ error() }}</small>
   }
 
-  <!-- Buttons -->
-  <div class="flex gap-2 justify-end pt-4 mt-3 border-t" style="border-color: var(--p-surface-200)">
+  <!-- Botones sticky al fondo del dialog -->
+  <div class="sticky bottom-0 flex gap-2 justify-end pt-3 pb-1 border-t -mx-4 px-4"
+       style="border-color: var(--p-surface-200); background: var(--p-dialog-content-background, var(--p-surface-0))">
     <p-button label="Limpiar" icon="pi pi-times" severity="secondary" (onClick)="handleClear()" />
-    <p-button
-      label="Eliminar"
-      icon="pi pi-trash"
-      severity="danger"
-      [disabled]="mode() === 'add'"
-      (onClick)="handleDelete()"
-    />
+    <p-button label="Eliminar" icon="pi pi-trash" severity="danger"
+      [disabled]="mode() === 'add'" (onClick)="handleDelete()" />
     <p-button
       [label]="mode() === 'add' ? 'Aceptar' : 'Modificar'"
       [icon]="mode() === 'add' ? 'pi pi-plus' : 'pi pi-check'"
@@ -241,7 +240,6 @@ export class EventForm {
   formTitle = '';
   formDescription = '';
   formDate = '';
-  // Timestamps: not bound to inputs. Composed in buildPayload() from formTimeIn/Out + offset.
   formTimestampIn = '';
   formTimestampOut = '';
   formTimeIn = '';
@@ -251,13 +249,11 @@ export class EventForm {
   formCityOut = '';
   formUsd: number | null = null;
   formConfirmed = false;
-  // traslado extras
   formCompany = '';
   formFare = '';
   formVehicleCode = '';
   formSeat = '';
   formDurationMin: number | null = null;
-  // estadia extras
   formAccommodation = '';
   formAddress = '';
   formCheckinTime = '';
@@ -265,27 +261,24 @@ export class EventForm {
   formBookingRef = '';
   formPlatform = '';
 
-  readonly mode = computed<'add' | 'edit'>(() => this.event() !== null ? 'edit' : 'add');
+  readonly mode = computed<'add' | 'edit'>(() => (this.event() !== null ? 'edit' : 'add'));
 
-  readonly cityOptions = computed(() =>
-    this.cities().map(c => ({ name: c.name, id: c.id }))
-  );
+  readonly cityOptions = computed(() => this.cities().map((c) => ({ name: c.name, id: c.id })));
 
   readonly typeOptions = [
-    { label: 'Hito',      value: EVENT_TYPES.HITO },
-    { label: 'Viaje',     value: EVENT_TYPES.TRASLADO },
+    { label: 'Hito', value: EVENT_TYPES.HITO },
+    { label: 'Viaje', value: EVENT_TYPES.TRASLADO },
     { label: 'Hospedaje', value: EVENT_TYPES.ESTADIA },
   ];
 
   readonly offsetOptions = [
-    { label: 'UTC',   value: '+00:00' },
-    { label: '+01',   value: '+01:00' },
-    { label: '+02',   value: '+02:00' },
-    { label: '-03',   value: '-03:00' },
+    { label: 'UTC', value: '+00:00' },
+    { label: '+01', value: '+01:00' },
+    { label: '+02', value: '+02:00' },
+    { label: '-03', value: '-03:00' },
   ];
 
   get isFormValid(): boolean {
-    // formTimeIn empty is acceptable (timestamp will be null).
     return !!this.formTitle && !!this.formDate && !!this.formCityIn && !!this.formType;
   }
 
@@ -335,7 +328,11 @@ export class EventForm {
           this.formSeat = t.seat ?? '';
           this.formDurationMin = t.durationMin;
         } else {
-          this.formCompany = ''; this.formFare = ''; this.formVehicleCode = ''; this.formSeat = ''; this.formDurationMin = null;
+          this.formCompany = '';
+          this.formFare = '';
+          this.formVehicleCode = '';
+          this.formSeat = '';
+          this.formDurationMin = null;
         }
         if (e.type === EVENT_TYPES.ESTADIA) {
           const s = e as EstadiaEvent;
@@ -346,7 +343,12 @@ export class EventForm {
           this.formBookingRef = s.bookingRef ?? '';
           this.formPlatform = s.platform ?? '';
         } else {
-          this.formAccommodation = ''; this.formAddress = ''; this.formCheckinTime = ''; this.formCheckoutTime = ''; this.formBookingRef = ''; this.formPlatform = '';
+          this.formAccommodation = '';
+          this.formAddress = '';
+          this.formCheckinTime = '';
+          this.formCheckoutTime = '';
+          this.formBookingRef = '';
+          this.formPlatform = '';
         }
       } else {
         this.resetForm();
@@ -365,16 +367,37 @@ export class EventForm {
   }
 
   resetForm(): void {
-    this.formType = ''; this.formTitle = ''; this.formDescription = '';
-    this.formDate = ''; this.formTimestampIn = ''; this.formTimestampOut = '';
-    this.formTimeIn = ''; this.formTimeOut = ''; this.formTimezoneOffset = '+02:00';
-    this.formCityIn = ''; this.formCityOut = ''; this.formUsd = null; this.formConfirmed = false;
-    this.formCompany = ''; this.formFare = ''; this.formVehicleCode = ''; this.formSeat = ''; this.formDurationMin = null;
-    this.formAccommodation = ''; this.formAddress = ''; this.formCheckinTime = ''; this.formCheckoutTime = ''; this.formBookingRef = ''; this.formPlatform = '';
+    this.formType = '';
+    this.formTitle = '';
+    this.formDescription = '';
+    this.formDate = '';
+    this.formTimestampIn = '';
+    this.formTimestampOut = '';
+    this.formTimeIn = '';
+    this.formTimeOut = '';
+    this.formTimezoneOffset = '+02:00';
+    this.formCityIn = '';
+    this.formCityOut = '';
+    this.formUsd = null;
+    this.formConfirmed = false;
+    this.formCompany = '';
+    this.formFare = '';
+    this.formVehicleCode = '';
+    this.formSeat = '';
+    this.formDurationMin = null;
+    this.formAccommodation = '';
+    this.formAddress = '';
+    this.formCheckinTime = '';
+    this.formCheckoutTime = '';
+    this.formBookingRef = '';
+    this.formPlatform = '';
     this.error.set(null);
   }
 
-  handleClear(): void { this.resetForm(); this.cleared.emit(); }
+  handleClear(): void {
+    this.resetForm();
+    this.cleared.emit();
+  }
 
   handleSave(): void {
     this.confirmationService.confirm({
@@ -439,22 +462,35 @@ export class EventForm {
     this.formTimestampOut = this.composeTimestamp(this.formTimeOut) ?? '';
 
     const base: Record<string, unknown> = {
-      type: this.formType, title: this.formTitle, description: this.formDescription || null,
+      type: this.formType,
+      title: this.formTitle,
+      description: this.formDescription || null,
       date: this.formDate,
       timestampIn: this.composeTimestamp(this.formTimeIn),
       timestampOut: this.composeTimestamp(this.formTimeOut),
       cityIn: this.formCityIn,
       cityOut: this.formType === EVENT_TYPES.TRASLADO ? (this.formCityOut || null) : null,
-      usd: this.formUsd, confirmed: this.formConfirmed,
+      usd: this.formUsd,
+      confirmed: this.formConfirmed,
     };
     if (this.formType === EVENT_TYPES.TRASLADO) {
-      Object.assign(base, { company: this.formCompany || null, fare: this.formFare || null,
-        vehicleCode: this.formVehicleCode || null, seat: this.formSeat || null, durationMin: this.formDurationMin });
+      Object.assign(base, {
+        company: this.formCompany || null,
+        fare: this.formFare || null,
+        vehicleCode: this.formVehicleCode || null,
+        seat: this.formSeat || null,
+        durationMin: this.formDurationMin,
+      });
     }
     if (this.formType === EVENT_TYPES.ESTADIA) {
-      Object.assign(base, { accommodation: this.formAccommodation, address: this.formAddress || null,
-        checkinTime: this.formCheckinTime || null, checkoutTime: this.formCheckoutTime || null,
-        bookingRef: this.formBookingRef || null, platform: this.formPlatform || null });
+      Object.assign(base, {
+        accommodation: this.formAccommodation,
+        address: this.formAddress || null,
+        checkinTime: this.formCheckinTime || null,
+        checkoutTime: this.formCheckoutTime || null,
+        bookingRef: this.formBookingRef || null,
+        platform: this.formPlatform || null,
+      });
     }
     return base;
   }
