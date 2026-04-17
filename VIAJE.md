@@ -60,10 +60,10 @@
 
 ### Madrid — 20 al 24 de abril (4 noches)
 
-- **Dom 19 abr → Lun 20 abr** · Vuelo SCL → MAD · Llegada ~06:00 CEST · Metro MAD T4 → Sol (L8+L10+L1, ~€4.50 pp con suplemento) · Check-in Airbnb Lavapiés (16:00) · Tarde: Madrid City Tour opcional · Noche: Museo del Prado (entrada gratuita lunes desde 18h)
-- **Mar 21 abr** · **Aniversario 30** · Parque del Retiro · Plaza Mayor · Cena Bodega de los Secretos (Barrio de las Letras) — taxi ida ~€7 / vuelta ~€8 (tarifa nocturna)
-- **Mié 22 abr** · Excursión Toledo — RENFE Avant 09:00 Atocha→Toledo (34 min, ~€18 pp RT) · Alcázar de Toledo, Catedral, casco antiguo · Regreso 17:00 Avant → Metro Atocha→Sol · Noche: Barrio de las Letras
-- **Jue 23 abr** · Museo Reina Sofía (10:00–13:00) · Parque del Retiro (13:30–16:30) · Mercado de San Miguel (17:00) · Lavapiés · Atocha
+- **Dom 19 abr → Lun 20 abr** · Vuelo SCL → MAD · Llegada ~06:00 CEST · **Bus EMT Express 203** T4 → Atocha (24h, cada 15 min, €5.10 pp) · Caminata simbólica Atocha → Paseo del Prado → Retiro → Lavapiés (primer transporte terrestre del viaje a pie) · Paseo matutino en Retiro · Mercado de Antón Martín (tapas locales, ~€25 pareja) · Check-in Airbnb Lavapiés (16:00) · **Fundación MAPFRE · Anders Zorn** (GRATIS lunes 14-20h, vigente feb–may 2026)
+- **Mar 21 abr** · **Aniversario 30** · Retiro barca en el lago (€6, lun-vie) · Almuerzo Antón Martín · **Matadero Madrid · exposición PULGAR** (Mónica Mays, GRATIS) · Noche: 6 opciones en evaluación — A: Café Central jazz+cena (€96), B: Bodega de los Secretos (existente), C: Recoletos Jazz jam (€66-86), D: Rooftop Círculo BBAA + Café Central (€106), E: Hammam Al Ándalus + cena (€152), F: Hammam + Café Central tardío (€172)
+- **Mié 22 abr** · Excursión Toledo — RENFE Avant 08:50 Atocha→Toledo (33 min, ~€18 pp RT) · Bus urbano L5 estación→Zocodover (€1.40 pp) · **Catedral Primada** (10:10–11:40, €12 pp, audioguía incluida) · **Pulsera Turística €14 pp** (7 monumentos): Santo Tomé (Entierro del Conde de Orgaz de El Greco), Sinagoga Sta María la Blanca, Monasterio San Juan de los Reyes, Mezquita Cristo de la Luz · Almuerzo Bar Ludeña Plaza Magdalena (carcamusas, **NO Zocodover**, ~€20) · Sinagoga del Tránsito · Museo Sefardí (€3 pp) · Museo del Greco (€3 pp) · Mirador del Valle (taxi €7 ida) · Regreso Avant 17:00 · Caminata Atocha → Prado · **Museo del Prado · GRATIS 18–20h** · Metro Banco España → Sol
+- **Jue 23 abr** · **Museo Reina Sofía** (10:00–13:00, €12 pp, reservar online) · Almuerzo tapas Lavapiés · **Museo Thyssen** (Hammershøi + Rauschenberg — 2 temporales TOP, €15 pp) · Caminata Thyssen → Lavapiés · Descanso Airbnb + cena ligera barrio · **Opcional: El Junco jam session jazz gratis** (22:00, consumición mín. €10-15)
 - **Vie 24 abr** · Metro Sol→Atocha Renfe 08:15 · **AVE 08:57 Madrid Atocha → Barcelona Sants (llega 12:06)** — CONFIRMADO
 
 ### Barcelona — 24 al 28 de abril (4 noches)
