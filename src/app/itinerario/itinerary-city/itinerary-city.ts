@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { City, DayWeather, TripEvent } from '../../shared/models';
 import { ItineraryDay, ItineraryDayInput } from '../itinerary-day/itinerary-day';
 import { WeatherService } from '../../shared/services/weather.service';
+import { AppIcon } from '../../shared/icon/icon';
 
 /**
  * One city block: header with city name + date range, then a vertical
@@ -12,7 +13,7 @@ import { WeatherService } from '../../shared/services/weather.service';
  */
 @Component({
   selector: 'app-itinerary-city',
-  imports: [DatePipe, ItineraryDay],
+  imports: [DatePipe, ItineraryDay, AppIcon],
   template: `
     <div class="mb-6">
       <div class="rounded-lg overflow-hidden border border-surface-200">
@@ -36,9 +37,11 @@ import { WeatherService } from '../../shared/services/weather.service';
               (click)="showSuggestions.set(!showSuggestions())"
               [title]="showSuggestions() ? 'Ocultar sugerencias' : 'Mostrar sugerencias'"
             >
-              <i class="pi pi-lightbulb text-base"
-                [style.color]="showSuggestions() ? '#fff' : 'rgba(255,255,255,0.4)'"
-              ></i>
+              <app-icon
+                icon="pi-lightbulb"
+                size="1rem"
+                [color]="showSuggestions() ? '#fff' : 'rgba(255,255,255,0.4)'"
+              />
             </button>
           }
         </div>

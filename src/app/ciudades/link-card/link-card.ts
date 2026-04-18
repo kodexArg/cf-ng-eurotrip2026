@@ -8,10 +8,11 @@ import { ExternalLink } from '../../shared/external-link/external-link';
 import type { Card as CardModel } from '../../shared/models';
 import { AuthService } from '../../shared/services/auth.service';
 import { EditService } from '../../shared/services/edit.service';
+import { AppIcon } from '../../shared/icon/icon';
 
 @Component({
   selector: 'app-link-card',
-  imports: [ExternalLink, Inplace, InputText, FormsModule, Tooltip],
+  imports: [ExternalLink, Inplace, InputText, FormsModule, Tooltip, AppIcon],
   template: `
     @if (auth.isOwner()) {
       <p-inplace (onDeactivate)="saveTitle()">
@@ -49,7 +50,7 @@ import { EditService } from '../../shared/services/edit.service';
              class="text-sm flex items-center gap-1 no-underline hover:underline"
              style="color: var(--p-primary-color)"
              [pTooltip]="link.tooltip ?? ''" tooltipPosition="top" [showDelay]="300">
-            <i class="pi pi-external-link text-xs"></i>
+            <app-icon icon="pi-external-link" size="0.75rem" />
             {{ link.label }}
           </a>
         }

@@ -6,6 +6,7 @@ import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
 import { resolveEventIcon, transportIcon } from '../../shared/transport-icon';
 import { ESTADIA_COLOR, ICON_GREYS, MUSEUM_COLOR } from '../../shared/theme/colors';
+import { AppIcon } from '../../shared/icon/icon';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -17,7 +18,7 @@ import { ESTADIA_COLOR, ICON_GREYS, MUSEUM_COLOR } from '../../shared/theme/colo
  */
 @Component({
   selector: 'app-event-slot',
-  imports: [InfoRow, ConfirmedBadge, MandatoryBadge],
+  imports: [InfoRow, ConfirmedBadge, MandatoryBadge, AppIcon],
   template: `
     @switch (event().type) {
       @case ('hito') {
@@ -31,11 +32,13 @@ import { ESTADIA_COLOR, ICON_GREYS, MUSEUM_COLOR } from '../../shared/theme/colo
             @if (h.cardId) {
               <button
                 type="button"
-                class="pi pi-lightbulb text-xs opacity-60 hover:opacity-100 transition-opacity ml-1 bg-transparent border-none cursor-pointer"
+                class="opacity-60 hover:opacity-100 transition-opacity ml-1 bg-transparent border-none cursor-pointer flex items-center"
                 style="height: 1.25rem; color: var(--p-primary-color)"
                 (click)="openInfo.emit()"
                 title="Ver informacion del sitio"
-              ></button>
+              >
+                <app-icon icon="pi-lightbulb" size="0.85rem" />
+              </button>
             }
             @if (h.confirmed) {
               <app-confirmed-badge />

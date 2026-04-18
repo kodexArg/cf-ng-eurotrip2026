@@ -14,6 +14,7 @@ import {
   DIALOG_MAX_HEIGHT_VH,
 } from '../../shared/theme/spacing';
 import { EventDetailRow } from './parts/event-detail-row';
+import { AppIcon } from '../../shared/icon/icon';
 
 const DOW_ES_FULL = [
   'Domingo',
@@ -57,7 +58,7 @@ function formatLongDate(ymd: string): string {
  */
 @Component({
   selector: 'app-day-detail-dialog',
-  imports: [Dialog, EventDetailRow],
+  imports: [Dialog, EventDetailRow, AppIcon],
   template: `
     <p-dialog
       [visible]="visible()"
@@ -91,7 +92,7 @@ function formatLongDate(ymd: string): string {
                   class="text-xs mt-1 flex items-center gap-1.5"
                   style="color: var(--p-surface-600)"
                 >
-                  <i class="pi pi-map-marker" style="font-size: 10px"></i>
+                  <app-icon icon="pi-map-marker" size="0.625rem" />
                   <span>{{ cityName() }}</span>
                   @if (isTravelDay()) {
                     <span style="color: var(--p-surface-400)">·</span>
@@ -117,7 +118,7 @@ function formatLongDate(ymd: string): string {
               style="color: var(--p-surface-500)"
             >
               <span class="flex items-center gap-1">
-                <i class="pi pi-list" style="font-size: 9px"></i>
+                <app-icon icon="pi-list" size="0.5625rem" />
                 {{ sortedEvents().length }}
                 {{ sortedEvents().length === 1 ? 'evento' : 'eventos' }}
               </span>

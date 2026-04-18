@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TrasladoEvent } from '../../../shared/models';
+import { AppIcon } from '../../../shared/icon/icon';
 
 /**
  * Renders the traslado-specific detail section inside an event row.
@@ -20,7 +21,7 @@ import { TrasladoEvent } from '../../../shared/models';
 @Component({
   selector: 'app-traslado-detail',
   standalone: true,
-  imports: [],
+  imports: [AppIcon],
   template: `
     <div
       class="mt-2 rounded p-2 text-xs"
@@ -30,7 +31,7 @@ import { TrasladoEvent } from '../../../shared/models';
         class="flex items-center gap-1.5"
         style="color: var(--p-surface-700)"
       >
-        <i class="pi pi-send" style="font-size: 10px"></i>
+        <app-icon icon="pi-send" size="0.625rem" />
         <span class="font-medium">{{ route() }}</span>
       </div>
       <div

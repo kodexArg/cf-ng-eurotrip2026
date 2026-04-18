@@ -10,6 +10,7 @@ import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from './booking-card/booking-card';
 import { DIALOG_WIDTH, DIALOG_MAX_WIDTH, DIALOG_MAX_HEIGHT_VH } from '../shared/theme/spacing';
+import { AppIcon } from '../shared/icon/icon';
 
 type FilterValue = EventType | 'all';
 type CityFilterValue = string | 'all';
@@ -18,7 +19,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
 @Component({
   selector: 'app-reservas',
   standalone: true,
-  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard],
+  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, AppIcon],
   template: `
     <div class="max-w-2xl mx-auto p-4">
       <h1 class="text-2xl font-bold select-none mb-4" style="color: var(--p-surface-800)">Reservas</h1>
@@ -69,7 +70,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
                 aria-label="Limpiar filtros"
                 title="Limpiar filtros"
                 (click)="clearFilters()">
-          <i class="pi pi-filter-slash"></i>
+          <app-icon icon="pi-filter-slash" />
         </button>
       </ng-template>
       <div class="flex flex-col gap-4 py-2">

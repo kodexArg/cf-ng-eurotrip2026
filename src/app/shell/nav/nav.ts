@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
+import { AppIcon } from '../../shared/icon/icon';
 
 @Component({
   selector: 'app-nav',
-  imports: [Menubar, RouterLink, RouterLinkActive],
+  imports: [Menubar, RouterLink, RouterLinkActive, AppIcon],
   template: `
     <nav class="hidden md:block">
       <div class="flex items-center">
@@ -26,7 +27,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla0.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla0.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla0.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-calendar text-xs"></i><span>Agenda</span>
+          <app-icon icon="pi-calendar" size="0.75rem" /><span>Agenda</span>
         </a>
         <a routerLink="/itinerario" routerLinkActive #rla1="routerLinkActive" aria-label="Viaje"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -34,7 +35,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla1.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla1.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla1.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-list text-xs"></i><span>Viaje</span>
+          <app-icon icon="pi-list" size="0.75rem" /><span>Viaje</span>
         </a>
         <a routerLink="/mapa" routerLinkActive #rla2="routerLinkActive" aria-label="Mapa"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -42,7 +43,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla2.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla2.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla2.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-map text-xs"></i><span>Mapa</span>
+          <app-icon icon="pi-map" size="0.75rem" /><span>Mapa</span>
         </a>
         <a routerLink="/sitios" routerLinkActive #rla3="routerLinkActive" aria-label="Sitios"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -50,7 +51,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla3.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla3.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla3.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-building text-xs"></i><span>Sitios</span>
+          <app-icon icon="ms-apartment" size="0.75rem" /><span>Sitios</span>
         </a>
         <a routerLink="/fotos" routerLinkActive #rla4="routerLinkActive" aria-label="Fotos"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -58,7 +59,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla4.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla4.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla4.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-images text-xs"></i><span>Fotos</span>
+          <app-icon icon="pi-images" size="0.75rem" /><span>Fotos</span>
         </a>
         <a routerLink="/reservas" routerLinkActive #rla5="routerLinkActive" aria-label="Reservas"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -66,7 +67,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla5.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla5.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla5.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-wallet text-xs"></i><span>Reservas</span>
+          <app-icon icon="pi-wallet" size="0.75rem" /><span>Reservas</span>
         </a>
         <a routerLink="/modificaciones" routerLinkActive #rla6="routerLinkActive" aria-label="Editar"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -74,7 +75,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rla6.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rla6.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rla6.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-pencil text-xs"></i><span>Editar</span>
+          <app-icon icon="pi-pencil" size="0.75rem" /><span>Editar</span>
         </a>
         <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
         <a routerLink="/admin" routerLinkActive #rlaAdmin="routerLinkActive" aria-label="Admin"
@@ -82,7 +83,7 @@ import { MenuItem } from 'primeng/api';
            [style.color]="rlaAdmin.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
            [style.background]="rlaAdmin.isActive ? 'var(--p-primary-color)' : 'transparent'"
            [style.borderColor]="rlaAdmin.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <i class="pi pi-cog text-xs"></i><span>Admin</span>
+          <app-icon icon="pi-cog" size="0.75rem" /><span>Admin</span>
         </a>
         -->
       </div>
@@ -95,7 +96,7 @@ export class Nav {
     { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },
     { label: 'Itinerario', icon: 'pi pi-list', routerLink: '/itinerario' },
     { label: 'Mapa', icon: 'pi pi-map', routerLink: '/mapa' },
-    { label: 'Sitios', icon: 'pi pi-building', routerLink: '/sitios' },
+    { label: 'Sitios', icon: 'pi pi-map-marker', routerLink: '/sitios' },
     { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
     { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
     { label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' },

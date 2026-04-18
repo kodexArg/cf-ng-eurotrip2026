@@ -8,10 +8,11 @@ import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { LoginDialog } from '../shared/login-dialog/login-dialog';
 import { AuthService } from '../shared/services/auth.service';
+import { AppIcon } from '../shared/icon/icon';
 
 @Component({
   selector: 'app-access-request',
-  imports: [FormsModule, Button, InputText, Textarea, LoginDialog],
+  imports: [FormsModule, Button, InputText, Textarea, LoginDialog, AppIcon],
   template: `
     <div class="min-h-screen bg-slate-900 flex items-center justify-center px-4">
       <div class="w-full max-w-md">
@@ -24,7 +25,7 @@ import { AuthService } from '../shared/services/auth.service';
         @if (submitted()) {
           <div class="bg-slate-800 border border-slate-700 rounded-lg p-8 text-center">
             <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center mx-auto mb-4">
-              <i class="pi pi-check text-slate-300"></i>
+              <app-icon icon="pi-check" color="#cbd5e1" />
             </div>
             <p class="text-slate-200 font-medium">Solicitud enviada</p>
             <p class="text-slate-400 text-sm mt-2">
