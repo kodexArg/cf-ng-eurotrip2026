@@ -1,6 +1,7 @@
 /** Shared geometry helpers: bearing math, SVG arrow icons, and icon-badge DivIcons. */
 
 import type * as L from 'leaflet';
+import { iconHtml } from '../../shared/icon/icon-html';
 
 /** Computes the initial bearing in degrees (0–360) from point a to point b. */
 export function bearing(a: [number, number], b: [number, number]): number {
@@ -27,9 +28,12 @@ export function makeArrowIcon(Leaflet: typeof L, deg: number, color: string): L.
   });
 }
 
-/** Creates a circular PrimeIcon badge DivIcon with the given background color and icon class. */
+/** Creates a circular icon badge DivIcon with the given background color and icon name. */
 export function makeIconBadge(Leaflet: typeof L, color: string, iconClass: string, size = 22): L.DivIcon {
   const glyph = size * 0.55;
+  // iconClass may be a full app-icon name (ms-train, pi-map-marker) or a bare pi class (pi-map-marker).
+  // Normalize: if no prefix, treat as pi- icon.
+  const iconName = iconClass.startsWith('ms-') || iconClass.startsWith('pi-') ? iconClass : `pi-${iconClass}`;
   return Leaflet.divIcon({
     html: `<div style="
       width:${size}px; height:${size}px;
@@ -39,7 +43,7 @@ export function makeIconBadge(Leaflet: typeof L, color: string, iconClass: strin
       box-shadow:0 2px 6px rgba(0,0,0,0.3);
       display:flex; align-items:center; justify-content:center;
       color:#fff;
-    "><i class="pi ${iconClass}" style="font-size:${glyph}px;line-height:1"></i></div>`,
+    ">${iconHtml(iconName, { size: `${glyph}px`, extraStyle: 'line-height:1' })}</div>`,
     className: '',
     iconSize:   [size, size],
     iconAnchor: [size / 2, size / 2],

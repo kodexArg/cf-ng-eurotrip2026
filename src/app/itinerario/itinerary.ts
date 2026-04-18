@@ -16,6 +16,7 @@ import { SiteInfoModal } from '../shared/site-info-modal/site-info-modal';
 import { ItineraryEnrichmentService } from '../shared/services/itinerary-enrichment.service';
 import { ItineraryFilters } from './itinerary-filters/itinerary-filters';
 import { formatUtcOffset, getCityUtcOffset } from '../shared/city-timezone';
+import { AppIcon } from '../shared/icon/icon';
 
 interface ItineraryPayload {
   cities: City[];
@@ -71,7 +72,7 @@ function dateToUtcMs(dateStr: string): number {
  */
 @Component({
   selector: 'app-itinerary',
-  imports: [ItineraryCity, LoadingState, ErrorState, SiteInfoModal, ItineraryFilters],
+  imports: [ItineraryCity, LoadingState, ErrorState, SiteInfoModal, ItineraryFilters, AppIcon],
   template: `
     <div class="max-w-2xl mx-auto p-4">
       <div class="mb-4">
@@ -107,7 +108,7 @@ function dateToUtcMs(dateStr: string): number {
               role="note"
               [attr.aria-label]="'Cambio de huso horario de ' + row.fromLabel + ' a ' + row.toLabel"
             >
-              <i class="pi pi-clock text-xl" aria-hidden="true"></i>
+              <app-icon icon="pi-clock" size="1.25rem" aria-hidden="true" />
               <span class="text-xl font-bold">
                 Cambio de horario: {{ row.fromLabel }} → {{ row.toLabel }}
               </span>

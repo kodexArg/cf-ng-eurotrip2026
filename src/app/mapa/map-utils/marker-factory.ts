@@ -1,6 +1,7 @@
 import type { City } from '../../shared/models/city.model';
 import type { TripEventBase } from '../../shared/models/event.model';
 import { timeOf } from '../../shared/models/event.model';
+import { iconHtml } from '../../shared/icon/icon-html';
 import {
   MARKER_POPUP_MAX_WIDTH,
   MARKER_POPUP_MIN_WIDTH,
@@ -107,16 +108,16 @@ function buildCityPopupHtml(city: City, hitos: TripEventBase[]): string {
         gap:6px;
         flex-wrap:wrap;
       ">
-        <span><i class="pi pi-calendar" style="font-size:9px;margin-right:2px"></i>${escapeHtml(formatShortDate(city.arrival))} – ${escapeHtml(formatShortDate(city.departure))}</span>
+        <span>${iconHtml('pi-calendar', { size: '9px', extraStyle: 'margin-right:2px' })}${escapeHtml(formatShortDate(city.arrival))} – ${escapeHtml(formatShortDate(city.departure))}</span>
         <span style="color:#bbb">·</span>
-        <span><i class="pi pi-moon" style="font-size:9px;margin-right:2px"></i>${city.nights}n</span>
+        <span>${iconHtml('pi-moon', { size: '9px', extraStyle: 'margin-right:2px' })}${city.nights}n</span>
         ${totalCount > 0 ? `
           <span style="color:#bbb">·</span>
-          <span><i class="pi pi-map-marker" style="font-size:9px;margin-right:2px"></i>${confirmedCount}/${totalCount}</span>
+          <span>${iconHtml('pi-map-marker', { size: '9px', extraStyle: 'margin-right:2px' })}${confirmedCount}/${totalCount}</span>
         ` : ''}
         ${totalUsd > 0 ? `
           <span style="color:#bbb">·</span>
-          <span><i class="pi pi-dollar" style="font-size:9px;margin-right:1px"></i>${totalUsd}</span>
+          <span>${iconHtml('pi-dollar', { size: '9px', extraStyle: 'margin-right:1px' })}${totalUsd}</span>
         ` : ''}
       </div>
     </div>`;
@@ -188,38 +189,17 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
 
   // Small map-pin suffix when the hito is drawn on the map.
   const mapIndicator = hasCoords(h)
-    ? `<i class="pi pi-map-marker" title="En el mapa" style="
-        font-size:8px;
-        color:${cityColor};
-        opacity:0.75;
-        margin-left:3px;
-      "></i>`
+    ? iconHtml('pi-map-marker', { size: '8px', color: cityColor, extraStyle: 'opacity:0.75;margin-left:3px' })
     : '';
 
   // Confirmed check or planned dot on the far right.
   const statusBadge = confirmed
-    ? `<i class="pi pi-check-circle" title="Confirmado" style="
-        font-size:10px;
-        color:#16a34a;
-        flex-shrink:0;
-      "></i>`
-    : `<i class="pi pi-circle" title="Planeado" style="
-        font-size:9px;
-        color:#cbd5e1;
-        flex-shrink:0;
-      "></i>`;
+    ? iconHtml('pi-check-circle', { size: '10px', color: '#16a34a', extraStyle: 'flex-shrink:0' })
+    : iconHtml('pi-circle', { size: '9px', color: '#cbd5e1', extraStyle: 'flex-shrink:0' });
 
   // Optional $ before the status badge.
   const usdBadge = typeof h.usd === 'number' && h.usd > 0
-    ? `<span style="
-        font-size:${MARKER_BADGE_FS};
-        color:#16a34a;
-        font-weight:600;
-        display:inline-flex;
-        align-items:center;
-        gap:1px;
-        flex-shrink:0;
-      "><i class="pi pi-dollar" style="font-size:8px"></i>${h.usd}</span>`
+    ? `<span style="font-size:${MARKER_BADGE_FS};color:#16a34a;font-weight:600;display:inline-flex;align-items:center;gap:1px;flex-shrink:0">${iconHtml('pi-dollar', { size: '8px' })}${h.usd}</span>`
     : '';
 
   // Optional one-line description underneath the title.
@@ -234,13 +214,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
 
   // Optional notes (shorter, even dimmer).
   const notes = h.notes
-    ? `<div style="
-        font-size:${MARKER_SMALL_FS};
-        color:#999;
-        font-style:italic;
-        line-height:1.3;
-        margin-top:1px;
-      "><i class="pi pi-info-circle" style="font-size:8px;margin-right:2px"></i>${escapeHtml(h.notes)}</div>`
+    ? `<div style="font-size:${MARKER_SMALL_FS};color:#999;font-style:italic;line-height:1.3;margin-top:1px">${iconHtml('pi-info-circle', { size: '8px', extraStyle: 'margin-right:2px' })}${escapeHtml(h.notes)}</div>`
     : '';
 
   return `
@@ -252,14 +226,7 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
       opacity:${rowOpacity};
     ">
       ${timeCell}
-      <i class="pi ${escapeHtml(iconName)}" style="
-        font-size:${MARKER_ICON_FS};
-        color:${cityColor};
-        width:14px;
-        text-align:center;
-        padding-top:1px;
-        flex-shrink:0;
-      "></i>
+      ${iconHtml(iconName, { size: MARKER_ICON_FS, color: cityColor, extraStyle: 'width:14px;text-align:center;padding-top:1px;flex-shrink:0' })}
       <div style="flex:1;min-width:0">
         <div style="
           font-size:${MARKER_HITO_TITLE_FS};

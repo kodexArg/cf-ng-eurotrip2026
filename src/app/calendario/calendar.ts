@@ -8,6 +8,7 @@ import { CityLegend } from './city-legend/city-legend';
 import { DayDetailDialog } from './day-detail-dialog/day-detail-dialog';
 import { LoadingState } from '../shared/loading-state/loading-state';
 import { getTravelGradientFromEvents } from './calendar-utils';
+import { AppIcon } from '../shared/icon/icon';
 
 interface ItineraryPayload {
   cities: City[];
@@ -42,7 +43,7 @@ const HITO_SUBTYPE_TO_TIPO: Record<string, ActivityTipo> = {
  */
 @Component({
   selector: 'app-calendar',
-  imports: [CalendarMonth, EventTypeLegend, CityLegend, DayDetailDialog, LoadingState],
+  imports: [CalendarMonth, EventTypeLegend, CityLegend, DayDetailDialog, LoadingState, AppIcon],
   template: `
     <div class="max-w-3xl mx-auto p-4 flex flex-col gap-6">
       <div class="flex items-center justify-between">
@@ -55,9 +56,11 @@ const HITO_SUBTYPE_TO_TIPO: Record<string, ActivityTipo> = {
           (click)="showIdeas.set(!showIdeas())"
           [title]="showIdeas() ? 'Ocultar ideas' : 'Mostrar ideas'"
         >
-          <i class="pi pi-lightbulb text-base"
-            [style.color]="showIdeas() ? 'var(--p-surface-700)' : 'var(--p-surface-400)'"
-          ></i>
+          <app-icon
+            icon="pi-lightbulb"
+            size="1rem"
+            [color]="showIdeas() ? 'var(--p-surface-700)' : 'var(--p-surface-400)'"
+          />
         </button>
       </div>
       @if (itineraryResource.isLoading()) {

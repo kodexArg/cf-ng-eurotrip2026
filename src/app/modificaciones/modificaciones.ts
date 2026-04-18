@@ -17,6 +17,7 @@ import {
   DIALOG_MAX_WIDTH,
   DIALOG_MAX_HEIGHT_VH,
 } from '../shared/theme/spacing';
+import { AppIcon } from '../shared/icon/icon';
 
 type FilterValue = EventType | 'all';
 type CityFilterValue = string | 'all';
@@ -34,7 +35,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
 @Component({
   selector: 'app-modificaciones',
   standalone: true,
-  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm],
+  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm, AppIcon],
   template: `
     @if (auth.isOwner()) {
       <div class="max-w-2xl mx-auto p-4">
@@ -124,7 +125,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
                 aria-label="Limpiar filtros"
                 title="Limpiar filtros"
                 (click)="clearFilters()">
-          <i class="pi pi-filter-slash"></i>
+          <app-icon icon="pi-filter-slash" />
         </button>
       </ng-template>
       <div class="flex flex-col gap-4 py-2">

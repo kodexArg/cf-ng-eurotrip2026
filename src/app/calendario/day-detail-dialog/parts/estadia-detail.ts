@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { EstadiaEvent } from '../../../shared/models';
+import { AppIcon } from '../../../shared/icon/icon';
 
 /**
  * Renders the accommodation detail section inside an event row.
@@ -19,7 +20,7 @@ import { EstadiaEvent } from '../../../shared/models';
 @Component({
   selector: 'app-estadia-detail',
   standalone: true,
-  imports: [],
+  imports: [AppIcon],
   template: `
     <div
       class="mt-2 rounded p-2 text-xs"
@@ -29,7 +30,7 @@ import { EstadiaEvent } from '../../../shared/models';
         class="flex items-center gap-1.5"
         style="color: var(--p-surface-700)"
       >
-        <i class="pi pi-home" style="font-size: 10px"></i>
+        <app-icon icon="pi-home" size="0.625rem" />
         <span class="font-medium">{{ estadia().accommodation }}</span>
       </div>
       <div
