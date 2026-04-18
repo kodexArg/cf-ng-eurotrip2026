@@ -5,7 +5,7 @@ import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { InfoRow } from '../info-row/info-row';
 import { transportColor } from '../../shared/transport-colors';
 import { resolveEventIcon, transportIcon } from '../../shared/transport-icon';
-import { ESTADIA_COLOR, ICON_GREYS } from '../../shared/theme/colors';
+import { ESTADIA_COLOR, ICON_GREYS, MUSEUM_COLOR } from '../../shared/theme/colors';
 
 /**
  * Unified slot for rendering one row of any TripEvent type.
@@ -23,7 +23,7 @@ import { ESTADIA_COLOR, ICON_GREYS } from '../../shared/theme/colors';
       @case ('hito') {
         @if (asHito(); as h) {
           <app-info-row
-            [icon]="h.icon"
+            [icon]="hitoIcon()"
             [iconColor]="iconColor()"
             [text]="h.title"
             [class.opacity-60]="!h.confirmed && !h.mandatory"
@@ -95,7 +95,7 @@ import { ESTADIA_COLOR, ICON_GREYS } from '../../shared/theme/colors';
       @case ('estadia') {
         @if (asEstadia(); as s) {
           <app-info-row
-            [icon]="s.icon"
+            [icon]="estadiaIcon()"
             [iconColor]="iconColor()"
             [text]="stayText()"
             [class.opacity-60]="!s.confirmed && !s.mandatory"
@@ -136,9 +136,21 @@ export class EventSlot {
     return isEstadia(e) ? e : null;
   });
 
+  protected readonly hitoIcon = computed((): string => {
+    const h = this.asHito();
+    return h ? resolveEventIcon({ icon: h.icon, subtype: h.subtype }) : '';
+  });
+
+  protected readonly estadiaIcon = computed((): string => {
+    const s = this.asEstadia();
+    return s ? resolveEventIcon({ icon: s.icon, subtype: s.subtype }) : '';
+  });
+
   protected readonly iconColor = computed((): string => {
     const e = this.event();
-    if (e.type === 'hito') return ICON_GREYS.hito;
+    if (e.type === 'hito') {
+      return this.hitoIcon() === 'ms-museum' ? MUSEUM_COLOR : ICON_GREYS.hito;
+    }
     if (e.type === 'estadia') return ESTADIA_COLOR;
     if (e.type === 'traslado') {
       if (this.isIntraCity()) return ICON_GREYS.transportIntra;
