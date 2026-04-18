@@ -2,6 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, effect, inject, in
 import { Router } from '@angular/router';
 import * as LeafletNs from 'leaflet';
 import type { City, TripEventBase } from '../../shared/models';
+import { makeIconBadge } from '../map-utils/geometry';
 import { createCityMarker } from '../map-utils/marker-factory';
 import { renderEventsOnMap } from '../map-utils/route-renderer';
 
@@ -33,6 +34,7 @@ export class MapContainer {
 
   private map: LeafletNs.Map | null = null;
   private citiesLayer: LeafletNs.LayerGroup | null = null;
+  private homeLayer: LeafletNs.LayerGroup | null = null;
   private eventsLayer: LeafletNs.LayerGroup | null = null;
 
   private readonly _initMap = afterNextRender(() => {
@@ -52,6 +54,7 @@ export class MapContainer {
     const events = this.events();
     if (this.mapReady() && events.length > 0) {
       this.renderEvents(events);
+      this.renderHome(events);
     }
   });
 
@@ -72,8 +75,10 @@ export class MapContainer {
 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    // Events added first, cities second → cities render on top in DOM order.
+    // Layer order (DOM + zIndexOffset): events (hitos, transportes) debajo,
+    // home (estadías, ícono hogar rojo) en medio, cities encima.
     this.eventsLayer = L.layerGroup().addTo(map);
+    this.homeLayer = L.layerGroup().addTo(map);
     this.citiesLayer = L.layerGroup().addTo(map);
 
     map.fitBounds([[39.9, -4.2], [48.9, 12.6]], { padding: [48, 48] });
@@ -101,7 +106,22 @@ export class MapContainer {
   private renderEvents(events: TripEventBase[]): void {
     if (!this.map || !this.eventsLayer) return;
     this.eventsLayer.clearLayers();
-    renderEventsOnMap(L, this.map, events).getLayers()
+    // Estadías se renderizan en homeLayer con ícono hogar; excluirlas acá evita el badge verde duplicado.
+    const nonStay = events.filter((ev) => ev.type !== 'estadia');
+    renderEventsOnMap(L, this.map, nonStay).getLayers()
       .forEach((layer) => this.eventsLayer!.addLayer(layer));
+  }
+
+  private renderHome(events: TripEventBase[]): void {
+    if (!this.homeLayer) return;
+    this.homeLayer.clearLayers();
+    const icon = makeIconBadge(L, '#ef4444', 'pi-home');
+    for (const ev of events) {
+      if (ev.type !== 'estadia') continue;
+      if (ev.originLat == null || ev.originLon == null) continue;
+      L.marker([ev.originLat, ev.originLon], { icon, zIndexOffset: 500 })
+        .bindTooltip(ev.title, { direction: 'top', offset: [0, -12] })
+        .addTo(this.homeLayer);
+    }
   }
 }
