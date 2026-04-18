@@ -17,6 +17,9 @@ export const ICON_GREYS = {
 /** Check-in / accommodation icon color — intense orange-red. */
 export const ESTADIA_COLOR = '#ea580c';
 
+/** Museum icon color — bordeaux wine, distinct from transports/food/parks. */
+export const MUSEUM_COLOR = '#722F37';
+
 /** Background and text colors per activity tipo — calendar chip palette. */
 export const ACTIVITY_TIPO_COLORS: Record<string, { bg: string; text: string }> = {
   event:     { bg: 'rgba(255,255,255,0.75)', text: '#f87171' },
