@@ -2,47 +2,65 @@
  * Semantic icon registry for trip events.
  *
  * Keys are Spanish semantic names stored in `events.icon`.
- * Values are raw icon identifiers compatible with `<app-icon>`:
- *   - `ms-*`  → Material Symbols Outlined
- *   - `pi-*`  → PrimeIcons
+ * Each entry carries both:
+ *   - `icon`: raw icon identifier compatible with `<app-icon>` (`ms-*` or `pi-*`)
+ *   - `color`: semantic hex color for this icon type (used by resolveEventColor)
  */
-export const ICON_REGISTRY: Record<string, string> = {
+
+export interface IconEntry {
+  icon: string;
+  color: string;
+}
+
+export const ICON_REGISTRY: Record<string, IconEntry> = {
   // Transporte
-  avion:      'ms-flight_takeoff',
-  tren:       'ms-train',
-  subte:      'ms-subway',
-  colectivo:  'ms-directions_bus',
-  taxi:       'ms-local_taxi',
-  auto:       'ms-directions_car',
-  caminata:   'ms-directions_walk',
-  bicicleta:  'ms-directions_bike',
-  scooter:    'ms-electric_scooter',
-  ferry:      'ms-directions_boat',
-  tranvia:    'ms-tram',
+  avion:      { icon: 'ms-flight_takeoff',    color: '#60a5fa' },
+  tren:       { icon: 'ms-train',             color: '#16a34a' },
+  subte:      { icon: 'ms-subway',            color: '#c084fc' },
+  colectivo:  { icon: 'ms-directions_bus',    color: '#fb923c' },
+  taxi:       { icon: 'ms-local_taxi',        color: '#fb923c' },
+  auto:       { icon: 'ms-directions_car',    color: '#94a3b8' },
+  caminata:   { icon: 'ms-directions_walk',   color: '#84cc16' },
+  bicicleta:  { icon: 'ms-directions_bike',   color: '#84cc16' },
+  scooter:    { icon: 'ms-electric_scooter',  color: '#facc15' },
+  ferry:      { icon: 'ms-directions_boat',   color: '#22d3ee' },
+  tranvia:    { icon: 'ms-tram',              color: '#c084fc' },
   // Hitos / actividades
-  comida:     'ms-lunch_dining',
-  cafe:       'ms-local_cafe',
-  museo:      'ms-museum',
-  monumento:  'ms-account_balance',
-  iglesia:    'ms-church',
-  parque:     'ms-park',
-  compras:    'ms-shopping_bag',
-  show:       'ms-theater_comedy',
-  corazon:    'pi-heart',
-  marcador:   'pi-map-marker',
+  comida:     { icon: 'ms-lunch_dining',      color: '#f97316' },
+  cafe:       { icon: 'ms-local_cafe',        color: '#8b6f47' },
+  museo:      { icon: 'ms-museum',            color: '#722F37' },
+  monumento:  { icon: 'ms-account_balance',   color: '#78716c' },
+  iglesia:    { icon: 'ms-church',            color: '#6366f1' },
+  parque:     { icon: 'ms-park',              color: '#16a34a' },
+  compras:    { icon: 'ms-shopping_bag',      color: '#db2777' },
+  show:       { icon: 'ms-theater_comedy',    color: '#a855f7' },
+  corazon:    { icon: 'pi-heart',             color: '#ef4444' },
+  marcador:   { icon: 'pi-map-marker',        color: '#0ea5e9' },
   // Estadías
-  hotel:      'ms-hotel',
-  airbnb:     'ms-home',
+  hotel:      { icon: 'ms-hotel',             color: '#ea580c' },
+  airbnb:     { icon: 'ms-home',              color: '#ef4444' },
   // Default
-  generico:   'ms-stars',
+  generico:   { icon: 'ms-stars',             color: '#6b7280' },
 };
 
 /**
  * Looks up a semantic icon key and returns the raw icon identifier,
  * or `null` if the key is not found in the registry.
+ *
+ * Backward-compatible: callers that only need the icon string continue to work.
  */
 export function iconFromType(type: string | null | undefined): string | null {
   if (!type) return null;
   const key = type.trim().toLowerCase();
-  return ICON_REGISTRY[key] ?? null;
+  return ICON_REGISTRY[key]?.icon ?? null;
+}
+
+/**
+ * Looks up a semantic icon key and returns the semantic color for that type,
+ * or `undefined` if the key is not found in the registry.
+ */
+export function colorFromType(type: string | null | undefined): string | undefined {
+  if (!type) return undefined;
+  const key = type.trim().toLowerCase();
+  return ICON_REGISTRY[key]?.color;
 }

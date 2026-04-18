@@ -10,7 +10,9 @@
  * component that applies the class directly via `<i class="..."></i>` or
  * a `<span class="material-symbols-outlined">`.
  */
-import { iconFromType } from './icon-registry';
+import { colorFromType, iconFromType } from './icon-registry';
+import { ESTADIA_COLOR, ICON_GREYS } from './theme/colors';
+import { transportColor } from './transport-colors';
 
 const TRANSPORT_ICONS: Record<string, string> = {
   flight:   'ms-flight_takeoff',
@@ -62,4 +64,37 @@ export function resolveEventIcon(event: { icon?: string | null; subtype?: string
   }
   // 3. Subtype fallback
   return transportIcon(event.subtype);
+}
+
+/**
+ * Resolves the display color for an event.
+ *
+ * Priority:
+ *  1. Semantic key in ICON_REGISTRY with color defined (e.g. "avion" → "#60a5fa")
+ *  2. type === 'estadia' → ESTADIA_COLOR
+ *  3. type === 'traslado' → transportColor(event.subtype)
+ *  4. Fallback → ICON_GREYS.hito (near-black)
+ */
+export function resolveEventColor(event: {
+  icon?: string | null;
+  subtype?: string | null;
+  type?: string | null;
+}): string {
+  // 1. Semantic key with color
+  const iconField = event.icon?.trim();
+  if (iconField) {
+    const color = colorFromType(iconField);
+    if (color) return color;
+  }
+
+  // 2. Estadía
+  if (event.type === 'estadia') return ESTADIA_COLOR;
+
+  // 3. Traslado → transport color by subtype
+  if (event.type === 'traslado') {
+    return transportColor(event.subtype ?? '');
+  }
+
+  // 4. Fallback
+  return ICON_GREYS.hito;
 }
