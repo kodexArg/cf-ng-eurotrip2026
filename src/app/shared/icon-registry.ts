@@ -15,7 +15,9 @@ export interface IconEntry {
 export const ICON_REGISTRY: Record<string, IconEntry> = {
   // Transporte
   avion:      { icon: 'ms-flight_takeoff',    color: '#60a5fa' },
+  aterriza:   { icon: 'ms-flight_land',       color: '#60a5fa' },
   tren:       { icon: 'ms-train',             color: '#16a34a' },
+  tren_llega: { icon: 'ms-directions_railway', color: '#16a34a' },
   subte:      { icon: 'ms-subway',            color: '#c084fc' },
   colectivo:  { icon: 'ms-directions_bus',    color: '#fb923c' },
   taxi:       { icon: 'ms-local_taxi',        color: '#fb923c' },
