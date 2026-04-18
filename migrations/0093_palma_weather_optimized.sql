@@ -44,14 +44,14 @@ DELETE FROM events_traslado
 WHERE event_id IN (
   SELECT id FROM events
   WHERE (city_in = 'pmi' OR city_out = 'pmi')
-    AND date BETWEEN '2026-04-28' AND '2026-05-01'
+    AND date BETWEEN '2026-04-28' AND '2026-05-02'
     AND id NOT IN ('ev-stay-auto-pmi', 'ev-leg-pmi-lon')
 );
 
--- Delete events
+-- Delete events (range extended a May 2 para limpiar taxi de 0092 y permitir re-inserción v3)
 DELETE FROM events
 WHERE (city_in = 'pmi' OR city_out = 'pmi')
-  AND date BETWEEN '2026-04-28' AND '2026-05-01'
+  AND date BETWEEN '2026-04-28' AND '2026-05-02'
   AND id NOT IN ('ev-stay-auto-pmi', 'ev-leg-pmi-lon');
 
 -- ═══════════════════════════════════════════════════════════════════════════════
