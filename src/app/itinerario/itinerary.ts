@@ -103,15 +103,19 @@ function dateToUtcMs(dateStr: string): number {
               (openEventInfo)="openEventInfo($event, row.block.city)"
             />
           } @else {
-            <div
-              class="mb-6 -mt-4 flex items-center justify-center gap-2 px-4 py-2 text-surface-600 select-none"
-              role="note"
-              [attr.aria-label]="'Cambio de huso horario de ' + row.fromLabel + ' a ' + row.toLabel"
-            >
-              <app-icon icon="pi-clock" size="1.25rem" aria-hidden="true" />
-              <span class="text-xl font-bold">
-                Cambio de horario: {{ row.fromLabel }} → {{ row.toLabel }}
-              </span>
+            <div class="my-6 flex items-center justify-center gap-3 px-4">
+              <span class="h-px flex-1 max-w-[8rem] bg-surface-200" aria-hidden="true"></span>
+              <div
+                class="flex items-center gap-2 rounded-full border border-surface-200 bg-surface-50 px-4 py-2 text-surface-600 select-none"
+                role="note"
+                [attr.aria-label]="'Cambio de huso horario de ' + row.fromLabel + ' a ' + row.toLabel"
+              >
+                <app-icon icon="pi-clock" size="1rem" aria-hidden="true" />
+                <span class="text-sm font-semibold">
+                  Cambio de horario: {{ row.fromLabel }} → {{ row.toLabel }}
+                </span>
+              </div>
+              <span class="h-px flex-1 max-w-[8rem] bg-surface-200" aria-hidden="true"></span>
             </div>
           }
         }
