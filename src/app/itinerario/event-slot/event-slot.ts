@@ -3,9 +3,8 @@ import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../sh
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { InfoRow } from '../info-row/info-row';
-import { transportColor } from '../../shared/transport-colors';
-import { resolveEventIcon, transportIcon } from '../../shared/transport-icon';
-import { ESTADIA_COLOR, ICON_GREYS, MUSEUM_COLOR } from '../../shared/theme/colors';
+import { resolveEventColor, resolveEventIcon, transportIcon } from '../../shared/transport-icon';
+import { ICON_GREYS } from '../../shared/theme/colors';
 import { AppIcon } from '../../shared/icon/icon';
 
 /**
@@ -151,15 +150,11 @@ export class EventSlot {
 
   protected readonly iconColor = computed((): string => {
     const e = this.event();
-    if (e.type === 'hito') {
-      return this.hitoIcon() === 'ms-museum' ? MUSEUM_COLOR : ICON_GREYS.hito;
-    }
-    if (e.type === 'estadia') return ESTADIA_COLOR;
-    if (e.type === 'traslado') {
-      if (this.isIntraCity()) return ICON_GREYS.transportIntra;
-      return transportColor(e.subtype);
-    }
-    return 'var(--p-surface-600)';
+    // Intra-city transit gets a distinct muted grey — this is a UI-level override
+    // that doesn't belong in the icon registry (same transport subtype can appear
+    // in both intra-city and cross-city contexts with different visual weight).
+    if (e.type === 'traslado' && this.isIntraCity()) return ICON_GREYS.transportIntra;
+    return resolveEventColor(e);
   });
 
   // When the itinerary splits a cross-city traslado into two halves it

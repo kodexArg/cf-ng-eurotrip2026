@@ -17,7 +17,7 @@ import { TrasladoBody } from './parts/traslado-body';
 import { EstadiaBody } from './parts/estadia-body';
 import { HitoBody } from './parts/hito-body';
 import { AppIcon } from '../../shared/icon/icon';
-import { resolveEventIcon } from '../../shared/transport-icon';
+import { resolveEventColor, resolveEventIcon } from '../../shared/transport-icon';
 
 /**
  * Booking card displaying a single trip event (traslado, estadia, or hito).
@@ -66,7 +66,7 @@ import { resolveEventIcon } from '../../shared/transport-icon';
               <app-icon
                 [icon]="headerIcon()!"
                 size="1.125rem"
-                color="var(--p-surface-600)"
+                [color]="headerIconColor()"
                 extraClass="shrink-0"
               />
             }
@@ -130,6 +130,8 @@ export class BookingCard {
     const icon = resolveEventIcon(this.event());
     return icon !== 'ms-directions_transit' ? icon : null;
   });
+
+  readonly headerIconColor = computed<string>(() => resolveEventColor(this.event()));
 
   readonly traslado = computed<TrasladoEvent | null>(() => {
     const e = this.event();
