@@ -179,21 +179,20 @@ export class EventSlot {
   }
 
   protected readonly trasladoPartidaIcon = computed((): string => {
-    const t = this.asTraslado();
-    // Special case: flight arribo uses flight_land; partida uses event.icon or flight_takeoff.
-    // resolveEventIcon prefers explicit event.icon; for flights without explicit icon it maps
-    // subtype 'flight' → 'ms-flight_takeoff' which is correct for partida.
-    return resolveEventIcon({ icon: t?.icon, subtype: t?.subtype });
+    // Partida: "sale de / despega desde" — always the departure glyph derived from subtype.
+    // We ignore event.icon here because event.icon describes the arrival (aterriza, tren_llega, etc.).
+    return transportIcon(this.asTraslado()?.subtype);
   });
 
   protected readonly trasladoArriboIcon = computed((): string => {
     const t = this.asTraslado();
-    // For arribo: if event has an explicit icon, honour it; otherwise:
-    //   - flight → ms-flight_land (special override)
-    //   - everything else → transportIcon(subtype)
-    if (t?.icon && t.icon.trim()) return t.icon;
+    // Arribo: use event.icon as a semantic key (aterriza, tren_llega, ...) resolved via registry.
+    // Fallback to subtype-specific arrival glyphs, then generic transport.
+    const resolved = resolveEventIcon({ icon: t?.icon, subtype: t?.subtype });
+    if (t?.icon?.trim()) return resolved;
     if (t?.subtype === 'flight') return 'ms-flight_land';
-    return transportIcon(t?.subtype);
+    if (t?.subtype === 'train') return 'ms-directions_railway';
+    return resolved;
   });
 
   protected readonly trasladoPartidaText = computed((): string => {
