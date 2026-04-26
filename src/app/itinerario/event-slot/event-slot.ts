@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { City, TripEvent, isEstadia, isHito, isTraslado, timeOf } from '../../shared/models';
+import { DoneBadge } from '../../shared/done-badge/done-badge';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
 import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { InfoRow } from '../info-row/info-row';
@@ -17,7 +18,7 @@ import { AppIcon } from '../../shared/icon/icon';
  */
 @Component({
   selector: 'app-event-slot',
-  imports: [InfoRow, ConfirmedBadge, MandatoryBadge, AppIcon],
+  imports: [InfoRow, DoneBadge, ConfirmedBadge, MandatoryBadge, AppIcon],
   template: `
     @switch (event().type) {
       @case ('hito') {
@@ -26,7 +27,7 @@ import { AppIcon } from '../../shared/icon/icon';
             [icon]="hitoIcon()"
             [iconColor]="iconColor()"
             [text]="h.title"
-            [class.opacity-60]="!h.confirmed && !h.mandatory"
+            [class.opacity-60]="!h.done && !h.confirmed && !h.mandatory"
           >
             @if (h.cardId) {
               <button
@@ -39,7 +40,9 @@ import { AppIcon } from '../../shared/icon/icon';
                 <app-icon icon="pi-lightbulb" size="0.85rem" />
               </button>
             }
-            @if (h.confirmed) {
+            @if (h.done) {
+              <app-done-badge />
+            } @else if (h.confirmed) {
               <app-confirmed-badge />
             } @else if (h.mandatory) {
               <app-mandatory-badge />
@@ -54,9 +57,11 @@ import { AppIcon } from '../../shared/icon/icon';
               [icon]="intraCityIcon()"
               [iconColor]="iconColor()"
               [text]="intraCityText()"
-              [class.opacity-60]="!t.confirmed && !t.mandatory"
+              [class.opacity-60]="!t.done && !t.confirmed && !t.mandatory"
             >
-              @if (t.confirmed) {
+              @if (t.done) {
+                <app-done-badge />
+              } @else if (t.confirmed) {
                 <app-confirmed-badge />
               } @else if (t.mandatory) {
                 <app-mandatory-badge />
@@ -68,9 +73,11 @@ import { AppIcon } from '../../shared/icon/icon';
                 [icon]="trasladoPartidaIcon()"
                 [iconColor]="iconColor()"
                 [text]="trasladoPartidaText()"
-                [class.opacity-60]="!t.confirmed && !t.mandatory"
+                [class.opacity-60]="!t.done && !t.confirmed && !t.mandatory"
               >
-                @if (t.confirmed && t.renderMode === 'partida') {
+                @if (t.done && t.renderMode === 'partida') {
+                  <app-done-badge />
+                } @else if (t.confirmed && t.renderMode === 'partida') {
                   <app-confirmed-badge />
                 } @else if (t.mandatory && t.renderMode === 'partida') {
                   <app-mandatory-badge />
@@ -82,9 +89,11 @@ import { AppIcon } from '../../shared/icon/icon';
                 [icon]="trasladoArriboIcon()"
                 [iconColor]="iconColor()"
                 [text]="trasladoArriboText()"
-                [class.opacity-60]="!t.confirmed && !t.mandatory"
+                [class.opacity-60]="!t.done && !t.confirmed && !t.mandatory"
               >
-                @if (t.confirmed) {
+                @if (t.done) {
+                  <app-done-badge />
+                } @else if (t.confirmed) {
                   <app-confirmed-badge />
                 } @else if (t.mandatory) {
                   <app-mandatory-badge />
@@ -100,9 +109,11 @@ import { AppIcon } from '../../shared/icon/icon';
             [icon]="estadiaIcon()"
             [iconColor]="iconColor()"
             [text]="stayText()"
-            [class.opacity-60]="!s.confirmed && !s.mandatory"
+            [class.opacity-60]="!s.done && !s.confirmed && !s.mandatory"
           >
-            @if (s.confirmed) {
+            @if (s.done) {
+              <app-done-badge />
+            } @else if (s.confirmed) {
               <app-confirmed-badge />
             } @else if (s.mandatory) {
               <app-mandatory-badge />
