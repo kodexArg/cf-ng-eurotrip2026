@@ -1,25 +1,26 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 /**
- * Green check icon indicating a confirmed event, optionally interactive.
+ * Amber check-circle icon indicating a completed (done) event, optionally interactive.
  *
  * @remarks
- * - `editable`: when true, clicking the icon emits `toggle` so the parent can flip the confirmed state.
+ * - `editable`: when true, clicking the icon emits `toggle` so the parent can flip the done state.
  */
 @Component({
-  selector: 'app-confirmed-badge',
+  selector: 'app-done-badge',
   standalone: true,
   template: `
     <i
-      class="pi pi-check text-xs ml-1"
-      style="color: var(--p-surface-400)"
+      class="pi pi-check-circle text-xs ml-1"
+      style="color: #f59e0b"
+      title="Hecho!"
       [class.cursor-pointer]="editable()"
       (click)="onClick()"
     ></i>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmedBadge {
+export class DoneBadge {
   readonly editable = input(false);
   readonly toggle = output<void>();
 

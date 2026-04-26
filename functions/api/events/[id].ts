@@ -19,7 +19,7 @@ const REFETCH_SQL = `
     e.timestamp_out AS timestampOut,
     e.city_in       AS cityIn,
     e.city_out      AS cityOut,
-    e.usd, e.icon, e.confirmed, e.variant,
+    e.usd, e.icon, e.confirmed, e.done, e.variant,
     e.card_id       AS cardId,
     e.notes,
     e.origin_lat       AS originLat,
@@ -58,6 +58,7 @@ interface EventRow {
   usd: number | null;
   icon: string;
   confirmed: number | boolean;
+  done: number | boolean;
   variant: string;
   cardId: string | null;
   notes: string | null;
@@ -96,6 +97,7 @@ function shapeEvent(r: EventRow) {
     usd: r.usd,
     icon: r.icon,
     confirmed: !!r.confirmed,
+    done: !!r.done,
     variant: r.variant,
     cardId: r.cardId,
     notes: r.notes,
@@ -145,6 +147,7 @@ const FIELDS_MAP: Record<string, string> = {
   usd: 'usd',
   icon: 'icon',
   confirmed: 'confirmed',
+  done: 'done',
   variant: 'variant',
   notes: 'notes',
   subtype: 'subtype',
@@ -191,8 +194,8 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
   for (const [key, col] of Object.entries(FIELDS_MAP)) {
     if (key in body) {
       eventSets.push(`${col} = ?`);
-      // Coerce confirmed boolean → integer
-      if (key === 'confirmed') {
+      // Coerce confirmed/done boolean → integer
+      if (key === 'confirmed' || key === 'done') {
         eventVals.push(body[key] ? 1 : 0);
       } else {
         eventVals.push(body[key]);
