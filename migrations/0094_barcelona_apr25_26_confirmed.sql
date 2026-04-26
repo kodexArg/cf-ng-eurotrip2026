@@ -15,7 +15,7 @@
 INSERT INTO events (id, type, subtype, slug, title, description, date, timestamp_in, timestamp_out, city_in, usd, icon, confirmed, variant, origin_lat, origin_lon) VALUES
 ('ev-bcn-apr25-shopping', 'hito', 'compras', 'bcn-shopping-20260425',
  'Shopping Barcelona centro',
- 'Compras por centro de Barcelona antes del mediodía. Passeig de Gràcia, Portal de l\'Àngel, El Corte Inglés.',
+ 'Compras por centro de Barcelona antes del mediodía. Passeig de Gràcia, Portal de l''Àngel, El Corte Inglés.',
  '2026-04-25', '2026-04-25T09:00:00+02:00', '2026-04-25T12:00:00+02:00', 'bcn', 0.00, 'compras', 1, 'both', 41.3870, 2.1700);
 
 -- Bus Turístico tarde (confirmado)
