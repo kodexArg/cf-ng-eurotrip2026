@@ -43,11 +43,13 @@ CREATE TABLE IF NOT EXISTS events (
   variant           TEXT NOT NULL DEFAULT 'both',
   card_id           TEXT,
   notes             TEXT,
+  created_at        TEXT,
+  lat               REAL,
+  lon               REAL,
   origin_lat        REAL,
   origin_lon        REAL,
   destination_lat   REAL,
   destination_lon   REAL,
-  waypoints         TEXT,
   origin_label      TEXT,
   destination_label TEXT
 );
@@ -58,7 +60,9 @@ CREATE TABLE IF NOT EXISTS events_traslado (
   fare         TEXT,
   vehicle_code TEXT,
   seat         TEXT,
-  duration_min INTEGER
+  duration_min INTEGER,
+  lat_out      REAL,
+  lon_out      REAL
 );
 
 CREATE TABLE IF NOT EXISTS events_estadia (
