@@ -27,7 +27,7 @@ import { AppIcon } from '../../shared/icon/icon';
             [icon]="hitoIcon()"
             [iconColor]="iconColor()"
             [text]="h.title"
-            [class.opacity-60]="!h.done && !h.confirmed && !h.mandatory"
+            [class.opacity-60]="!h.done && !h.mandatory"
           >
             @if (h.cardId) {
               <button
@@ -42,8 +42,6 @@ import { AppIcon } from '../../shared/icon/icon';
             }
             @if (h.done) {
               <app-done-badge />
-            } @else if (h.confirmed) {
-              <app-confirmed-badge />
             } @else if (h.mandatory) {
               <app-mandatory-badge />
             }
@@ -57,12 +55,10 @@ import { AppIcon } from '../../shared/icon/icon';
               [icon]="intraCityIcon()"
               [iconColor]="iconColor()"
               [text]="intraCityText()"
-              [class.opacity-60]="!t.done && !t.confirmed && !t.mandatory"
+              [class.opacity-60]="!t.done && !t.mandatory"
             >
               @if (t.done) {
                 <app-done-badge />
-              } @else if (t.confirmed) {
-                <app-confirmed-badge />
               } @else if (t.mandatory) {
                 <app-mandatory-badge />
               }
@@ -73,12 +69,10 @@ import { AppIcon } from '../../shared/icon/icon';
                 [icon]="trasladoPartidaIcon()"
                 [iconColor]="iconColor()"
                 [text]="trasladoPartidaText()"
-                [class.opacity-60]="!t.done && !t.confirmed && !t.mandatory"
+                [class.opacity-60]="!t.done && !t.mandatory"
               >
                 @if (t.done && t.renderMode === 'partida') {
                   <app-done-badge />
-                } @else if (t.confirmed && t.renderMode === 'partida') {
-                  <app-confirmed-badge />
                 } @else if (t.mandatory && t.renderMode === 'partida') {
                   <app-mandatory-badge />
                 }
@@ -89,12 +83,10 @@ import { AppIcon } from '../../shared/icon/icon';
                 [icon]="trasladoArriboIcon()"
                 [iconColor]="iconColor()"
                 [text]="trasladoArriboText()"
-                [class.opacity-60]="!t.done && !t.confirmed && !t.mandatory"
+                [class.opacity-60]="!t.done && !t.mandatory"
               >
                 @if (t.done) {
                   <app-done-badge />
-                } @else if (t.confirmed) {
-                  <app-confirmed-badge />
                 } @else if (t.mandatory) {
                   <app-mandatory-badge />
                 }
@@ -109,12 +101,10 @@ import { AppIcon } from '../../shared/icon/icon';
             [icon]="estadiaIcon()"
             [iconColor]="iconColor()"
             [text]="stayText()"
-            [class.opacity-60]="!s.done && !s.confirmed && !s.mandatory"
+            [class.opacity-60]="!s.done && !s.mandatory"
           >
             @if (s.done) {
               <app-done-badge />
-            } @else if (s.confirmed) {
-              <app-confirmed-badge />
             } @else if (s.mandatory) {
               <app-mandatory-badge />
             }

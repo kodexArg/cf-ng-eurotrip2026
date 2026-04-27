@@ -16,7 +16,6 @@ import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
   template: `
     <span
       class="block truncate rounded text-xs leading-none px-1 py-0.5 w-full"
-      [class.opacity-60]="!confirmed()"
       [style]="chipStyle()"
     >{{ label() }}</span>
   `,
