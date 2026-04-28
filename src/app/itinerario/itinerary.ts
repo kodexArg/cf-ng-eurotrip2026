@@ -193,42 +193,28 @@ export class ItineraryPage {
 
     for (const city of cities) {
       const cityEvents = byCity.get(city.id) ?? [];
-      if (cityEvents.length === 0) continue;
-
-      const dateSet = new Set(cityEvents.map((e) => e.date));
-      const dates = [...dateSet].sort();
-
-      const clusters: string[][] = [];
-      let current: string[] = [dates[0]];
-      for (let i = 1; i < dates.length; i++) {
-        const gapDays = (dateToUtcMs(dates[i]) - dateToUtcMs(current[current.length - 1])) / MS_PER_DAY;
-        if (gapDays > 2) {
-          clusters.push(current);
-          current = [dates[i]];
-        } else {
-          current.push(dates[i]);
-        }
-      }
-      clusters.push(current);
-
-      for (const cluster of clusters) {
-        const first = cluster[0];
-        const last = cluster[cluster.length - 1];
-        const clusterEvents = cityEvents.filter((e) => e.date >= first && e.date <= last);
-        const firstTimestamp = clusterEvents
-          .filter((e) => e.date === first)
-          .map((e) => e.timestampIn)
-          .filter((t): t is string => !!t)
-          .sort()[0] ?? `${first}T00:00:00`;
-        out.push({
-          city,
-          events: clusterEvents,
-          firstDay: first,
-          lastDay: last,
-          nightCount: cluster.length,
-          firstTimestamp,
-        });
-      }
+      
+      // Use city's arrival and departure dates instead of clustering events
+      const first = city.arrival;
+      const last = city.departure;
+      
+      // Filter events to only those within the city's date range
+      const clusterEvents = cityEvents.filter((e) => e.date >= first && e.date <= last);
+      
+      const firstTimestamp = clusterEvents
+        .filter((e) => e.date === first)
+        .map((e) => e.timestampIn)
+        .filter((t): t is string => !!t)
+        .sort()[0] ?? `${first}T00:00:00`;
+        
+      out.push({
+        city,
+        events: clusterEvents,
+        firstDay: first,
+        lastDay: last,
+        nightCount: city.nights,  // Use city's nights instead of calculating from dates
+        firstTimestamp,
+      });
     }
 
     out.sort((a, b) => {
