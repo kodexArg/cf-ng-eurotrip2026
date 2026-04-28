@@ -44,7 +44,7 @@ export const ICON_REGISTRY: Record<string, IconEntry> = {
   paseo:        { icon: 'ms-near_me',           color: '#84cc16' },
   mirador:      { icon: 'ms-landscape',         color: '#059669' },
   sendero:      { icon: 'ms-hiking',            color: '#65a30d' },
-  palmera:      { icon: 'ms-palm_beach',        color: '#0ea5e9' },
+  palmera:      { icon: 'ms-umbrella',          color: '#0ea5e9' },
   atardecer:    { icon: 'ms-wb_twilight',       color: '#f59e0b' },
   nocturno:     { icon: 'ms-nightlife',         color: '#6366f1' },
   castillo:     { icon: 'ms-castle',            color: '#78716c' },
@@ -63,7 +63,7 @@ export const ICON_REGISTRY: Record<string, IconEntry> = {
   vista:        { icon: 'ms-landscape',         color: '#059669' },
   torre:        { icon: 'ms-church',            color: '#6366f1' },
   basílica:     { icon: 'ms-church',            color: '#4338ca' },
-  puente:       { icon: 'ms-bridge',            color: '#78716c' },
+  puente:       { icon: 'ms-landscape',         color: '#78716c'},
   jardín:       { icon: 'ms-park',              color: '#16a34a' },
   // Estadías
   hotel:        { icon: 'ms-hotel',             color: '#ea580c' },
