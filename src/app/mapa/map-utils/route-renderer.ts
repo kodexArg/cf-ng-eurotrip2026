@@ -85,7 +85,8 @@ export function renderEventsOnMap(
     // Check if we have valid coordinates or waypoints to work with
     const hasOriginCoords = originLat != null && originLon != null;
     const hasDestinationCoords = destinationLat != null && destinationLon != null;
-    const hasWaypoints = ev.waypoints && ev.waypoints.length > 0;
+    const waypoints = ev.waypoints ?? [];
+    const hasWaypoints = waypoints.length > 0;
     
     // Skip events without any coordinate data
     if (!hasOriginCoords && !hasDestinationCoords && !hasWaypoints) continue;
@@ -95,7 +96,7 @@ export function renderEventsOnMap(
     if (hasOriginCoords) {
       origin = [originLat, originLon];
     } else if (hasWaypoints) {
-      origin = ev.waypoints[0];
+      origin = waypoints[0];
     }
     
     // If we still don't have an origin, skip this event
@@ -107,7 +108,7 @@ export function renderEventsOnMap(
       if (hasDestinationCoords) {
         dest = [destinationLat, destinationLon];
       } else if (hasWaypoints) {
-        dest = ev.waypoints[ev.waypoints.length - 1];
+        dest = waypoints[waypoints.length - 1];
       }
       
       // If we don't have a destination, skip this event
@@ -125,17 +126,13 @@ export function renderEventsOnMap(
         // Use all waypoints between origin and destination
         // If origin/destination coords exist, use them; otherwise use first/last waypoints
         if (hasOriginCoords && hasDestinationCoords) {
-          // Both origin and destination coords exist, use all waypoints in between
-          pts = [origin, ...ev.waypoints, dest];
+          pts = [origin, ...waypoints, dest];
         } else if (hasOriginCoords && !hasDestinationCoords) {
-          // Origin coords exist but destination is from last waypoint
-          pts = [origin, ...ev.waypoints];
+          pts = [origin, ...waypoints];
         } else if (!hasOriginCoords && hasDestinationCoords) {
-          // Origin is from first waypoint but destination coords exist
-          pts = [...ev.waypoints, dest];
+          pts = [...waypoints, dest];
         } else {
-          // Both origin and destination come from waypoints
-          pts = ev.waypoints;
+          pts = [...waypoints];
         }
       } 
       // Default to geodesic for all other cases for better accuracy
@@ -177,8 +174,8 @@ export function renderEventsOnMap(
       }
 
       // Add waypoint markers if they exist
-      if (ev.waypoints && ev.waypoints.length > 0) {
-        ev.waypoints.forEach((wp, index) => {
+      if (hasWaypoints) {
+        waypoints.forEach((wp, index) => {
           const wpIcon = makeIconBadge(L, '#94a3b8', 'pi-map-pin', 16);
           L.marker(wp as import('leaflet').LatLngExpression, { icon: wpIcon, interactive: false })
             .bindTooltip(`Waypoint ${index + 1}`, { direction: 'top', offset: [0, -12] })
