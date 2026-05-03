@@ -82,24 +82,61 @@ export function renderEventsOnMap(
   for (const ev of events) {
     const { type, subtype, originLat, originLon, destinationLat, destinationLon } = ev;
 
-    if (originLat == null || originLon == null) continue;
+    // Check if we have valid coordinates or waypoints to work with
+    const hasOriginCoords = originLat != null && originLon != null;
+    const hasDestinationCoords = destinationLat != null && destinationLon != null;
+    const hasWaypoints = ev.waypoints && ev.waypoints.length > 0;
+    
+    // Skip events without any coordinate data
+    if (!hasOriginCoords && !hasDestinationCoords && !hasWaypoints) continue;
 
-    const origin: [number, number] = [originLat, originLon];
+    // Determine origin point: use origin coords or first waypoint
+    let origin: [number, number] | undefined;
+    if (hasOriginCoords) {
+      origin = [originLat, originLon];
+    } else if (hasWaypoints) {
+      origin = ev.waypoints[0];
+    }
+    
+    // If we still don't have an origin, skip this event
+    if (!origin) continue;
 
     if (type === 'traslado') {
-      if (destinationLat == null || destinationLon == null) continue;
-      const dest: [number, number] = [destinationLat, destinationLon];
+      // Determine destination point: use destination coords or last waypoint
+      let dest: [number, number] | undefined;
+      if (hasDestinationCoords) {
+        dest = [destinationLat, destinationLon];
+      } else if (hasWaypoints) {
+        dest = ev.waypoints[ev.waypoints.length - 1];
+      }
+      
+      // If we don't have a destination, skip this event
+      if (!dest) continue;
 
-      // Determine the points for the route based on whether it's a flight or has waypoints
+      // Determine the points for the route based on available data
       let pts: [number, number][];
       
       // For flights, always use geodesic curves unless waypoints are explicitly provided
-      if (subtype === 'flight' && (!ev.waypoints || ev.waypoints.length === 0)) {
+      if (subtype === 'flight' && !hasWaypoints) {
         pts = greatCirclePoints(origin, dest, 30);
       } 
       // For other transport types or when waypoints are provided, use straight segments
-      else if (ev.waypoints && ev.waypoints.length > 0) {
-        pts = [origin, ...ev.waypoints, dest];
+      else if (hasWaypoints) {
+        // Use all waypoints between origin and destination
+        // If origin/destination coords exist, use them; otherwise use first/last waypoints
+        if (hasOriginCoords && hasDestinationCoords) {
+          // Both origin and destination coords exist, use all waypoints in between
+          pts = [origin, ...ev.waypoints, dest];
+        } else if (hasOriginCoords && !hasDestinationCoords) {
+          // Origin coords exist but destination is from last waypoint
+          pts = [origin, ...ev.waypoints];
+        } else if (!hasOriginCoords && hasDestinationCoords) {
+          // Origin is from first waypoint but destination coords exist
+          pts = [...ev.waypoints, dest];
+        } else {
+          // Both origin and destination come from waypoints
+          pts = ev.waypoints;
+        }
       } 
       // Default to geodesic for all other cases for better accuracy
       else {
