@@ -173,15 +173,8 @@ export function renderEventsOnMap(
         L.marker(midPt as import('leaflet').LatLngExpression, { icon, interactive: false }).addTo(group);
       }
 
-      // Add waypoint markers if they exist
-      if (hasWaypoints) {
-        waypoints.forEach((wp, index) => {
-          const wpIcon = makeIconBadge(L, '#94a3b8', 'pi-map-pin', 16);
-          L.marker(wp as import('leaflet').LatLngExpression, { icon: wpIcon, interactive: false })
-            .bindTooltip(`Waypoint ${index + 1}`, { direction: 'top', offset: [0, -12] })
-            .addTo(group);
-        });
-      }
+      // Waypoints are used for route path only — no dot markers on the map
+      // Only city/place markers should appear as dots
 
       continue;
     }
