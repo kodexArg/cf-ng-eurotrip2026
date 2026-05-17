@@ -201,11 +201,15 @@ export class EventSlot {
     if (!t) return '';
     const origin = this.resolveCityName(t.cityOut);
     const departTime = timeOf(t.timestampIn);
-    const company = t.company?.trim() || '—';
+    const company = t.company?.trim() || '';
     const vehicle = t.vehicleCode?.trim() || '';
-    const service = vehicle ? `${company} ${vehicle}` : company;
+    const service = [company, vehicle].filter(Boolean).join(' ');
     const verb = t.subtype === 'flight' ? 'Despega desde' : 'Sale de';
-    return `${verb} ${origin} a las ${departTime} por ${service}`;
+    // When the carrier/service is unknown, omit the "por …" tail entirely
+    // instead of rendering a meaningless "por —".
+    return service
+      ? `${verb} ${origin} a las ${departTime} por ${service}`
+      : `${verb} ${origin} a las ${departTime}`;
   });
 
   protected readonly trasladoArriboText = computed((): string => {
