@@ -101,7 +101,9 @@ CREATE TABLE IF NOT EXISTS photos (
   event_id    TEXT,
   caption     TEXT,
   taken_at    TEXT,
-  uploaded_at TEXT NOT NULL DEFAULT (datetime('now'))
+  uploaded_at TEXT NOT NULL DEFAULT (datetime('now')),
+  media_type  TEXT NOT NULL DEFAULT 'photo' CHECK (media_type IN ('photo', 'video')),
+  mime        TEXT
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
