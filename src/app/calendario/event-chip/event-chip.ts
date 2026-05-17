@@ -28,13 +28,17 @@ export class EventChip {
   readonly done      = input<boolean>(false);
 
   readonly chipStyle = computed(() => {
-    const { bg, text } = TIPO_CONFIG[this.tipo()];
+    const { text } = TIPO_CONFIG[this.tipo()];
     if (this.done()) {
-      return { 'background-color': 'rgba(245,158,11,0.15)', color: '#b45309', 'border': '1px solid rgba(245,158,11,0.4)' };
+      return { 'background-color': '#ffffff', color: '#b45309', 'border': '1px solid rgba(245,158,11,0.55)' };
     }
-    if (this.confirmed()) {
-      return { 'background-color': 'rgba(255,255,255,0.9)', color: text };
-    }
-    return { 'background-color': bg, color: text };
+    // Solid white chip with a subtle type-colored border so it stays legible
+    // on top of strongly-colored city cells (matches the accommodation chips).
+    return {
+      'background-color': '#ffffff',
+      color: text,
+      border: `1px solid ${text}33`,
+      'box-shadow': '0 1px 1px rgba(0,0,0,0.08)',
+    };
   });
 }
