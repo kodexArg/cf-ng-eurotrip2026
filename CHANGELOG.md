@@ -7,6 +7,16 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+- group: fotos-media-gallery
+  priority: normal
+  commit: pending
+  changes:
+    - feat(fotos): media gallery Ola 3 — group by place, video, owner upload
+    - feat(photo-item): render <video> with muted, metadata preview, play badge
+    - feat(lightbox-overlay): fullscreen video playback with controls; click no longer closes
+    - feat(upload-form): owner-only multipart upload — place select, image/video/*; live caption counter
+    - feat(gallery): fetch /api/photos + /api/cities, group media per city in trip order
+
 - group: fotos-media-upload
   priority: normal
   commit: 184cbaf
