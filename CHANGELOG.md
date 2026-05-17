@@ -9,7 +9,7 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 - group: cloudflare-access-auth-scaffolding
   priority: high
-  commit: pending
+  commit: 586ee0a
   changes:
     - feat(auth): Cloudflare Access + Google scaffolding (dormant until configured)
     - feat(access.ts): verify Cf-Access-Jwt-Assertion against team JWKS (RS256, aud, exp)
