@@ -117,3 +117,17 @@ amplifytools.xcconfig
 \#current-cloud-backend
 .wrangler/
 proxy.conf.json
+
+# === Secrets / credentials — never commit (hardened 2026-05-17) ===
+resources/
+**/resources/
+*.secret.json
+*secret*.json
+client_secret*.json
+*client-secret*
+*-credentials*.json
+credentials*.json
+service-account*.json
+gha-creds-*.json
+*.json.key
+google-oauth*.json
