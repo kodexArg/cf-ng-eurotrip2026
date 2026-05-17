@@ -7,11 +7,29 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
-- group: fotos-media-schema
+- group: fotos-media-upload
   priority: normal
-  commit: c934fc5
+  commit: 184cbaf
   changes:
-    - feat(fotos): formalize photos table with media_type and mime columns
+    - feat(fotos): photo and video upload endpoint with R2 storage
+
+- group: calendario-chip-style
+  priority: normal
+  commit: cd06dc4
+  changes:
+    - style(calendario): white legible event chips on colored city cells
+
+- group: ciudad-color-contrast
+  priority: normal
+  commit: e70d24e
+  changes:
+    - fix(calendario): lighten Santiago and Buenos Aires color for legibility
+
+- group: santiago-departure-recovery
+  priority: high
+  commit: 56ad67c
+  changes:
+    - fix(calendario): recover lost April 19 Santiago departure and city mapping
 
 ### Open
 
