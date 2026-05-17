@@ -7,6 +7,19 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+- group: cloudflare-access-auth-scaffolding
+  priority: high
+  commit: pending
+  changes:
+    - feat(auth): Cloudflare Access + Google scaffolding (dormant until configured)
+    - feat(access.ts): verify Cf-Access-Jwt-Assertion against team JWKS (RS256, aud, exp)
+    - feat(middleware): Access mode gated by CF_ACCESS_TEAM_DOMAIN+CF_ACCESS_AUD env vars
+    - feat(api/auth/whoami.ts): identity endpoint for welcome page
+    - feat(api/access-log.ts): editor-only visit log with 500-entry limit
+    - feat(bienvenida): post-login welcome showing email, role, logout link
+    - feat(migrations): 0108_access_log.sql with access_log table + indexes
+    - docs(auth): scaffolding ready for Cloudflare Zero Trust + Google IdP activation
+
 - group: fotos-media-gallery
   priority: normal
   commit: be74a7e
