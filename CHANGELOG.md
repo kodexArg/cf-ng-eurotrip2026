@@ -9,7 +9,7 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 - group: fotos-media-gallery
   priority: normal
-  commit: pending
+  commit: be74a7e
   changes:
     - feat(fotos): media gallery Ola 3 — group by place, video, owner upload
     - feat(photo-item): render <video> with muted, metadata preview, play badge
