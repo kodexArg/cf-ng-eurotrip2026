@@ -44,7 +44,7 @@ import { EstadiaDetail } from './estadia-detail';
       class="rounded-lg border p-3"
       [style.borderColor]="borderColor()"
       [style.backgroundColor]="bgColor()"
-      [style.opacity]="event().confirmed || event().mandatory ? '1' : '0.7'"
+      [style.opacity]="event().done || event().mandatory ? '1' : '0.7'"
     >
       <div class="flex items-start gap-2">
         <i
@@ -102,11 +102,11 @@ import { EstadiaDetail } from './estadia-detail';
                   title="Gratis"
                 >gratis</span>
               }
-              @if (event().confirmed) {
+              @if (event().done) {
                 <i
                   class="pi pi-check-circle"
-                  title="Confirmado"
-                  style="font-size: 12px; color: #16a34a"
+                  title="Hecho!"
+                  style="font-size: 12px; color: #f59e0b"
                 ></i>
               } @else if (event().mandatory) {
                 <i

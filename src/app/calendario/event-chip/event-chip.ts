@@ -16,7 +16,6 @@ import { ActivityTipo, TIPO_CONFIG } from '../../shared/models/activity.model';
   template: `
     <span
       class="block truncate rounded text-xs leading-none px-1 py-0.5 w-full"
-      [class.opacity-60]="!confirmed()"
       [style]="chipStyle()"
     >{{ label() }}</span>
   `,
@@ -26,9 +25,13 @@ export class EventChip {
   readonly label     = input.required<string>();
   readonly tipo      = input<ActivityTipo>('visit');
   readonly confirmed = input<boolean>(false);
+  readonly done      = input<boolean>(false);
 
   readonly chipStyle = computed(() => {
     const { bg, text } = TIPO_CONFIG[this.tipo()];
+    if (this.done()) {
+      return { 'background-color': 'rgba(245,158,11,0.15)', color: '#b45309', 'border': '1px solid rgba(245,158,11,0.4)' };
+    }
     if (this.confirmed()) {
       return { 'background-color': 'rgba(255,255,255,0.9)', color: text };
     }

@@ -12,6 +12,7 @@ interface RawEventRow {
   timestampIn: string | null;
   icon: string | null;
   confirmed: number | null;
+  done: number | null;
   usd: number | null;
   notes: string | null;
   cityIn: string | null;
@@ -35,6 +36,7 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
        timestamp_in AS timestampIn,
        icon,
        confirmed,
+       done,
        usd,
        notes,
        city_in   AS cityIn,

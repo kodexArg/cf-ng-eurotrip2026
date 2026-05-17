@@ -3,7 +3,7 @@ import { ActivityTipo } from '../../shared/models/activity.model';
 import { City, TripEvent, isHito, isTraslado, isEstadia, timeOf } from '../../shared/models';
 import { EventChip } from '../event-chip/event-chip';
 
-type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean };
+type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; done: boolean };
 
 const DOW_ES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 const MON_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -48,7 +48,7 @@ function formatHoverHeader(ymd: string): string {
           <span class="text-xs font-semibold block" [class]="dayNumberClass()">{{ dayNumber() }}</span>
           <div class="flex flex-col gap-0.5 mt-0.5">
             @for (event of events(); track event.tag) {
-              <app-event-chip [label]="event.tag" [tipo]="event.tipo" [confirmed]="event.confirmed" />
+              <app-event-chip [label]="event.tag" [tipo]="event.tipo" [confirmed]="event.confirmed" [done]="event.done" />
             }
           </div>
         </div>
@@ -88,7 +88,7 @@ function formatHoverHeader(ymd: string): string {
               @for (row of hoverRows(); track row.id) {
                 <div
                   class="flex items-start gap-1.5"
-                  [style.opacity]="row.confirmed ? '1' : '0.62'"
+                  [style.opacity]="row.confirmed || row.done ? '1' : '0.62'"
                 >
                   <span
                     style="
@@ -114,13 +114,20 @@ function formatHoverHeader(ymd: string): string {
                         color: #222;
                         word-wrap: break-word;
                       "
-                      [style.fontWeight]="row.confirmed ? '500' : '400'"
+                      [style.fontWeight]="row.confirmed || row.done ? '500' : '400'"
                     >{{ row.title }}</div>
                   </div>
-                  @if (row.confirmed) {
+                  @if (row.done) {
                     <i
                       class="pi pi-check-circle"
-                      style="font-size: 10px; color: #16a34a; padding-top: 3px; flex-shrink: 0"
+                      style="font-size: 10px; color: #f59e0b; padding-top: 3px; flex-shrink: 0"
+                      title="Hecho!"
+                    ></i>
+                  } @else if (row.confirmed) {
+                    <i
+                      class="pi pi-check"
+                      style="font-size: 10px; color: var(--p-surface-400); padding-top: 3px; flex-shrink: 0"
+                      title="Confirmado"
                     ></i>
                   }
                 </div>
@@ -191,6 +198,7 @@ export class CalendarDay {
           icon: e.icon || 'pi-circle',
           title: e.title,
           confirmed: e.confirmed,
+          done: e.done,
           color,
         };
       });

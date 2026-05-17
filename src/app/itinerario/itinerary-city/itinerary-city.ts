@@ -99,7 +99,7 @@ export class ItineraryCity {
   });
 
   readonly hasUnconfirmed = computed(() =>
-    this.events().some((e) => !e.confirmed && !e.mandatory)
+    this.events().some((e) => !e.done && !e.confirmed && !e.mandatory)
   );
 
   readonly cityWeather = computed(() => this.weatherService.getWeather(this.city().slug)());

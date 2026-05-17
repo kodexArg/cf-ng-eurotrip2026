@@ -4,8 +4,9 @@
 -- Revierte el plan alternativo Jet2→Gatwick + Gatwick Express que había en la DB.
 
 -- 1. Limpiar el plan alternativo Jet2 + Gatwick Express
-DELETE FROM events_traslado WHERE event_id IN ('ev-leg-pmi-lgw', 'ev-leg-lgw-lon');
-DELETE FROM events WHERE id IN ('ev-leg-pmi-lgw', 'ev-leg-lgw-lon');
+--    También limpiar el Stansted Express creado en 0012 (será re-creado abajo)
+DELETE FROM events_traslado WHERE event_id IN ('ev-leg-pmi-lgw', 'ev-leg-lgw-lon', 'ev-leg-stn-lon');
+DELETE FROM events WHERE id IN ('ev-leg-pmi-lgw', 'ev-leg-lgw-lon', 'ev-leg-stn-lon');
 
 -- 2. Insertar Ryanair FR28 PMI → Stansted (CONFIRMADO)
 INSERT INTO events (id, type, subtype, slug, title, description, date,

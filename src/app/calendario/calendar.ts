@@ -21,6 +21,7 @@ interface CalendarActivity {
   tipo: ActivityTipo;
   tag: string;
   confirmed: boolean;
+  done: boolean;
   cityColor: string;
 }
 
@@ -116,7 +117,7 @@ export class CalendarPage {
     const showAll = this.showIdeas();
     const map = new Map<string, CalendarActivity[]>();
     for (const e of this.events()) {
-      if (!showAll && !e.confirmed) continue;
+      if (!showAll && !e.confirmed && !e.done) continue;
       let tipo: ActivityTipo;
       if (isHito(e)) {
         tipo = HITO_SUBTYPE_TO_TIPO[e.subtype] ?? 'visit';
@@ -136,6 +137,7 @@ export class CalendarPage {
         tipo,
         tag: e.title,
         confirmed: e.confirmed,
+        done: e.done,
         cityColor: cityColor.get(e.cityIn) ?? 'var(--p-surface-400)',
       };
       const list = map.get(e.date);
@@ -143,7 +145,7 @@ export class CalendarPage {
       else map.set(e.date, [activity]);
     }
     for (const list of map.values()) {
-      list.sort((a, b) => (b.confirmed ? 1 : 0) - (a.confirmed ? 1 : 0));
+      list.sort((a, b) => (b.done ? 2 : 0) + (b.confirmed ? 1 : 0) - (a.done ? 2 : 0) - (a.confirmed ? 1 : 0));
     }
     return map;
   });
@@ -152,7 +154,7 @@ export class CalendarPage {
     const showAll = this.showIdeas();
     const map = new Map<string, TripEvent[]>();
     for (const e of this.events()) {
-      if (!showAll && !e.confirmed) continue;
+      if (!showAll && !e.confirmed && !e.done) continue;
       const list = map.get(e.date);
       if (list) list.push(e);
       else map.set(e.date, [e]);

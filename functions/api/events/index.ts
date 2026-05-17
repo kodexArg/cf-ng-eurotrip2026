@@ -36,7 +36,7 @@ const REFETCH_SQL = `
     e.timestamp_out AS timestampOut,
     e.city_in       AS cityIn,
     e.city_out      AS cityOut,
-    e.usd, e.icon, e.confirmed, e.variant,
+    e.usd, e.icon, e.confirmed, e.done, e.variant,
     e.card_id       AS cardId,
     e.notes,
     e.origin_lat       AS originLat,
@@ -75,6 +75,7 @@ interface EventRow {
   usd: number | null;
   icon: string;
   confirmed: number | boolean;
+  done: number | boolean;
   variant: string;
   cardId: string | null;
   notes: string | null;
@@ -113,6 +114,7 @@ function shapeEvent(r: EventRow) {
     usd: r.usd,
     icon: r.icon,
     confirmed: !!r.confirmed,
+    done: !!r.done,
     variant: r.variant,
     cardId: r.cardId,
     notes: r.notes,
@@ -193,14 +195,15 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   const icon = (body.icon as string | undefined) ?? 'pi pi-calendar';
   const variant = (body.variant as string | undefined) ?? 'both';
   const confirmed = body.confirmed ? 1 : 0;
+  const done = body.done ? 1 : 0;
 
   // Build INSERT for events
   const insertEvent = ctx.env.DB.prepare(`
     INSERT INTO events (
       id, type, subtype, slug, title, description, date,
       timestamp_in, timestamp_out, city_in, city_out,
-      usd, icon, confirmed, variant, card_id, notes
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      usd, icon, confirmed, done, variant, card_id, notes
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(
     id,
     type,
@@ -216,6 +219,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     (body.usd as number | null) ?? null,
     icon,
     confirmed,
+    done,
     variant,
     (body.cardId as string | null) ?? null,
     (body.notes as string | null) ?? null,

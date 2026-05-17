@@ -7,6 +7,12 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+- group: fotos-media-schema
+  priority: normal
+  commit: c934fc5
+  changes:
+    - feat(fotos): formalize photos table with media_type and mime columns
+
 ### Open
 
 - `event-form.ts` (381 LOC) Signal Forms migration blocked. ADR-004 mandates

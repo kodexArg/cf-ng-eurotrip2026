@@ -42,6 +42,7 @@ interface EventRow {
   usd: number | null;
   icon: string;
   confirmed: number | boolean;
+  done: number | boolean;
   mandatory: number | boolean;
   variant: string;
   cardId: string | null;
@@ -83,7 +84,7 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
         e.timestamp_out AS timestampOut,
         e.city_in       AS cityIn,
         e.city_out      AS cityOut,
-        e.usd, e.icon, e.confirmed, e.mandatory, e.variant,
+        e.usd, e.icon, e.confirmed, e.done, e.mandatory, e.variant,
         e.card_id       AS cardId,
         e.notes,
         e.origin_lat       AS originLat,
@@ -125,6 +126,7 @@ export const onRequest: PagesFunction<Env> = async (ctx) => {
       usd: r.usd,
       icon: r.icon,
       confirmed: !!r.confirmed,
+      done: !!r.done,
       mandatory: !!r.mandatory,
       variant: r.variant,
       cardId: r.cardId,

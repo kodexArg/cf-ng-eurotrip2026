@@ -4,7 +4,7 @@ import { City, TripEvent, isTraslado } from '../../shared/models';
 import { getDayColorFromCities, getTravelGradientFromEvents, toDateStr } from '../calendar-utils';
 import { CalendarDay } from '../calendar-day/calendar-day';
 
-type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; cityColor?: string };
+type CalEvent = { description: string; tipo: ActivityTipo; tag: string; confirmed: boolean; done: boolean; cityColor?: string };
 
 type CellData = {
   key: string;
@@ -103,7 +103,7 @@ export class CalendarMonth {
       const gradient = gradientsByDay.get(dateStr) ?? null;
       let bgColor = gradient ? null : getDayColorFromCities(dateStr, cities);
       if (!bgColor && !gradient && events.length > 0) {
-        const confirmedEvent = events.find((e) => e.confirmed && e.cityColor);
+        const confirmedEvent = events.find((e) => (e.done || e.confirmed) && e.cityColor);
         if (confirmedEvent?.cityColor) bgColor = confirmedEvent.cityColor;
       }
       cells.push({ key: dateStr, day: d, dateStr, events, rawEvents, bgColor, gradient, inactive: false });

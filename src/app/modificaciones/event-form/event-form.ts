@@ -61,8 +61,8 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Título + Confirmado -->
-  <div class="grid grid-cols-[1fr_auto] gap-3 items-end">
+  <!-- Título + Confirmado + Hecho -->
+  <div class="grid grid-cols-[1fr_auto_auto] gap-3 items-end">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Título *</label>
       <input pInputText [(ngModel)]="formTitle" placeholder="Título del evento" class="w-full" />
@@ -70,6 +70,10 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     <div class="flex items-center gap-2 pb-1.5">
       <p-checkbox [(ngModel)]="formConfirmed" [binary]="true" inputId="evt-confirmed" />
       <label for="evt-confirmed" class="text-sm select-none" style="color: var(--p-surface-700)">Confirmado</label>
+    </div>
+    <div class="flex items-center gap-2 pb-1.5">
+      <p-checkbox [(ngModel)]="formDone" [binary]="true" inputId="evt-done" />
+      <label for="evt-done" class="text-sm select-none" style="color: var(--p-surface-700)">Hecho</label>
     </div>
   </div>
 
@@ -249,6 +253,7 @@ export class EventForm {
   formCityOut = '';
   formUsd: number | null = null;
   formConfirmed = false;
+  formDone = false;
   formCompany = '';
   formFare = '';
   formVehicleCode = '';
@@ -297,7 +302,8 @@ export class EventForm {
       this.formCityIn !== e.cityIn ||
       this.formCityOut !== (e.cityOut ?? '') ||
       this.formUsd !== e.usd ||
-      this.formConfirmed !== e.confirmed
+      this.formConfirmed !== e.confirmed ||
+      this.formDone !== e.done
     );
   }
 
@@ -320,6 +326,7 @@ export class EventForm {
         this.formCityOut = e.cityOut ?? '';
         this.formUsd = e.usd;
         this.formConfirmed = e.confirmed;
+        this.formDone = e.done;
         if (e.type === EVENT_TYPES.TRASLADO) {
           const t = e as TrasladoEvent;
           this.formCompany = t.company ?? '';
@@ -380,6 +387,7 @@ export class EventForm {
     this.formCityOut = '';
     this.formUsd = null;
     this.formConfirmed = false;
+    this.formDone = false;
     this.formCompany = '';
     this.formFare = '';
     this.formVehicleCode = '';
@@ -472,6 +480,7 @@ export class EventForm {
       cityOut: this.formType === EVENT_TYPES.TRASLADO ? (this.formCityOut || null) : null,
       usd: this.formUsd,
       confirmed: this.formConfirmed,
+      done: this.formDone,
     };
     if (this.formType === EVENT_TYPES.TRASLADO) {
       Object.assign(base, {

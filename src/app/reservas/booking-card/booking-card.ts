@@ -11,6 +11,7 @@ import {
 } from '../../shared/models/event.model';
 import { City } from '../../shared/models/city.model';
 import { ConfirmedBadge } from '../../shared/confirmed-badge/confirmed-badge';
+import { DoneBadge } from '../../shared/done-badge/done-badge';
 import { MandatoryBadge } from '../../shared/mandatory-badge/mandatory-badge';
 import { BookingTypeChip } from '../booking-type-chip/booking-type-chip';
 import { TrasladoBody } from './parts/traslado-body';
@@ -33,7 +34,7 @@ import { resolveEventColor, resolveEventIcon } from '../../shared/transport-icon
 @Component({
   selector: 'app-booking-card',
   standalone: true,
-  imports: [ConfirmedBadge, MandatoryBadge, BookingTypeChip, Tooltip, TrasladoBody, EstadiaBody, HitoBody, AppIcon],
+  imports: [DoneBadge, ConfirmedBadge, MandatoryBadge, BookingTypeChip, Tooltip, TrasladoBody, EstadiaBody, HitoBody, AppIcon],
   template: `
     <div class="flex rounded-lg">
       @if (selectable()) {
@@ -87,7 +88,9 @@ import { resolveEventColor, resolveEventIcon } from '../../shared/transport-icon
                 [showDelay]="300"
               >gratis</span>
             }
-            @if (event().confirmed) {
+            @if (event().done) {
+              <app-done-badge />
+            } @else if (event().confirmed) {
               <app-confirmed-badge />
             } @else if (event().mandatory) {
               <app-mandatory-badge />

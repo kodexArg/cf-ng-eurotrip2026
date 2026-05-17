@@ -34,6 +34,6 @@ export class MapPage {
 
   /** Only render confirmed events — no planned, mandatory-only, or unconfirmed transfers. */
   readonly confirmedEvents = computed(() =>
-    (this.eventsResource.value() ?? []).filter((ev) => ev.confirmed === true)
+    (this.eventsResource.value() ?? []).filter((ev) => !!ev.confirmed)
   );
 }
