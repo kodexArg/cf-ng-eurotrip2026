@@ -28,6 +28,8 @@ import { AppIcon } from '../../shared/icon/icon';
             [iconColor]="iconColor()"
             [text]="h.title"
             [class.opacity-60]="!h.done && !h.mandatory"
+            [class.line-through]="isHitoCerrado()"
+            [class.text-red-600]="isHitoCerrado()"
           >
             @if (h.cardId) {
               <button
@@ -137,6 +139,13 @@ export class EventSlot {
   protected readonly asEstadia = computed(() => {
     const e = this.event();
     return isEstadia(e) ? e : null;
+  });
+
+  // A "cerrado" hito (e.g. an attraction we found closed) renders the title
+  // in red with a strikethrough — a record of what didn't happen.
+  protected readonly isHitoCerrado = computed((): boolean => {
+    const h = this.asHito();
+    return h?.subtype === 'cerrado';
   });
 
   protected readonly hitoIcon = computed((): string => {
