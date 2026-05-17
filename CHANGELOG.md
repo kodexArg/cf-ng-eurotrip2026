@@ -9,7 +9,7 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 - group: fotos-media-schema
   priority: normal
-  commit: pending
+  commit: c934fc5
   changes:
     - feat(fotos): formalize photos table with media_type and mime columns
 
