@@ -44,6 +44,10 @@ export const routes: Routes = [
     loadComponent: () => import('./modificaciones/modificaciones').then((m) => m.ModificacionesPage),
   },
   {
+    path: 'bienvenida',
+    loadComponent: () => import('./bienvenida/bienvenida').then((m) => m.BienvenidaPage),
+  },
+  {
     path: 'access',
     loadComponent: () => import('./access/access-request').then((m) => m.AccessRequestPage),
   },
