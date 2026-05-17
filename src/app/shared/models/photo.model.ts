@@ -6,4 +6,6 @@ export interface Photo {
   dateTaken: string | null;
   uploaderNote: string | null;
   createdAt: string;
+  mediaType: 'photo' | 'video';
+  mime: string | null;
 }
