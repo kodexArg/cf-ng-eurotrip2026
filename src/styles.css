@@ -7,7 +7,7 @@
   font-family: "Material Symbols Outlined";
   font-style: normal;
   font-weight: 100 700;
-  font-display: swap;
+  font-display: block;
   src: url("/assets/fonts/material-symbols-outlined.woff2") format("woff2");
 }
 
@@ -32,7 +32,7 @@
 /* Custom font-face for PrimeIcons with local font file and swap display */
 @font-face {
   font-family: 'primeicons';
-  font-display: swap;
+  font-display: block;
   src: url('/assets/fonts/primeicons.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
@@ -100,4 +100,14 @@ p-togglebutton.filter-wrap .p-togglebutton-label {
 .p-selectbutton.filter-wrap .p-selectbutton-option {
   border-radius: 999px !important;
   margin: 0 !important;
+}
+
+/* ── Anti-FOUC for icon webfonts ──────────────────────────────────────────
+   font-display:block keeps the fallback period invisible, and the inline
+   <head> gate in index.html adds html.fonts-loading until BOTH icon fonts
+   are actually decoded. While loading we hide icon glyphs so the stretched
+   ligature text (e.g. "home") never flashes on any page / any device. */
+html.fonts-loading .material-symbols-outlined,
+html.fonts-loading .pi {
+  visibility: hidden !important;
 }
