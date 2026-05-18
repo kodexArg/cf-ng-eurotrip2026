@@ -25,16 +25,21 @@ import { Panel } from 'primeng/panel';
       header="Subir foto o video"
       [toggleable]="true"
       [collapsed]="true"
-      styleClass="mb-6"
+      styleClass="mb-6 rounded-lg border border-surface-200"
     >
       <form
-        class="flex flex-col gap-3"
+        class="flex flex-col gap-4 px-1 pt-1 pb-2"
         (submit)="submit($event)"
       >
-        <div class="flex flex-col gap-1">
-          <label class="text-xs text-surface-600">Lugar</label>
+        <!-- Lugar -->
+        <div class="flex flex-col gap-1.5">
+          <label
+            class="text-xs font-semibold uppercase tracking-wide"
+            style="color: var(--p-surface-500)"
+          >Lugar</label>
           <select
-            class="border border-surface-300 rounded px-2 py-1 text-sm bg-white"
+            class="w-full border border-surface-300 rounded-lg px-3 py-2.5 text-sm bg-surface-0 focus:outline-none focus:ring-2 focus:ring-primary-300"
+            style="color: var(--p-surface-800); min-height: 44px"
             [value]="cityId()"
             (change)="cityId.set($any($event.target).value)"
             required
@@ -46,8 +51,12 @@ import { Panel } from 'primeng/panel';
           </select>
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label class="text-xs text-surface-600">Archivo (imagen o video)</label>
+        <!-- Archivo -->
+        <div class="flex flex-col gap-1.5">
+          <label
+            class="text-xs font-semibold uppercase tracking-wide"
+            style="color: var(--p-surface-500)"
+          >Archivo (imagen o video)</label>
           <p-fileupload
             mode="basic"
             [customUpload]="true"
@@ -58,30 +67,49 @@ import { Panel } from 'primeng/panel';
             styleClass="w-full"
           />
           @if (file()) {
-            <span class="text-xs text-surface-500 mt-0.5">{{ file()!.name }}</span>
+            <span
+              class="text-xs leading-snug mt-0.5"
+              style="color: var(--p-surface-500)"
+            >{{ file()!.name }}</span>
           }
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label class="text-xs text-surface-600">
-            Epígrafe <span class="text-surface-400">({{ caption().length }}/150)</span>
+        <!-- Epígrafe -->
+        <div class="flex flex-col gap-1.5">
+          <label
+            class="text-xs font-semibold uppercase tracking-wide"
+            style="color: var(--p-surface-500)"
+          >
+            Epígrafe
+            <span style="color: var(--p-surface-400); font-weight: 400; text-transform: none; letter-spacing: 0">
+              ({{ caption().length }}/150)
+            </span>
           </label>
           <input
             type="text"
             maxlength="150"
-            class="border border-surface-300 rounded px-2 py-1 text-sm"
+            class="w-full border border-surface-300 rounded-lg px-3 py-2.5 text-sm bg-surface-0 focus:outline-none focus:ring-2 focus:ring-primary-300"
+            style="color: var(--p-surface-800); min-height: 44px"
             [value]="caption()"
             (input)="caption.set($any($event.target).value)"
             placeholder="Texto corto opcional"
           />
         </div>
 
-        <div class="flex flex-col gap-1">
-          <div class="flex items-center justify-between">
-            <label class="text-xs text-surface-600">Fecha de la foto</label>
-            <label class="flex items-center gap-1.5 text-xs text-surface-600 cursor-pointer select-none">
+        <!-- Fecha -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <label
+              class="text-xs font-semibold uppercase tracking-wide"
+              style="color: var(--p-surface-500)"
+            >Fecha de la foto</label>
+            <label
+              class="flex items-center gap-1.5 text-xs cursor-pointer select-none"
+              style="color: var(--p-surface-600)"
+            >
               <input
                 type="checkbox"
+                class="w-4 h-4"
                 [checked]="noDate()"
                 (change)="noDate.set($any($event.target).checked)"
               />
@@ -102,16 +130,22 @@ import { Panel } from 'primeng/panel';
         </div>
 
         @if (errorMsg()) {
-          <p class="text-xs text-red-600 m-0">{{ errorMsg() }}</p>
+          <p
+            class="text-xs m-0 rounded-lg px-3 py-2"
+            style="color: #dc2626; background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.2)"
+          >{{ errorMsg() }}</p>
         }
 
-        <button
-          type="submit"
-          class="self-start bg-primary-600 text-white text-sm rounded px-4 py-1.5 disabled:opacity-50"
-          [disabled]="busy() || !cityId() || !file()"
-        >
-          {{ busy() ? 'Subiendo…' : 'Subir' }}
-        </button>
+        <div class="flex justify-end pt-1">
+          <button
+            type="submit"
+            class="text-sm font-semibold rounded-lg px-5 py-2.5 disabled:opacity-50 transition-opacity"
+            style="background: var(--p-primary-color, #2563eb); color: #fff; min-height: 44px; min-width: 96px; border: none; cursor: pointer"
+            [disabled]="busy() || !cityId() || !file()"
+          >
+            {{ busy() ? 'Subiendo…' : 'Subir' }}
+          </button>
+        </div>
       </form>
     </p-panel>
   `,

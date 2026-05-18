@@ -33,17 +33,24 @@ interface CityGroup {
   selector: 'app-gallery',
   imports: [Message, Skeleton, Carousel, Image, UploadForm],
   template: `
-    <div class="max-w-5xl mx-auto p-4">
-      <h1 class="text-2xl font-bold mb-4 text-surface-800 select-none">Fotos del viaje</h1>
+    <div class="max-w-5xl mx-auto px-3 py-4 sm:px-4">
+      <!-- Page title — mirrors calendar's day-detail header weight/size -->
+      <div class="mb-4 flex items-center gap-2">
+        <h1
+          class="text-base font-bold leading-tight m-0 select-none"
+          style="color: var(--p-surface-800)"
+        >Fotos del viaje</h1>
+      </div>
 
       @if (auth.isOwner() && citiesResource.value()?.length) {
         <app-upload-form [cities]="citiesResource.value()!" (uploaded)="reload()" />
       }
 
       @if (photosResource.isLoading()) {
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Skeleton grid: 1 col mobile, 2 col sm, 3 col md -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           @for (i of [1,2,3,4,5,6]; track i) {
-            <p-skeleton height="220px" />
+            <p-skeleton height="200px" styleClass="rounded-lg" />
           }
         </div>
       } @else if (photosResource.error()) {
@@ -54,15 +61,42 @@ interface CityGroup {
         </div>
       } @else {
         @for (g of groups(); track g.cityId) {
-          <section class="mb-8 rounded-lg overflow-hidden border border-surface-200">
-            <div class="p-4 text-white select-none" [style.background-color]="g.color">
-              <h2 class="text-xl font-bold m-0">{{ g.cityName }}</h2>
+          <!--
+            City section — same surface/card pattern as day-detail-dialog rows:
+            rounded-lg border border-surface-200, colored left border + tinted header.
+          -->
+          <section
+            class="mb-6 rounded-lg overflow-hidden"
+            style="border: 1px solid var(--p-surface-200)"
+          >
+            <!-- City header: 4px left border accent, tinted bg, matches dialog header -->
+            <div
+              class="px-4 pt-4 pb-3 select-none"
+              [style.borderLeft]="'4px solid ' + g.color"
+              [style.background]="headerBg(g.color)"
+            >
+              <div
+                class="text-base font-bold leading-tight"
+                [style.color]="g.color"
+              >{{ g.cityName }}</div>
             </div>
-            <div class="p-4 bg-surface-0 flex flex-col gap-5">
+
+            <!-- Date groups inside the city card -->
+            <div class="px-3 py-3 sm:px-4 flex flex-col gap-4" style="background: var(--p-surface-0)">
               @for (dg of g.dateGroups; track dg.date) {
                 <div class="flex flex-col gap-2">
                   @if (dg.label) {
-                    <h3 class="text-sm font-semibold text-surface-700 m-0 select-none">{{ dg.label }}</h3>
+                    <!--
+                      Date sub-header — mirrors "text-xs mt-1 flex items-center"
+                      subtitle style from day-detail-dialog.
+                    -->
+                    <div
+                      class="text-xs flex items-center gap-1.5"
+                      style="color: var(--p-surface-600)"
+                    >
+                      <i class="pi pi-calendar" style="font-size: 0.625rem"></i>
+                      <span class="font-semibold">{{ dg.label }}</span>
+                    </div>
                   }
                   <p-carousel
                     [value]="dg.photos"
@@ -72,17 +106,24 @@ interface CityGroup {
                     [responsiveOptions]="responsive"
                   >
                     <ng-template #item let-photo>
-                      <div class="p-2 flex flex-col items-center">
+                      <div class="px-1 pb-1 flex flex-col items-center">
                         <p-image
                           [src]="mediaUrl(photo)"
                           [preview]="true"
                           styleClass="block w-full"
-                          imageClass="w-full rounded-md"
-                          [imageStyle]="{ height: '13rem', width: '100%', 'object-fit': 'cover' }"
+                          imageClass="w-full rounded-lg"
+                          [imageStyle]="{ height: '11rem', width: '100%', 'object-fit': 'cover' }"
                           [alt]="photo.caption ?? ''"
                         />
                         @if (photo.caption) {
-                          <p class="text-sm text-surface-700 font-medium mt-2 m-0 text-center leading-snug">
+                          <!--
+                            Caption: mirrors event description style —
+                            text-xs leading-snug surface-600
+                          -->
+                          <p
+                            class="text-xs leading-snug mt-1.5 m-0 text-center w-full"
+                            style="color: var(--p-surface-600)"
+                          >
                             {{ photo.caption }}
                           </p>
                         }
@@ -170,6 +211,17 @@ export class GalleryPage {
     const dt = new Date(y, m - 1, d);
     const s = dt.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
     return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  /** Tint a city's hex color to a subtle header background (mirrors day-detail-dialog). */
+  headerBg(color: string): string {
+    const m = /^#?([0-9a-f]{6})$/i.exec(color.trim());
+    if (!m) return 'rgba(0,0,0,0.03)';
+    const n = parseInt(m[1], 16);
+    const r = (n >> 16) & 0xff;
+    const g = (n >> 8) & 0xff;
+    const b = n & 0xff;
+    return `rgba(${r},${g},${b},0.08)`;
   }
 
   reload(): void {
