@@ -9,11 +9,19 @@ import { City, Photo } from '../shared/models';
 import { AuthService } from '../shared/services/auth.service';
 import { environment } from '../../environments/environment';
 
+interface DateGroup {
+  /** ISO date string, or null for generic (no-date) photos. */
+  date: string | null;
+  /** Pretty label: '' for generic, localized date otherwise. */
+  label: string;
+  photos: Photo[];
+}
+
 interface CityGroup {
   cityId: string;
   cityName: string;
   color: string;
-  photos: Photo[];
+  dateGroups: DateGroup[];
 }
 
 /**
@@ -50,30 +58,39 @@ interface CityGroup {
             <div class="p-4 text-white select-none" [style.background-color]="g.color">
               <h2 class="text-xl font-bold m-0">{{ g.cityName }}</h2>
             </div>
-            <div class="p-4 bg-surface-0">
-              <p-carousel
-                [value]="g.photos"
-                [numVisible]="3"
-                [numScroll]="1"
-                [circular]="g.photos.length > 3"
-                [responsiveOptions]="responsive"
-              >
-                <ng-template #item let-photo>
-                  <div class="p-2 flex flex-col items-center">
-                    <p-image
-                      [src]="mediaUrl(photo)"
-                      [preview]="true"
-                      styleClass="block w-full"
-                      imageClass="w-full rounded-md"
-                      [imageStyle]="{ height: '13rem', width: '100%', 'object-fit': 'cover' }"
-                      [alt]="photo.caption ?? ''"
-                    />
-                    @if (photo.caption) {
-                      <p class="text-xs text-surface-600 mt-2 m-0 text-center">{{ photo.caption }}</p>
-                    }
-                  </div>
-                </ng-template>
-              </p-carousel>
+            <div class="p-4 bg-surface-0 flex flex-col gap-5">
+              @for (dg of g.dateGroups; track dg.date) {
+                <div class="flex flex-col gap-2">
+                  @if (dg.label) {
+                    <h3 class="text-sm font-semibold text-surface-700 m-0 select-none">{{ dg.label }}</h3>
+                  }
+                  <p-carousel
+                    [value]="dg.photos"
+                    [numVisible]="3"
+                    [numScroll]="1"
+                    [circular]="dg.photos.length > 3"
+                    [responsiveOptions]="responsive"
+                  >
+                    <ng-template #item let-photo>
+                      <div class="p-2 flex flex-col items-center">
+                        <p-image
+                          [src]="mediaUrl(photo)"
+                          [preview]="true"
+                          styleClass="block w-full"
+                          imageClass="w-full rounded-md"
+                          [imageStyle]="{ height: '13rem', width: '100%', 'object-fit': 'cover' }"
+                          [alt]="photo.caption ?? ''"
+                        />
+                        @if (photo.caption) {
+                          <p class="text-sm text-surface-700 font-medium mt-2 m-0 text-center leading-snug">
+                            {{ photo.caption }}
+                          </p>
+                        }
+                      </div>
+                    </ng-template>
+                  </p-carousel>
+                </div>
+              }
             </div>
           </section>
         }
@@ -111,9 +128,7 @@ export class GalleryPage {
         cityId: c.id,
         cityName: c.name,
         color: c.color,
-        photos: (byCity.get(c.id) ?? []).sort((a, b) =>
-          (a.dateTaken ?? '￿').localeCompare(b.dateTaken ?? '￿'),
-        ),
+        dateGroups: this.buildDateGroups(byCity.get(c.id) ?? []),
       }));
     const unknownGroups: CityGroup[] = [...byCity.entries()]
       .filter(([id]) => !cityById.has(id))
@@ -121,10 +136,41 @@ export class GalleryPage {
         cityId: id,
         cityName: 'Sin ubicación',
         color: '#64748b',
-        photos: ps,
+        dateGroups: this.buildDateGroups(ps),
       }));
     return [...knownOrder, ...unknownGroups];
   });
+
+  /**
+   * Sub-group a city's photos by `dateTaken`. Generic (no-date) photos form
+   * a single labelless group rendered FIRST; dated groups follow ascending.
+   */
+  private buildDateGroups(photos: Photo[]): DateGroup[] {
+    const byDate = new Map<string, Photo[]>();
+    const generic: Photo[] = [];
+    for (const p of photos) {
+      const d = p.dateTaken?.trim();
+      if (!d) {
+        generic.push(p);
+      } else {
+        (byDate.get(d) ?? byDate.set(d, []).get(d)!).push(p);
+      }
+    }
+    const dated: DateGroup[] = [...byDate.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, ps]) => ({ date, label: this.formatDate(date), photos: ps }));
+    const result: DateGroup[] = [];
+    if (generic.length) result.push({ date: null, label: '', photos: generic });
+    return [...result, ...dated];
+  }
+
+  private formatDate(iso: string): string {
+    const [y, m, d] = iso.split('-').map(Number);
+    if (!y || !m || !d) return iso;
+    const dt = new Date(y, m - 1, d);
+    const s = dt.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
 
   reload(): void {
     this.refresh.update((n) => n + 1);
