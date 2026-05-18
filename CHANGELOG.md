@@ -7,6 +7,16 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+- group: fotos-city-grouped-gallery
+  priority: high
+  commit: 916e66a
+  changes:
+    - fix(fotos): group gallery by city (itinerary order) instead of date_taken
+    - fix(gallery.ts): DayGroup→CityGroup, renamed groupBy cityId, removed DatePipe
+    - fix(gallery): seed photos (with dates) and app-uploaded photos (NULL date) now coexist per city
+    - fix(gallery): block label is city name, consistent for entire block; unknown city_ids → "Sin ubicación"
+    - verify(migrations): 0112–0114 city_ids confirmed matching upload form canonical ids (bcn/lon/mad/par/pmi/rom/scl)
+
 - group: cloudflare-access-auth-scaffolding
   priority: high
   commit: 586ee0a
