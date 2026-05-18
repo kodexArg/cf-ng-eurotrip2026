@@ -112,7 +112,7 @@ function formatLongDate(ymd: string): string {
               aria-label="Cerrar"
             >✕</button>
           </div>
-          @if (totalUsd() > 0 || sortedEvents().length > 0) {
+          @if (sortedEvents().length > 0) {
             <div
               class="text-xs mt-2 flex items-center gap-3 flex-wrap"
               style="color: var(--p-surface-500)"
@@ -122,12 +122,6 @@ function formatLongDate(ymd: string): string {
                 {{ sortedEvents().length }}
                 {{ sortedEvents().length === 1 ? 'evento' : 'eventos' }}
               </span>
-              @if (totalUsd() > 0) {
-                <span style="color: var(--p-surface-300)">·</span>
-                <span class="flex items-center gap-1" style="color: #16a34a">
-                  USD {{ totalUsd() }}
-                </span>
-              }
             </div>
           }
         </div>
@@ -187,10 +181,6 @@ export class DayDetailDialog {
       if (tb) return 1;
       return 0;
     })
-  );
-
-  protected readonly totalUsd = computed(() =>
-    this.events().reduce((acc, e) => acc + (e.usd ?? 0), 0)
   );
 
   protected readonly headerBg = computed(() => {
