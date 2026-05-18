@@ -10,20 +10,18 @@ const URL = `${HOST}/api/map/events`;
 
 // Each row: [id, expectedConfirmed (1|0|null=skip), expectedUsd (number|null=skip)]
 // These are the post-0044 invariants that must hold in prod for the trip to be "shipped".
+// Post-rectification invariants (stale rows for events removed by later
+// migrations — Stonehenge coach, pmi-peguera leg, old London stay/legs —
+// were dropped on 2026-05-18 so the smoke reflects the real prod state).
 const EXPECTED = [
   ['ev-stay-auto-pmi',          1, 428.32],
-  ['ev-stay-auto-lon',          1, 320.12],
   ['ev-stay-auto-par',          1, 213.00],
   ['est-rom-airbnb-colosseo',   1, 451.00],
-  ['ev-lon-may03-stonehenge',   1, 303.00],
   ['ev-leg-lon-par',            1, 328.27],
   ['ev-leg-leo-express',        1,  38.91],
-  ['ev-leg-pmi-peguera',        1,   8.81],
   ['ev-leg-stn-lon',            1,  null],
-  ['ev-leg-lon-victoria-kings-cross', 1, null],
   ['ev-leg-par-gdn-hotel',      1,  null],
   ['ev-leg-rom-termini-hotel',  1,  null],
-  ['ev-leg-lon-stonehenge-coach', 1, null],
 ];
 
 const fail = [];
