@@ -4,6 +4,8 @@ import { DatePicker } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { City } from '../../shared/models';
+import { FileUpload, FileSelectEvent } from 'primeng/fileupload';
+import { Panel } from 'primeng/panel';
 
 /**
  * Owner-only media upload form for the trip gallery.
@@ -17,91 +19,101 @@ import { City } from '../../shared/models';
  */
 @Component({
   selector: 'app-upload-form',
-  imports: [DatePicker, FormsModule],
+  imports: [DatePicker, FormsModule, FileUpload, Panel],
   template: `
-    <form
-      class="bg-surface-50 border border-surface-200 rounded-lg p-4 mb-6 flex flex-col gap-3"
-      (submit)="submit($event)"
+    <p-panel
+      header="Subir foto o video"
+      [toggleable]="true"
+      [collapsed]="true"
+      styleClass="mb-6"
     >
-      <h2 class="text-sm font-semibold text-surface-700 m-0">Subir foto o video</h2>
-
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-surface-600">Lugar</label>
-        <select
-          class="border border-surface-300 rounded px-2 py-1 text-sm bg-white"
-          [value]="cityId()"
-          (change)="cityId.set($any($event.target).value)"
-          required
-        >
-          <option value="" disabled>Elegí un lugar…</option>
-          @for (c of cities(); track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-surface-600">Archivo (imagen o video)</label>
-        <input
-          type="file"
-          accept="image/*,video/*"
-          class="text-sm"
-          (change)="onFile($event)"
-          required
-        />
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-surface-600">
-          Epígrafe <span class="text-surface-400">({{ caption().length }}/150)</span>
-        </label>
-        <input
-          type="text"
-          maxlength="150"
-          class="border border-surface-300 rounded px-2 py-1 text-sm"
-          [value]="caption()"
-          (input)="caption.set($any($event.target).value)"
-          placeholder="Texto corto opcional"
-        />
-      </div>
-
-      <div class="flex flex-col gap-1">
-        <div class="flex items-center justify-between">
-          <label class="text-xs text-surface-600">Fecha de la foto</label>
-          <label class="flex items-center gap-1.5 text-xs text-surface-600 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              [checked]="noDate()"
-              (change)="noDate.set($any($event.target).checked)"
-            />
-            Sin fecha (genérica)
-          </label>
-        </div>
-        <p-datepicker
-          [(ngModel)]="dateTaken"
-          name="dateTaken"
-          dateFormat="dd/mm/yy"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          appendTo="body"
-          placeholder="Elegí una fecha…"
-          [disabled]="noDate()"
-          styleClass="w-full"
-        />
-      </div>
-
-      @if (errorMsg()) {
-        <p class="text-xs text-red-600 m-0">{{ errorMsg() }}</p>
-      }
-
-      <button
-        type="submit"
-        class="self-start bg-primary-600 text-white text-sm rounded px-4 py-1.5 disabled:opacity-50"
-        [disabled]="busy() || !cityId() || !file()"
+      <form
+        class="flex flex-col gap-3"
+        (submit)="submit($event)"
       >
-        {{ busy() ? 'Subiendo…' : 'Subir' }}
-      </button>
-    </form>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-surface-600">Lugar</label>
+          <select
+            class="border border-surface-300 rounded px-2 py-1 text-sm bg-white"
+            [value]="cityId()"
+            (change)="cityId.set($any($event.target).value)"
+            required
+          >
+            <option value="" disabled>Elegí un lugar…</option>
+            @for (c of cities(); track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-surface-600">Archivo (imagen o video)</label>
+          <p-fileupload
+            mode="basic"
+            [customUpload]="true"
+            chooseLabel="Elegir archivo…"
+            accept="image/*,video/*"
+            [maxFileSize]="524288000"
+            (onSelect)="onFileSelect($event)"
+            styleClass="w-full"
+          />
+          @if (file()) {
+            <span class="text-xs text-surface-500 mt-0.5">{{ file()!.name }}</span>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-xs text-surface-600">
+            Epígrafe <span class="text-surface-400">({{ caption().length }}/150)</span>
+          </label>
+          <input
+            type="text"
+            maxlength="150"
+            class="border border-surface-300 rounded px-2 py-1 text-sm"
+            [value]="caption()"
+            (input)="caption.set($any($event.target).value)"
+            placeholder="Texto corto opcional"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center justify-between">
+            <label class="text-xs text-surface-600">Fecha de la foto</label>
+            <label class="flex items-center gap-1.5 text-xs text-surface-600 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                [checked]="noDate()"
+                (change)="noDate.set($any($event.target).checked)"
+              />
+              Sin fecha (genérica)
+            </label>
+          </div>
+          <p-datepicker
+            [(ngModel)]="dateTaken"
+            name="dateTaken"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            [readonlyInput]="true"
+            appendTo="body"
+            placeholder="Elegí una fecha…"
+            [disabled]="noDate()"
+            styleClass="w-full"
+          />
+        </div>
+
+        @if (errorMsg()) {
+          <p class="text-xs text-red-600 m-0">{{ errorMsg() }}</p>
+        }
+
+        <button
+          type="submit"
+          class="self-start bg-primary-600 text-white text-sm rounded px-4 py-1.5 disabled:opacity-50"
+          [disabled]="busy() || !cityId() || !file()"
+        >
+          {{ busy() ? 'Subiendo…' : 'Subir' }}
+        </button>
+      </form>
+    </p-panel>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -119,9 +131,8 @@ export class UploadForm {
   readonly busy = signal(false);
   readonly errorMsg = signal<string | null>(null);
 
-  onFile(ev: Event): void {
-    const input = ev.target as HTMLInputElement;
-    this.file.set(input.files?.[0] ?? null);
+  onFileSelect(ev: FileSelectEvent): void {
+    this.file.set(ev.files?.[0] ?? null);
   }
 
   async submit(ev: Event): Promise<void> {
