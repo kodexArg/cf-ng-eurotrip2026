@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { DatePicker } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { City } from '../../shared/models';
 
@@ -15,7 +17,7 @@ import { City } from '../../shared/models';
  */
 @Component({
   selector: 'app-upload-form',
-  imports: [],
+  imports: [DatePicker, FormsModule],
   template: `
     <form
       class="bg-surface-50 border border-surface-200 rounded-lg p-4 mb-6 flex flex-col gap-3"
@@ -63,6 +65,31 @@ import { City } from '../../shared/models';
         />
       </div>
 
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center justify-between">
+          <label class="text-xs text-surface-600">Fecha de la foto</label>
+          <label class="flex items-center gap-1.5 text-xs text-surface-600 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              [checked]="noDate()"
+              (change)="noDate.set($any($event.target).checked)"
+            />
+            Sin fecha (genérica)
+          </label>
+        </div>
+        <p-datepicker
+          [(ngModel)]="dateTaken"
+          name="dateTaken"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          appendTo="body"
+          placeholder="Elegí una fecha…"
+          [disabled]="noDate()"
+          styleClass="w-full"
+        />
+      </div>
+
       @if (errorMsg()) {
         <p class="text-xs text-red-600 m-0">{{ errorMsg() }}</p>
       }
@@ -87,6 +114,8 @@ export class UploadForm {
   readonly cityId = signal('');
   readonly caption = signal('');
   readonly file = signal<File | null>(null);
+  readonly dateTaken = signal<Date | null>(null);
+  readonly noDate = signal(false);
   readonly busy = signal(false);
   readonly errorMsg = signal<string | null>(null);
 
@@ -106,12 +135,19 @@ export class UploadForm {
     fd.append('file', f);
     fd.append('city_id', this.cityId());
     if (this.caption().trim()) fd.append('caption', this.caption().trim());
+    const d = this.dateTaken();
+    if (!this.noDate() && d) {
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      fd.append('date_taken', iso);
+    }
 
     try {
       await firstValueFrom(this.http.post('/api/photos', fd));
       this.caption.set('');
       this.file.set(null);
       this.cityId.set('');
+      this.dateTaken.set(null);
+      this.noDate.set(false);
       this.uploaded.emit();
     } catch {
       this.errorMsg.set('No se pudo subir. Verificá que estés logueado como owner y que el archivo sea imagen o video.');
