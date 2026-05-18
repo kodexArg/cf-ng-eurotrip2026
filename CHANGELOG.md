@@ -7,6 +7,17 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+- group: fotos-feature-overhaul
+  priority: high
+  commit: 0d60cb4
+  changes:
+    - feat(fotos): gallery hierarchy City→Date→optional caption→photo; generic photos (NULL date) first per city
+    - feat(fotos): upload form redesign — PrimeNG p-fileupload + collapsible p-panel + p-datepicker + "Sin fecha" toggle
+    - refactor(gallery.ts): new CityGroup type, grouped by itinerary city order (not date_taken)
+    - feat(migrations): 0115_seed_photos_generic_nodate.sql applied to production — 6 seed covers (bcn/lon/mad/par/pmi/rom) now generic-first; ph-seed-scl removed
+    - style(fotos): mobile-first redesign aligned with itinerario calendar visual language (surface cards, 4px left-border headers, responsive grid)
+    - data-op(production): deleted 8 Santiago photos from prod D1 + R2 bucket at user request
+
 - group: fotos-city-grouped-gallery
   priority: high
   commit: 916e66a
