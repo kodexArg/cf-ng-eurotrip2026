@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Message } from 'primeng/message';
 import { Skeleton } from 'primeng/skeleton';
@@ -6,8 +6,13 @@ import { Carousel } from 'primeng/carousel';
 import { Image } from 'primeng/image';
 import { UploadForm } from './upload-form/upload-form';
 import { City, Photo } from '../shared/models';
-import { AuthService } from '../shared/services/auth.service';
 import { environment } from '../../environments/environment';
+
+interface WhoAmI {
+  accessActive: boolean;
+  email: string | null;
+  editor: boolean;
+}
 
 interface DateGroup {
   /** ISO date string, or null for generic (no-date) photos. */
@@ -42,7 +47,7 @@ interface CityGroup {
         >Fotos del viaje</h1>
       </div>
 
-      @if (auth.isOwner() && citiesResource.value()?.length) {
+      @if (canEdit() && citiesResource.value()?.length) {
         <app-upload-form [cities]="citiesResource.value()!" (uploaded)="reload()" />
       }
 
@@ -107,14 +112,25 @@ interface CityGroup {
                   >
                     <ng-template #item let-photo>
                       <div class="px-1 pb-1 flex flex-col items-center">
-                        <p-image
-                          [src]="mediaUrl(photo)"
-                          [preview]="true"
-                          styleClass="block w-full"
-                          imageClass="w-full rounded-lg"
-                          [imageStyle]="{ height: '11rem', width: '100%', 'object-fit': 'cover' }"
-                          [alt]="photo.caption ?? ''"
-                        />
+                        @if (photo.mediaType === 'video') {
+                          <video
+                            [src]="mediaUrl(photo)"
+                            controls
+                            preload="metadata"
+                            playsinline
+                            class="w-full rounded-lg block"
+                            style="height: 11rem; width: 100%; object-fit: cover; background: #000"
+                          ></video>
+                        } @else {
+                          <p-image
+                            [src]="mediaUrl(photo)"
+                            [preview]="true"
+                            styleClass="block w-full"
+                            imageClass="w-full rounded-lg"
+                            [imageStyle]="{ height: '11rem', width: '100%', 'object-fit': 'cover' }"
+                            [alt]="photo.caption ?? ''"
+                          />
+                        }
                         @if (photo.caption) {
                           <!--
                             Caption: mirrors event description style —
@@ -141,8 +157,11 @@ interface CityGroup {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GalleryPage {
-  readonly auth = inject(AuthService);
   private readonly refresh = signal(0);
+
+  /** Cloudflare Access identity; editor flag drives the upload surface. */
+  private readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
+  readonly canEdit = computed(() => this.who.value()?.editor === true);
 
   readonly photosResource = httpResource<Photo[]>(() => `/api/photos?r=${this.refresh()}`);
   readonly citiesResource = httpResource<City[]>(() => '/api/cities');
