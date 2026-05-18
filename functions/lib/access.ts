@@ -14,9 +14,6 @@
 export const EDITOR_EMAILS: ReadonlySet<string> = new Set([
   'gcavedal@gmail.com',
   'vanybou@gmail.com',
-  'hcavedal@gmail.com',
-  'jcavedal@gmail.com',
-  'brujigra@gmail.com',
 ]);
 
 export interface AccessIdentity {

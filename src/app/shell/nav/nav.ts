@@ -1,8 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { httpResource } from '@angular/common/http';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { AppIcon } from '../../shared/icon/icon';
+
+interface WhoAmI {
+  accessActive: boolean;
+  email: string | null;
+  editor: boolean;
+}
 
 @Component({
   selector: 'app-nav',
@@ -10,7 +17,7 @@ import { AppIcon } from '../../shared/icon/icon';
   template: `
     <nav class="hidden md:block">
       <div class="flex items-center">
-        <p-menubar [model]="menuItems" styleClass="flex-1" />
+        <p-menubar [model]="menuItems()" styleClass="flex-1" />
         <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
         <a routerLink="/admin" routerLinkActive="text-primary" class="no-underline">
           <p-button icon="pi pi-cog" [text]="true" size="small" />
@@ -69,14 +76,16 @@ import { AppIcon } from '../../shared/icon/icon';
            [style.borderColor]="rla5.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
           <app-icon icon="pi-wallet" size="0.75rem" /><span>Reservas</span>
         </a>
-        <a routerLink="/modificaciones" routerLinkActive #rla6="routerLinkActive" aria-label="Editar"
-           class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
-           [class.border-surface-200]="!rla6.isActive"
-           [style.color]="rla6.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
-           [style.background]="rla6.isActive ? 'var(--p-primary-color)' : 'transparent'"
-           [style.borderColor]="rla6.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <app-icon icon="pi-pencil" size="0.75rem" /><span>Editar</span>
-        </a>
+        @if (canEdit()) {
+          <a routerLink="/modificaciones" routerLinkActive #rla6="routerLinkActive" aria-label="Editar"
+             class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
+             [class.border-surface-200]="!rla6.isActive"
+             [style.color]="rla6.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
+             [style.background]="rla6.isActive ? 'var(--p-primary-color)' : 'transparent'"
+             [style.borderColor]="rla6.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
+            <app-icon icon="pi-pencil" size="0.75rem" /><span>Editar</span>
+          </a>
+        }
         <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
         <a routerLink="/admin" routerLinkActive #rlaAdmin="routerLinkActive" aria-label="Admin"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -92,13 +101,24 @@ import { AppIcon } from '../../shared/icon/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Nav {
-  readonly menuItems: MenuItem[] = [
-    { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },
-    { label: 'Itinerario', icon: 'pi pi-list', routerLink: '/itinerario' },
-    { label: 'Mapa', icon: 'pi pi-map', routerLink: '/mapa' },
-    { label: 'Sitios', icon: 'pi pi-map-marker', routerLink: '/sitios' },
-    { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
-    { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
-    { label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' },
-  ];
+  /** Cloudflare Access identity; `editor` is true only for allowlisted emails. */
+  private readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
+
+  /** Only allowlisted editor emails (gcavedal / vanybou) see the edit surface. */
+  readonly canEdit = computed(() => this.who.value()?.editor === true);
+
+  readonly menuItems = computed<MenuItem[]>(() => {
+    const items: MenuItem[] = [
+      { label: 'Calendario', icon: 'pi pi-calendar', routerLink: '/calendario' },
+      { label: 'Itinerario', icon: 'pi pi-list', routerLink: '/itinerario' },
+      { label: 'Mapa', icon: 'pi pi-map', routerLink: '/mapa' },
+      { label: 'Sitios', icon: 'pi pi-map-marker', routerLink: '/sitios' },
+      { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
+      { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
+    ];
+    if (this.canEdit()) {
+      items.push({ label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' });
+    }
+    return items;
+  });
 }
