@@ -60,12 +60,14 @@ interface DayGroup {
                 [circular]="g.photos.length > 3"
                 [responsiveOptions]="responsive"
               >
-                <ng-template let-photo pTemplate="item">
-                  <div class="p-2">
+                <ng-template #item let-photo>
+                  <div class="p-2 flex flex-col items-center">
                     <p-image
                       [src]="mediaUrl(photo)"
                       [preview]="true"
-                      imageClass="w-full h-52 object-cover rounded-md"
+                      styleClass="block w-full"
+                      imageClass="w-full rounded-md"
+                      [imageStyle]="{ height: '13rem', width: '100%', 'object-fit': 'cover' }"
                       [alt]="photo.caption ?? ''"
                     />
                     @if (photo.caption) {
