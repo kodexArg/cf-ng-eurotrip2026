@@ -76,6 +76,7 @@ interface WhoAmI {
            [style.borderColor]="rla5.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
           <app-icon icon="pi-wallet" size="0.75rem" /><span>Reservas</span>
         </a>
+        <!-- Modificaciones ficha ocultada hasta nuevo aviso — disabled 2026-05-29
         @if (canEdit()) {
           <a routerLink="/modificaciones" routerLinkActive #rla6="routerLinkActive" aria-label="Editar"
              class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -86,6 +87,7 @@ interface WhoAmI {
             <app-icon icon="pi-pencil" size="0.75rem" /><span>Editar</span>
           </a>
         }
+        -->
         <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
         <a routerLink="/admin" routerLinkActive #rlaAdmin="routerLinkActive" aria-label="Admin"
            class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
@@ -116,9 +118,10 @@ export class Nav {
       { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
       { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
     ];
-    if (this.canEdit()) {
-      items.push({ label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' });
-    }
+    // Modificaciones ficha ocultada hasta nuevo aviso — disabled 2026-05-29
+    // if (this.canEdit()) {
+    //   items.push({ label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' });
+    // }
     return items;
   });
 }

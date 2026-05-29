@@ -3,8 +3,9 @@ import { httpResource } from '@angular/common/http';
 import { Message } from 'primeng/message';
 import { Skeleton } from 'primeng/skeleton';
 import { Carousel } from 'primeng/carousel';
-import { Image } from 'primeng/image';
 import { UploadForm } from './upload-form/upload-form';
+import { CarouselScrollFix } from './carousel-scroll-fix';
+import { MediaLightbox } from './media-lightbox/media-lightbox';
 import { City, Photo } from '../shared/models';
 import { environment } from '../../environments/environment';
 
@@ -36,7 +37,7 @@ interface CityGroup {
  */
 @Component({
   selector: 'app-gallery',
-  imports: [Message, Skeleton, Carousel, Image, UploadForm],
+  imports: [Message, Skeleton, Carousel, UploadForm, CarouselScrollFix, MediaLightbox],
   template: `
     <div class="max-w-5xl mx-auto px-3 py-4 sm:px-4">
       <!-- Page title — mirrors calendar's day-detail header weight/size -->
@@ -104,6 +105,7 @@ interface CityGroup {
                     </div>
                   }
                   <p-carousel
+                    appCarouselScrollFix
                     [value]="dg.photos"
                     [numVisible]="3"
                     [numScroll]="1"
@@ -122,13 +124,13 @@ interface CityGroup {
                             style="height: 11rem; width: 100%; object-fit: cover; background: #000"
                           ></video>
                         } @else {
-                          <p-image
+                          <img
                             [src]="mediaUrl(photo)"
-                            [preview]="true"
-                            styleClass="block w-full"
-                            imageClass="w-full rounded-lg"
-                            [imageStyle]="{ height: '11rem', width: '100%', 'object-fit': 'cover' }"
                             [alt]="photo.caption ?? ''"
+                            loading="lazy"
+                            class="block w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                            style="height: 11rem; width: 100%; object-fit: cover"
+                            (click)="openLightbox(photo)"
                           />
                         }
                         @if (photo.caption) {
@@ -152,12 +154,31 @@ interface CityGroup {
           </section>
         }
       }
+
+      <!-- Full-screen viewer with working mobile zoom / rotate (replaces p-image preview) -->
+      @if (lightbox(); as lb) {
+        <app-media-lightbox
+          [visible]="true"
+          [src]="mediaUrl(lb)"
+          [isVideo]="lb.mediaType === 'video'"
+          [caption]="lb.caption"
+          [alt]="lb.caption ?? ''"
+          (closed)="lightbox.set(null)"
+        />
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GalleryPage {
   private readonly refresh = signal(0);
+
+  /** Currently-open media in the full-screen viewer, or null when closed. */
+  readonly lightbox = signal<Photo | null>(null);
+
+  openLightbox(photo: Photo): void {
+    this.lightbox.set(photo);
+  }
 
   /** Cloudflare Access identity; editor flag drives the upload surface. */
   private readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
