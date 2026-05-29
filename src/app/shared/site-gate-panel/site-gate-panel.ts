@@ -21,7 +21,7 @@ import { SiteGateService } from '../services/site-gate.service';
           <input
             pInputText
             type="password"
-            placeholder="Contraseña"
+            placeholder="v...3"
             [(ngModel)]="password"
             (keydown.enter)="submit()"
             class="w-full"

@@ -62,9 +62,23 @@
 
 .nav-scroll {
   scrollbar-width: none;
+  /* Easier lateral drag: snap to nearest chip on release + smooth touch inertia */
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 1rem;
 }
 .nav-scroll::-webkit-scrollbar {
   display: none;
+}
+.nav-scroll > a {
+  scroll-snap-align: center;
+}
+/* Footer nav chips: uppercase labels (icons stay) */
+.nav-scroll span {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
 }
 
 .city-label {
