@@ -7,6 +7,24 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+## 2026-06-05 — Gallery UX Upgrades & Map Route Enhancements
+
+- group: fotos-ux-overhaul
+  priority: high
+  commit: 416b7ce
+  changes:
+    - feat(fotos): popstate-aware lightbox closing (Back button closes media instead of returning to home)
+    - feat(fotos): mobile swipe gestures to navigate through images and videos
+    - feat(fotos): desktop arrow buttons and keyboard listeners (ArrowLeft/ArrowRight) to navigate media
+    - feat(fotos): automatic scale correction to fit rotated landscape/portrait media inside viewport without overflow
+    - feat(fotos): floating action button on mobile for easy right-hand thumb access to rotate media
+- group: map-route-bcn-pmi-bus
+  priority: normal
+  commit: 9de65de
+  changes:
+    - feat(mapa): flight BCN→PMI coordinates and route lines added to map
+    - feat(mapa): Palma↔Peguera bus waypoints and path lines added to map
+
 - group: fotos-feature-overhaul
   priority: high
   commit: 0d60cb4
