@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal, HostListener, OnDestroy } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Message } from 'primeng/message';
 import { Skeleton } from 'primeng/skeleton';
@@ -163,21 +163,74 @@ interface CityGroup {
           [isVideo]="lb.mediaType === 'video'"
           [caption]="lb.caption"
           [alt]="lb.caption ?? ''"
-          (closed)="lightbox.set(null)"
+          (closed)="closeLightbox()"
+          (prev)="goToPrev()"
+          (next)="goToNext()"
         />
       }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GalleryPage {
+export class GalleryPage implements OnDestroy {
   private readonly refresh = signal(0);
 
   /** Currently-open media in the full-screen viewer, or null when closed. */
   readonly lightbox = signal<Photo | null>(null);
 
+  readonly orderedPhotos = computed((): Photo[] => {
+    const list: Photo[] = [];
+    for (const g of this.groups()) {
+      for (const dg of g.dateGroups) {
+        list.push(...dg.photos);
+      }
+    }
+    return list;
+  });
+
   openLightbox(photo: Photo): void {
     this.lightbox.set(photo);
+    history.pushState({ lightboxOpen: true }, '');
+  }
+
+  closeLightbox(fromPopState: boolean = false): void {
+    this.lightbox.set(null);
+    if (!fromPopState && history.state?.lightboxOpen) {
+      history.back();
+    }
+  }
+
+  goToPrev(): void {
+    const list = this.orderedPhotos();
+    const current = this.lightbox();
+    if (!current || list.length <= 1) return;
+    const idx = list.findIndex((p) => p.id === current.id);
+    if (idx === -1) return;
+    const prevIdx = (idx - 1 + list.length) % list.length;
+    this.lightbox.set(list[prevIdx]);
+  }
+
+  goToNext(): void {
+    const list = this.orderedPhotos();
+    const current = this.lightbox();
+    if (!current || list.length <= 1) return;
+    const idx = list.findIndex((p) => p.id === current.id);
+    if (idx === -1) return;
+    const nextIdx = (idx + 1) % list.length;
+    this.lightbox.set(list[nextIdx]);
+  }
+
+  @HostListener('window:popstate')
+  onPopState(): void {
+    if (this.lightbox()) {
+      this.closeLightbox(true);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.lightbox() && history.state?.lightboxOpen) {
+      history.back();
+    }
   }
 
   /** Cloudflare Access identity; editor flag drives the upload surface. */
