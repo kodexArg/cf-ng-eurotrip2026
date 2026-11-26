@@ -3,7 +3,7 @@ import { provideZonelessChangeDetection } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { BookingCard } from './booking-card';
 import { HitoEvent } from '../../shared/models/event.model';
 
@@ -11,7 +11,7 @@ const mockEvent: HitoEvent = {
   id: 'test-1', type: 'hito', subtype: 'hito', slug: 'test-1', title: 'Test Event',
   description: null, date: '2026-05-01', timestampIn: '2026-05-01T10:00:00',
   timestampOut: null, cityIn: 'lon', cityOut: null, usd: null, icon: 'pi pi-flag',
-  confirmed: false, variant: 'both', cardId: null, notes: null,
+  confirmed: false, done: false, mandatory: false, variant: 'both', cardId: null, notes: null,
 };
 
 describe('BookingCard', () => {

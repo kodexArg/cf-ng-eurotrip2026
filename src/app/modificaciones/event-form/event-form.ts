@@ -44,7 +44,6 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
   template: `
 <div class="flex flex-col gap-3">
 
-  <!-- Tipo -->
   <div>
     <div class="text-xs font-medium mb-1.5 select-none" style="color: var(--p-surface-500)">Tipo *</div>
     <div class="flex gap-2">
@@ -61,7 +60,6 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Título + Confirmado + Hecho -->
   <div class="grid grid-cols-[1fr_auto_auto] gap-3 items-end">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Título *</label>
@@ -77,7 +75,6 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Fecha + hora entrada + hora salida + UTC -->
   <div class="grid grid-cols-[1.4fr_1fr_1fr_auto] gap-3">
     <div class="flex flex-col gap-1">
       <label class="text-xs" style="color: var(--p-surface-500)">Fecha *</label>
@@ -97,7 +94,6 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   </div>
 
-  <!-- Ciudad(es) -->
   @if (formType === EVENT_TYPES.TRASLADO) {
     <div class="grid grid-cols-2 gap-3">
       <div class="flex flex-col gap-1">
@@ -116,20 +112,17 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   }
 
-  <!-- USD -->
   <div class="flex flex-col gap-1" style="max-width: 160px">
     <label class="text-xs" style="color: var(--p-surface-500)">Costo (USD)</label>
     <p-inputnumber [(ngModel)]="formUsd" [minFractionDigits]="2" [maxFractionDigits]="2" placeholder="0.00" styleClass="w-full" />
   </div>
 
-  <!-- Descripción multilinea -->
   <div class="flex flex-col gap-1">
     <label class="text-xs" style="color: var(--p-surface-500)">Descripción</label>
     <textarea pTextarea [(ngModel)]="formDescription" [autoResize]="true" rows="3"
               placeholder="(opcional)" class="w-full resize-none"></textarea>
   </div>
 
-  <!-- Traslado extras -->
   @if (formType === EVENT_TYPES.TRASLADO) {
     <div class="pt-3 border-t" style="border-color: var(--p-surface-200)">
       <div class="text-xs font-medium mb-2 select-none uppercase tracking-wide" style="color: var(--p-surface-500)">Detalles de traslado</div>
@@ -162,7 +155,6 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   }
 
-  <!-- Estadia extras -->
   @if (formType === EVENT_TYPES.ESTADIA) {
     <div class="pt-3 border-t" style="border-color: var(--p-surface-200)">
       <div class="text-xs font-medium mb-2 select-none uppercase tracking-wide" style="color: var(--p-surface-500)">Detalles de estadía</div>
@@ -199,12 +191,10 @@ import { EVENT_TYPES } from '../../shared/constants/event-types';
     </div>
   }
 
-  <!-- Error -->
   @if (error()) {
     <small class="text-red-500">{{ error() }}</small>
   }
 
-  <!-- Botones sticky al fondo del dialog -->
   <div class="sticky bottom-0 flex gap-2 justify-end pt-3 pb-1 border-t -mx-4 px-4"
        style="border-color: var(--p-surface-200); background: var(--p-dialog-content-background, var(--p-surface-0))">
     <p-button label="Limpiar" icon="pi pi-times" severity="secondary" (onClick)="handleClear()" />

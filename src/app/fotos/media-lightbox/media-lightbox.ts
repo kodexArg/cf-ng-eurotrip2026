@@ -45,7 +45,6 @@ import {
         (pointerup)="onPointerUp($event)"
         (pointercancel)="onPointerUp($event)"
       >
-        <!-- Toolbar: mirrors PrimeNG p-image preview actions -->
         <div
           class="absolute top-0 right-0 z-10 flex items-center gap-1 p-3 text-white"
           (pointerdown)="$event.stopPropagation()"
@@ -96,7 +95,6 @@ import {
           </button>
         </div>
 
-        <!-- Left Arrow (Desktop Only) -->
         <button
           type="button"
           class="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 active:bg-black/80 text-white transition-colors border border-white/10 hidden md:flex"
@@ -107,7 +105,6 @@ import {
           <i class="pi pi-chevron-left text-xl"></i>
         </button>
 
-        <!-- Right Arrow (Desktop Only) -->
         <button
           type="button"
           class="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 active:bg-black/80 text-white transition-colors border border-white/10 hidden md:flex"
@@ -139,7 +136,6 @@ import {
             (load)="onImageLoad()"
           />
 
-          <!-- Mobile-friendly floating rotate button (lower right for easy thumb access) -->
           <button
             type="button"
             class="absolute bottom-6 right-6 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-black/60 hover:bg-black/80 active:bg-black/90 text-white transition-colors border border-white/20 shadow-lg md:hidden"
@@ -191,21 +187,16 @@ export class MediaLightbox {
 
   private readonly imgRef = viewChild<ElementRef<HTMLImageElement>>('img');
 
-  /** Active pointers for pinch/pan tracking. */
   private readonly pointers = new Map<number, { x: number; y: number }>();
-  /** Pinch baseline. */
   private pinchStartDist = 0;
   private pinchStartScale = 1;
-  /** Pan baseline. */
   private panStartX = 0;
   private panStartY = 0;
   private panStartTx = 0;
   private panStartTy = 0;
-  /** Swipe baseline. */
   private swipeStartX = 0;
   private swipeStartY = 0;
   private isSwipeCandidate = false;
-  /** Double-tap detection. */
   private lastTapTime = 0;
   private lastTapX = 0;
   private lastTapY = 0;
@@ -231,7 +222,6 @@ export class MediaLightbox {
   }
 
   constructor() {
-    // Reset transform every time the viewer opens or the media changes.
     effect(() => {
       this.visible();
       this.src();
@@ -239,7 +229,6 @@ export class MediaLightbox {
     });
 
     effect(() => {
-      // Recompute scale correction whenever rotation state changes.
       this.rotate();
       this.updateRotationScale();
     });
@@ -286,7 +275,6 @@ export class MediaLightbox {
     }
   }
 
-  // ── Toolbar controls ────────────────────────────────────────────────────
   protected rotateLeft(): void {
     this.rotate.update((r) => r - 90);
   }
@@ -302,7 +290,6 @@ export class MediaLightbox {
     }
   }
 
-  // ── Gesture handling ────────────────────────────────────────────────────
   protected onPointerDown(event: PointerEvent): void {
     (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
     this.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });

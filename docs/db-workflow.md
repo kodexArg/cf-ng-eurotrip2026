@@ -1,6 +1,6 @@
 # D1 Workflow — production-only
 
-This project talks directly to the production Cloudflare D1 database (`eurotrip2026`, binding `DB`). There is no local D1, no migrations folder, no staging. Every data change goes straight to prod via `wrangler d1 execute --remote`.
+This project talks directly to the production Cloudflare D1 database (`eurotrip2026`, binding `DB`). There is no local D1 and no staging. Ad-hoc changes go straight to prod via `wrangler d1 execute --remote`. Files in `migrations/` are applied by `.github/workflows/deploy.yml` (`wrangler d1 migrations apply --remote`) on every push to `prod`, so a migration file must never overwrite real data unguarded; back up first with `npx wrangler d1 export eurotrip2026 --remote --output <file>` outside the repo.
 
 The real fallback for the trip data is not a backup file — it is the markdowns in the repo root (`VIAJE.md`, `PRD.md`). If the database is ever lost, rebuild from those.
 
@@ -42,10 +42,9 @@ Current tables queried by the app (see `functions/api/*`):
 | `cards` | City "sitios" cards: type (`info` / `note`), title, body, url |
 | `card_links` | 1:N links inside a card |
 | `photos` | R2 key + metadata per photo |
-| `sessions` | Auth sessions |
-| `access_requests` | Auth access requests |
+| `access_log` | One row per page view / API call: Google email, editor flag, IP, geo, path |
 
-Also present but unused by the app today: `_legacy_*` tables (historical snapshots from before the unified `events` refactor) and `d1_migrations` (orphaned metadata from when migrations were used). Both are dormant; leave them unless you need the disk space.
+Also present but unused by the app today: `sessions` and `access_requests` (passphrase / magic-link auth, removed when Cloudflare Access became the only gate), `_legacy_*` tables (historical snapshots from before the unified `events` refactor) and `d1_migrations` (orphaned metadata from when migrations were used). Both are dormant; leave them unless you need the disk space.
 
 ## D1 limits that matter here
 

@@ -63,6 +63,13 @@ Both are configured in `.mcp.json`:
 - **SQL is free**: create, modify, delete data at will — the DB is a scratch pad.
 - **Markdown fallback**: `VIAJE.md` and `PRD.md` are the canonical trip-data fallback. When you change data in D1 that is also reflected in those files, update them in the same commit.
 
+## Auth model
+
+- Cloudflare Access app `eurotrip2026` covers `eurotrip2026.kodexarg.com`, `eurotrip2026.pages.dev` and `*.eurotrip2026.pages.dev`; Google is the only identity provider and any Google login is allowed.
+- `functions/_middleware.ts` rejects every request without a valid Access JWT (401) and every mutating method or private read (`/api/access-log`) from a non-editor (403). Editors: `EDITOR_EMAILS` in `functions/lib/access.ts`.
+- Pages secrets `CF_ACCESS_TEAM_DOMAIN` and `CF_ACCESS_AUD` are required; without them the middleware fails closed.
+- Tests: `npm run test:functions` (auth) and `npx ng test --watch=false` (UI). CI runs both before deploy; the post-deploy smoke checks that nothing is reachable without Access.
+
 ## Key rules (summary)
 
 - Code and docs: **English**. Rendered UI: **Spanish**.

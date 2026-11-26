@@ -117,7 +117,6 @@ export class ItineraryCity {
   }
 }
 
-/** Emit every YYYY-MM-DD between start and end inclusive. */
 function expandRange(start: string, end: string): string[] {
   const out: string[] = [];
   const startDate = new Date(start + 'T00:00:00Z');

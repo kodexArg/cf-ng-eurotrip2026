@@ -55,8 +55,8 @@ export class CityTabContent {
 }
 
 interface DatePill {
-  date: string;   // YYYY-MM-DD
-  label: string;  // "28 Abr"
+  date: string;
+  label: string;
 }
 
 function cityDatePills(city: City): DatePill[] {
@@ -109,7 +109,6 @@ function cityDatePills(city: City): DatePill[] {
           <p-tabpanels>
             @for (city of cities(); track city.slug) {
               <p-tabpanel [value]="city.slug">
-                <!-- Date pills for this city -->
                 <div class="mt-3">
                   <p-selectbutton
                     [options]="dateOptions(city)"

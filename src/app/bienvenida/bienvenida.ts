@@ -1,11 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { httpResource } from '@angular/common/http';
-
-interface WhoAmI {
-  accessActive: boolean;
-  email: string | null;
-  editor: boolean;
-}
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AuthService } from '../shared/services/auth.service';
 
 /**
  * Post-login welcome page. Cloudflare Access (Google) has already
@@ -19,17 +13,13 @@ interface WhoAmI {
     <div class="max-w-xl mx-auto p-6 text-center flex flex-col gap-5 mt-10">
       <h1 class="text-3xl font-bold text-surface-800">Bienvenida al Eurotrip 2026</h1>
 
-      @if (who.isLoading()) {
+      @if (!auth.checked()) {
         <p class="text-surface-500">Cargando tu sesión…</p>
-      } @else if (!who.value()?.accessActive) {
-        <p class="text-surface-600">
-          El acceso con Google aún no está activo. Estás en modo de transición.
-        </p>
-      } @else if (who.value()?.email) {
+      } @else if (auth.email()) {
         <p class="text-surface-700">
-          Entraste como <strong>{{ who.value()!.email }}</strong>.
+          Entraste como <strong>{{ auth.email() }}</strong>.
         </p>
-        @if (who.value()!.editor) {
+        @if (auth.isOwner()) {
           <div class="rounded-lg bg-emerald-50 border border-emerald-200 p-4 text-emerald-800">
             Tenés <strong>permiso de edición</strong>: podés crear y modificar
             contenido (subir fotos/videos, etc.).
@@ -59,5 +49,5 @@ interface WhoAmI {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BienvenidaPage {
-  readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
+  readonly auth = inject(AuthService);
 }

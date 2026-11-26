@@ -53,7 +53,7 @@ This applies without exception. When in doubt: if a human reads it in the browse
 
 A personal travel companion site for Gabriel & Vanesa's Europe trip — April 19 to May 10, 2026. Route: Santiago de Chile → Madrid → Barcelona → Palma de Mallorca → Londres → París (transit) → Roma → Madrid (escala nocturna) → Buenos Aires.
 
-Public to anyone with the link. No login. No accounts.
+Anyone with a Google account can sign in (Cloudflare Access) and see the trip. Only the two organizers can edit.
 
 ---
 

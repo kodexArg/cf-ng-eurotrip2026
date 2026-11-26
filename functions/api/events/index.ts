@@ -155,7 +155,6 @@ function shapeEvent(r: EventRow) {
 export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   const body = await ctx.request.json() as Record<string, unknown>;
 
-  // Validate required fields
   const type = body.type as string | undefined;
   const title = body.title as string | undefined;
   const date = body.date as string | undefined;
@@ -177,11 +176,9 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     return Response.json({ error: 'cityIn is required' }, { status: 400 });
   }
 
-  // Generate id and slug
   const id = crypto.randomUUID();
   let slug = slugify(title, date);
 
-  // Check slug collision
   const existing = await ctx.env.DB.prepare(
     'SELECT id FROM events WHERE slug = ?'
   ).bind(slug).first<{ id: string }>();
@@ -190,14 +187,12 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     slug = `${slug}-2`;
   }
 
-  // Default values
   const subtype = (body.subtype as string | undefined) ?? type;
   const icon = (body.icon as string | undefined) ?? 'pi pi-calendar';
   const variant = (body.variant as string | undefined) ?? 'both';
   const confirmed = body.confirmed ? 1 : 0;
   const done = body.done ? 1 : 0;
 
-  // Build INSERT for events
   const insertEvent = ctx.env.DB.prepare(`
     INSERT INTO events (
       id, type, subtype, slug, title, description, date,
@@ -227,7 +222,6 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
 
   const stmts: D1PreparedStatement[] = [insertEvent];
 
-  // Sub-table inserts
   if (type === 'traslado') {
     const insertTraslado = ctx.env.DB.prepare(`
       INSERT INTO events_traslado (event_id, company, fare, vehicle_code, seat, duration_min)
@@ -261,7 +255,6 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
 
   await ctx.env.DB.batch(stmts);
 
-  // Re-fetch the created event
   const row = await ctx.env.DB.prepare(REFETCH_SQL).bind(id).first<EventRow>();
 
   if (!row) {

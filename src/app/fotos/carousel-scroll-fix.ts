@@ -31,7 +31,6 @@ export class CarouselScrollFix implements OnInit, OnDestroy {
 
   private readonly onTouchStart = (e: TouchEvent): void => {
     if (e.touches.length !== 1) {
-      // Multi-touch (pinch) — never our concern; let the carousel ignore it.
       this.axis = 'x';
       return;
     }
@@ -47,7 +46,6 @@ export class CarouselScrollFix implements OnInit, OnDestroy {
     const dx = Math.abs(t.clientX - this.startX);
     const dy = Math.abs(t.clientY - this.startY);
 
-    // Decide the dominant axis once, after a small movement threshold.
     if (this.axis === undefined) {
       if (dx < 6 && dy < 6) return;
       this.axis = dy > dx ? 'y' : 'x';

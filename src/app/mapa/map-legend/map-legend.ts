@@ -1,48 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Card } from 'primeng/card';
 
-/**
- * Map legend card listing transport line styles with updated categorization.
- * 
- * UPDATED LINE TYPE REPRESENTATION (V2):
- * -------------------------------------
- * 
- * 1. FLIGHTS: Blue geodesic curves
- *    - Represent actual flight paths using great-circle calculations
- *    - Visible curvature distinguishes them from straight-line transports
- *    - Styled with 1.8px weight, 0.75 opacity for subtle prominence
- * 
- * 2. TRAINS: Green solid lines
- *    - Used for inter-zone and inter-province railway connections
- *    - Solid 2.5px lines with 0.85 opacity for clear visibility
- *    - Examples: Eurostar, AVE, TGV inter-city routes
- * 
- * 3. BUSES / COACH: Orange solid lines
- *    - Applied to long-distance bus routes and coach tours
- *    - Same visual weight as trains but differentiated by color
- *    - Examples: Cross-country bus lines, tour buses like Stonehenge Express
- * 
- * 4. INTERNAL TRANSPORT: Orange dashed lines
- *    - Designates intra-city transportation within urban areas
- *    - Includes metro/subway, local buses, taxis, ride-sharing (Uber)
- *    - Distinguished by dashed patterns:
- *      * Metro: 6,4 dash pattern at 2.0px weight
- *      * Taxi/Uber: 1,5 dash pattern with round line caps
- *    - Helps users distinguish local transit from long-haul journeys
- * 
- * 5. PENDING/UNCONFIRMED ITEMS:
- *    - Dashed variants (4,8 pattern) at 40% opacity
- *    - Applied uniformly across all transport types when confirmed=false
- *    - Provides visual distinction between firm plans and tentative arrangements
- * 
- * LEGEND DESIGN NOTES:
- * -------------------
- * - All samples use consistent sizing (24x4px) for easy visual comparison
- * - Colors match the actual route rendering implementations
- * - Curved flight path represented by SVG quadratic Bézier curve
- * - Pending items use muted styling to avoid visual competition with confirmed routes
- * - Text labels kept concise for readability at small sizes
- */
+/** Map legend card listing transport line styles. */
 @Component({
   selector: 'app-map-legend',
   imports: [Card],

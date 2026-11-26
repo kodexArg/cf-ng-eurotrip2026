@@ -6,23 +6,20 @@ import Aura from '@primeuix/themes/aura';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ModificacionesPage } from './modificaciones';
 import { AuthService } from '../shared/services/auth.service';
 
 describe('ModificacionesPage', () => {
   let httpController: HttpTestingController;
-  let role: ReturnType<typeof signal<'owner' | 'visitor' | null>>;
-  let fakeAuth: { isOwner: ReturnType<typeof computed>; isAuthenticated: ReturnType<typeof signal>; role: ReturnType<typeof signal>; checkAuth: ReturnType<typeof vi.fn>; login: ReturnType<typeof vi.fn> };
+  let editor: ReturnType<typeof signal<boolean>>;
 
   beforeEach(async () => {
-    role = signal<'owner' | 'visitor' | null>(null);
-    fakeAuth = {
-      isOwner: computed(() => role() === 'owner'),
-      isAuthenticated: signal(false),
-      role,
-      checkAuth: vi.fn().mockResolvedValue(undefined),
-      login: vi.fn().mockResolvedValue(false),
+    editor = signal(false);
+    const fakeAuth = {
+      isOwner: computed(() => editor()),
+      email: signal<string | null>('test@example.com'),
+      checked: signal(true),
     };
 
     await TestBed.configureTestingModule({
@@ -45,50 +42,44 @@ describe('ModificacionesPage', () => {
     httpController.verify();
   });
 
-  it('renders app-login-panel when role is null (not owner)', () => {
-    role.set(null);
+  it('renders the read-only notice when the user is not an editor', () => {
+    editor.set(false);
     const fixture = TestBed.createComponent(ModificacionesPage);
     fixture.detectChanges();
 
-    // httpResource fires a request on init regardless of auth state; flush it
-    const req = httpController.expectOne('/api/reservas');
-    req.flush({ cities: [], events: [] });
+    httpController.expectOne('/api/reservas').flush({ cities: [], events: [] });
     fixture.detectChanges();
 
-    const loginPanel = fixture.nativeElement.querySelector('app-login-panel');
-    expect(loginPanel).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Solo los organizadores pueden modificar el viaje.');
     expect(fixture.nativeElement.textContent).not.toContain('Modificaciones');
   });
 
-  it('renders main content with "Modificaciones" heading when role is owner', () => {
-    role.set('owner');
+  it('renders main content with "Modificaciones" heading when the user is an editor', () => {
+    editor.set(true);
     const fixture = TestBed.createComponent(ModificacionesPage);
     fixture.detectChanges();
 
-    const req = httpController.expectOne('/api/reservas');
-    req.flush({ cities: [], events: [] });
+    httpController.expectOne('/api/reservas').flush({ cities: [], events: [] });
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Modificaciones');
-    expect(fixture.nativeElement.querySelector('app-login-panel')).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('Solo los organizadores');
   });
 
-  it('switches from login panel to main content when role changes to owner', () => {
-    role.set(null);
+  it('switches from the notice to main content when the user becomes an editor', () => {
+    editor.set(false);
     const fixture = TestBed.createComponent(ModificacionesPage);
     fixture.detectChanges();
 
-    // Flush initial httpResource request
-    const req1 = httpController.expectOne('/api/reservas');
-    req1.flush({ cities: [], events: [] });
+    httpController.expectOne('/api/reservas').flush({ cities: [], events: [] });
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('app-login-panel')).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Solo los organizadores');
 
-    role.set('owner');
+    editor.set(true);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('app-login-panel')).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('Solo los organizadores');
     expect(fixture.nativeElement.textContent).toContain('Modificaciones');
   });
 });

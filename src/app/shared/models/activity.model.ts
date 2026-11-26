@@ -1,13 +1,4 @@
-/**
- * Activity tipo lookup.
- *
- * NOTE: The `Activity` / `Day` / `TransportLeg` / `CityBlock` interfaces
- * were removed when the DB moved to the unified `events` table. This
- * module now only exposes the visual tipo catalog so calendar-side
- * components (calendar-month, event-chip, event-type-legend) keep
- * rendering their category chips. All inbound data is now TripEvent
- * (see event.model.ts).
- */
+/** Activity tipo catalog used by the calendar chips and legend. */
 
 import { ACTIVITY_TIPO_COLORS } from '../theme/colors';
 

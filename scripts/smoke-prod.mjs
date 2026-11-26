@@ -1,61 +1,30 @@
 #!/usr/bin/env node
-// Smoke test: hits the deployed prod API and verifies critical events
-// (prices, confirmed status). Exits non-zero on any failure so CI can gate.
-//
-// Usage: node scripts/smoke-prod.mjs
-// Override the host with: SMOKE_HOST=https://other.example.com node scripts/smoke-prod.mjs
+const HOSTS = (process.env.SMOKE_HOSTS || 'https://eurotrip2026.kodexarg.com,https://eurotrip2026.pages.dev').split(',');
+const PATHS = ['/', '/api/itinerary', '/api/photos', '/api/auth/whoami', '/api/access-log'];
+const FORGED = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IngifQ.eyJlbWFpbCI6ImdjYXZlZGFsQGdtYWlsLmNvbSJ9.c2ln';
 
-const HOST = process.env.SMOKE_HOST || 'https://eurotrip2026.kodexarg.com';
-const URL = `${HOST}/api/map/events`;
+const failures = [];
 
-// Each row: [id, expectedConfirmed (1|0|null=skip), expectedUsd (number|null=skip)]
-// These are the post-0044 invariants that must hold in prod for the trip to be "shipped".
-// Post-rectification invariants (stale rows for events removed by later
-// migrations — Stonehenge coach, pmi-peguera leg, old London stay/legs —
-// were dropped on 2026-05-18 so the smoke reflects the real prod state).
-const EXPECTED = [
-  ['ev-stay-auto-pmi',          1, 428.32],
-  ['ev-stay-auto-par',          1, 213.00],
-  ['est-rom-airbnb-colosseo',   1, 451.00],
-  ['ev-leg-lon-par',            1, 328.27],
-  ['ev-leg-leo-express',        1,  38.91],
-  ['ev-leg-stn-lon',            1,  null],
-  ['ev-leg-par-gdn-hotel',      1,  null],
-  ['ev-leg-rom-termini-hotel',  1,  null],
-];
+async function probe(host, path, method = 'GET', headers = {}) {
+  const res = await fetch(`${host}${path}`, { method, headers, redirect: 'manual' });
+  const location = res.headers.get('location') ?? '';
+  const gated = (res.status >= 300 && res.status < 400 && location.includes('cloudflareaccess.com')) || res.status === 401 || res.status === 403;
+  const line = `${method} ${host}${path}${headers['Cf-Access-Jwt-Assertion'] ? ' (forged JWT)' : ''} -> ${res.status}`;
+  if (gated) console.log(`ok   ${line}`);
+  else failures.push(line);
+}
 
-const fail = [];
-const ok = [];
+for (const host of HOSTS) {
+  for (const path of PATHS) {
+    await probe(host, path);
+    await probe(host, path, 'GET', { 'Cf-Access-Jwt-Assertion': FORGED });
+  }
+  await probe(host, '/api/photos', 'POST', { 'Cf-Access-Jwt-Assertion': FORGED });
+}
 
-const res = await fetch(URL);
-if (!res.ok) {
-  console.error(`✘ HTTP ${res.status} fetching ${URL}`);
+if (failures.length) {
+  console.error(`\nUngated responses (${failures.length}):`);
+  for (const f of failures) console.error(`  ${f}`);
   process.exit(1);
 }
-const events = await res.json();
-const byId = new Map(events.map((e) => [e.id, e]));
-
-for (const [id, expConfirmed, expUsd] of EXPECTED) {
-  const ev = byId.get(id);
-  if (!ev) {
-    fail.push(`${id}: NOT FOUND in prod`);
-    continue;
-  }
-  if (expConfirmed !== null && Number(ev.confirmed) !== expConfirmed) {
-    fail.push(`${id}: confirmed=${ev.confirmed}, expected ${expConfirmed}`);
-    continue;
-  }
-  if (expUsd !== null && Math.abs(Number(ev.usd) - expUsd) > 0.01) {
-    fail.push(`${id}: usd=${ev.usd}, expected ${expUsd}`);
-    continue;
-  }
-  ok.push(id);
-}
-
-console.log(`✓ ${ok.length}/${EXPECTED.length} events match expectations`);
-if (fail.length > 0) {
-  console.error(`\n✘ ${fail.length} failures:`);
-  for (const f of fail) console.error(`  - ${f}`);
-  process.exit(1);
-}
-console.log('All smoke checks passed.');
+console.log('\nEvery probe was gated by Cloudflare Access or the Functions middleware.');

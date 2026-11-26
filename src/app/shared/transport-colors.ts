@@ -6,18 +6,18 @@
  */
 
 export const TRANSPORT_COLORS: Record<string, string> = {
-  flight: '#60a5fa',   // blue-400  (softened from map #3b82f6)
-  train:  '#16a34a',   // green-600 (matches map palette for stronger contrast)
-  ferry:  '#22d3ee',   // cyan-400  (softened from map #0891b2)
-  metro:  '#c084fc',   // purple-400 (softened from map #a855f7)
-  bus:    '#fb923c',   // orange-400 (softened from map #f97316)
+  flight: '#60a5fa',
+  train:  '#16a34a',
+  ferry:  '#22d3ee',
+  metro:  '#c084fc',
+  bus:    '#fb923c',
   coach:  '#fb923c',
   taxi:   '#fb923c',
   uber:   '#fb923c',
-  car:    '#94a3b8',   // slate-400  (softened from map #6b7280)
-  walking:'#84cc16',   // lime-500   (caminata: distinct from train-green, evokes "natural")
+  car:    '#94a3b8',
+  walking:'#84cc16',
   walk:   '#84cc16',
-  scooter:'#facc15',   // yellow-400 (e-scooter: distinct from bus-orange, evokes "rental")
+  scooter:'#facc15',
 };
 
 /** Default color for unknown subtypes (slate-400). */

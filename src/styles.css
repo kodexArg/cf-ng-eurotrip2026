@@ -2,7 +2,6 @@
 @plugin 'tailwindcss-primeui';
 @import 'leaflet/dist/leaflet.css';
 
-/* Custom font-face for Material Symbols Outlined with local font file and swap display */
 @font-face {
   font-family: "Material Symbols Outlined";
   font-style: normal;
@@ -29,7 +28,6 @@
   font-feature-settings: "liga";
 }
 
-/* Custom font-face for PrimeIcons with local font file and swap display */
 @font-face {
   font-family: 'primeicons';
   font-display: block;
@@ -62,7 +60,6 @@
 
 .nav-scroll {
   scrollbar-width: none;
-  /* Easier lateral drag: snap to nearest chip on release + smooth touch inertia */
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
@@ -74,7 +71,6 @@
 .nav-scroll > a {
   scroll-snap-align: center;
 }
-/* Footer nav chips: uppercase labels (icons stay) */
 .nav-scroll span {
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -116,7 +112,7 @@ p-togglebutton.filter-wrap .p-togglebutton-label {
   margin: 0 !important;
 }
 
-/* ── Anti-FOUC for icon webfonts ──────────────────────────────────────────
+/* Anti-FOUC for icon webfonts.
    font-display:block keeps the fallback period invisible, and the inline
    <head> gate in index.html adds html.fonts-loading until BOTH icon fonts
    are actually decoded. While loading we hide icon glyphs so the stretched

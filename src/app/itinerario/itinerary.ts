@@ -38,9 +38,9 @@ interface CityBlock {
  */
 interface TimezoneChangeRow {
   kind: 'tz-change';
-  fromLabel: string;  // e.g. "UTC+2"
-  toLabel: string;    // e.g. "UTC+1"
-  diffHours: number;  // signed (toOffset - fromOffset)
+  fromLabel: string;
+  toLabel: string;
+  diffHours: number;
 }
 
 type ItineraryRow =
@@ -58,18 +58,6 @@ function dateToUtcMs(dateStr: string): number {
   return new Date(dateStr + 'T00:00:00Z').getTime();
 }
 
-/**
- * Itinerary page.
- *
- * Data flow:
- *   1. httpResource fetches { cities, events } from /api/itinerary
- *   2. ItineraryEnrichmentService injects synthetic "Presentarse en aeropuerto"
- *      hitos in front of every flight traslado
- *   3. Events are clustered into city blocks by cityIn + contiguous
- *      date range (gap ≤ 2 days). Traslado events route into the
- *      destination city block.
- *   4. Each block is rendered by <app-itinerary-city>.
- */
 @Component({
   selector: 'app-itinerary',
   imports: [ItineraryCity, LoadingState, ErrorState, SiteInfoModal, ItineraryFilters, AppIcon],
@@ -194,11 +182,9 @@ export class ItineraryPage {
     for (const city of cities) {
       const cityEvents = byCity.get(city.id) ?? [];
       
-      // Use city's arrival and departure dates instead of clustering events
       const first = city.arrival;
       const last = city.departure;
       
-      // Filter events to only those within the city's date range
       const clusterEvents = cityEvents.filter((e) => e.date >= first && e.date <= last);
       
       const firstTimestamp = clusterEvents
@@ -212,7 +198,7 @@ export class ItineraryPage {
         events: clusterEvents,
         firstDay: first,
         lastDay: last,
-        nightCount: city.nights,  // Use city's nights instead of calculating from dates
+        nightCount: city.nights,
         firstTimestamp,
       });
     }
