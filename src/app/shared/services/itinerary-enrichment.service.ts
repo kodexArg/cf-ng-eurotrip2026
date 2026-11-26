@@ -82,7 +82,6 @@ export class ItineraryEnrichmentService {
  * and timezone math never enter the picture.
  */
 function subtractMinutes(timestamp: string, minutes: number): string {
-  // Strip any trailing Z or ±HH:MM offset so the result is always naive local.
   const naive = timestamp.replace(/(Z|[+-]\d{2}:?\d{2})$/, '');
   const asUtc = new Date(naive + 'Z');
   asUtc.setUTCMinutes(asUtc.getUTCMinutes() - minutes);

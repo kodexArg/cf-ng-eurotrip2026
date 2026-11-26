@@ -112,8 +112,6 @@ export class ItineraryDay {
     return 'pi-cloud';
   });
 
-  // Returns a Material Symbols Outlined name for weather codes PrimeIcons
-  // can't render (rain/drizzle/snow). Null falls through to the pi-* branch.
   protected readonly weatherIconMaterial = computed((): string | null => {
     const code = this.weather()?.weatherCode ?? -1;
     if (code >= 51 && code <= 67) return 'rainy';

@@ -23,7 +23,7 @@ const FILTER_OPTIONS: { label: string; value: EventType }[] = [
  *
  * @remarks
  * Multi-toggle, three options: Hitos, Viajes, Hospedaje — each independently on or off.
- * The "Todos" option has been removed. All state is owned by TypeFilterService,
+ * All state is owned by TypeFilterService,
  * which persists selections to localStorage so they survive page reloads.
  * The component is self-contained via the service — no input/output bindings needed.
  * Consumed types: hito / traslado / estadia (mapped from EventType).

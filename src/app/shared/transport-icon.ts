@@ -53,16 +53,13 @@ export function transportIcon(subtype: string | null | undefined): string {
 export function resolveEventIcon(event: { icon?: string | null; subtype?: string | null }): string {
   const iconField = event.icon?.trim();
   if (iconField) {
-    // 1. Semantic lookup
     const fromRegistry = iconFromType(iconField);
     if (fromRegistry) return fromRegistry;
 
-    // 2. Raw icon value — normalise legacy "pi pi-*" → "pi-*"
     if (iconField.startsWith('ms-')) return iconField;
     if (iconField.startsWith('pi-')) return iconField;
     if (iconField.startsWith('pi ')) return iconField.replace(/^pi /, 'pi-');
   }
-  // 3. Subtype fallback
   return transportIcon(event.subtype);
 }
 
@@ -80,21 +77,17 @@ export function resolveEventColor(event: {
   subtype?: string | null;
   type?: string | null;
 }): string {
-  // 1. Semantic key with color
   const iconField = event.icon?.trim();
   if (iconField) {
     const color = colorFromType(iconField);
     if (color) return color;
   }
 
-  // 2. Estadía
   if (event.type === 'estadia') return ESTADIA_COLOR;
 
-  // 3. Traslado → transport color by subtype
   if (event.type === 'traslado') {
     return transportColor(event.subtype ?? '');
   }
 
-  // 4. Fallback
   return ICON_GREYS.hito;
 }

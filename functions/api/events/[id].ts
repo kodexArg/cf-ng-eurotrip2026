@@ -135,7 +135,6 @@ function shapeEvent(r: EventRow) {
   return base;
 }
 
-// camelCase body key → snake_case column name for the events table
 const FIELDS_MAP: Record<string, string> = {
   title: 'title',
   description: 'description',
@@ -153,7 +152,6 @@ const FIELDS_MAP: Record<string, string> = {
   subtype: 'subtype',
 };
 
-// camelCase body key → snake_case column for events_traslado
 const TRASLADO_MAP: Record<string, string> = {
   company: 'company',
   fare: 'fare',
@@ -162,7 +160,6 @@ const TRASLADO_MAP: Record<string, string> = {
   durationMin: 'duration_min',
 };
 
-// camelCase body key → snake_case column for events_estadia
 const ESTADIA_MAP: Record<string, string> = {
   accommodation: 'accommodation',
   address: 'address',
@@ -176,7 +173,6 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
   const id = ctx.params['id'] as string;
   const body = await ctx.request.json() as Record<string, unknown>;
 
-  // Verify event exists
   const existing = await ctx.env.DB.prepare(
     'SELECT id, type FROM events WHERE id = ?'
   ).bind(id).first<{ id: string; type: string }>();
@@ -187,14 +183,12 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
 
   const stmts: D1PreparedStatement[] = [];
 
-  // Build dynamic SET clause for events table
   const eventSets: string[] = [];
   const eventVals: unknown[] = [];
 
   for (const [key, col] of Object.entries(FIELDS_MAP)) {
     if (key in body) {
       eventSets.push(`${col} = ?`);
-      // Coerce confirmed/done boolean → integer
       if (key === 'confirmed' || key === 'done') {
         eventVals.push(body[key] ? 1 : 0);
       } else {
@@ -212,7 +206,6 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
     );
   }
 
-  // Build dynamic UPDATE for events_traslado if any traslado fields present
   const trasladoSets: string[] = [];
   const trasladoVals: unknown[] = [];
 
@@ -232,7 +225,6 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
     );
   }
 
-  // Build dynamic UPDATE for events_estadia if any estadia fields present
   const estadiaSets: string[] = [];
   const estadiaVals: unknown[] = [];
 
@@ -258,7 +250,6 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
 
   await ctx.env.DB.batch(stmts);
 
-  // Re-fetch the updated event
   const row = await ctx.env.DB.prepare(REFETCH_SQL).bind(id).first<EventRow>();
 
   if (!row) {
@@ -271,7 +262,6 @@ export const onRequestPatch: PagesFunction<Env> = async (ctx) => {
 export const onRequestDelete: PagesFunction<Env> = async (ctx) => {
   const id = ctx.params['id'] as string;
 
-  // Verify event exists
   const existing = await ctx.env.DB.prepare(
     'SELECT id FROM events WHERE id = ?'
   ).bind(id).first<{ id: string }>();
@@ -280,7 +270,6 @@ export const onRequestDelete: PagesFunction<Env> = async (ctx) => {
     return Response.json({ error: 'Event not found' }, { status: 404 });
   }
 
-  // Delete sub-table rows first (no FK cascade), then the event itself
   await ctx.env.DB.batch([
     ctx.env.DB.prepare('DELETE FROM events_traslado WHERE event_id = ?').bind(id),
     ctx.env.DB.prepare('DELETE FROM events_estadia WHERE event_id = ?').bind(id),

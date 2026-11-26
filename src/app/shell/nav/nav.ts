@@ -65,18 +65,6 @@ import { AuthService } from '../../shared/services/auth.service';
            [style.borderColor]="rla5.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
           <app-icon icon="pi-wallet" size="0.75rem" /><span>Reservas</span>
         </a>
-        <!-- Modificaciones ficha ocultada hasta nuevo aviso — disabled 2026-05-29
-        @if (canEdit()) {
-          <a routerLink="/modificaciones" routerLinkActive #rla6="routerLinkActive" aria-label="Editar"
-             class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
-             [class.border-surface-200]="!rla6.isActive"
-             [style.color]="rla6.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
-             [style.background]="rla6.isActive ? 'var(--p-primary-color)' : 'transparent'"
-             [style.borderColor]="rla6.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-            <app-icon icon="pi-pencil" size="0.75rem" /><span>Editar</span>
-          </a>
-        }
-        -->
       </div>
     </nav>
   `,
@@ -97,10 +85,6 @@ export class Nav {
       { label: 'Fotos', icon: 'pi pi-images', routerLink: '/fotos' },
       { label: 'Reservas', icon: 'pi pi-wallet', routerLink: '/reservas' },
     ];
-    // Modificaciones ficha ocultada hasta nuevo aviso — disabled 2026-05-29
-    // if (this.canEdit()) {
-    //   items.push({ label: 'Modificaciones', icon: 'pi pi-pencil', routerLink: '/modificaciones' });
-    // }
     return items;
   });
 }

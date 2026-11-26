@@ -58,7 +58,6 @@ function hasCoords(h: TripEventBase): boolean {
 
 /** Soft background tinted from the city color (alpha ~14%). */
 function tintBg(hex: string): string {
-  // Accepts #rrggbb or named fallback; if unparseable, return a neutral gray.
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return 'rgba(0,0,0,0.04)';
   const n = parseInt(m[1], 16);
@@ -133,7 +132,6 @@ function buildCityPopupHtml(city: City, hitos: TripEventBase[]): string {
       ">Sin hitos registrados</div>`;
   }
 
-  // Group by date → sorted list of [date, hitos[]].
   const sorted = sortHitos(hitos);
   const byDate = new Map<string, TripEventBase[]>();
   for (const h of sorted) {
@@ -175,7 +173,6 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
   const iconName = h.icon || 'pi-map-marker';
   const time = h.timestampIn ? timeOf(h.timestampIn) : '';
 
-  // Left gutter: time or a thin placeholder so icons align.
   const timeCell = time
     ? `<span style="
         font-size:${MARKER_SMALL_FS};
@@ -187,22 +184,18 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
       ">${escapeHtml(time)}</span>`
     : `<span style="min-width:30px"></span>`;
 
-  // Small map-pin suffix when the hito is drawn on the map.
   const mapIndicator = hasCoords(h)
     ? iconHtml('pi-map-marker', { size: '8px', color: cityColor, extraStyle: 'opacity:0.75;margin-left:3px' })
     : '';
 
-  // Confirmed check or planned dot on the far right.
   const statusBadge = confirmed
     ? iconHtml('pi-check-circle', { size: '10px', color: '#16a34a', extraStyle: 'flex-shrink:0' })
     : iconHtml('pi-circle', { size: '9px', color: '#cbd5e1', extraStyle: 'flex-shrink:0' });
 
-  // Optional $ before the status badge.
   const usdBadge = typeof h.usd === 'number' && h.usd > 0
     ? `<span style="font-size:${MARKER_BADGE_FS};color:#16a34a;font-weight:600;display:inline-flex;align-items:center;gap:1px;flex-shrink:0">${iconHtml('pi-dollar', { size: '8px' })}${h.usd}</span>`
     : '';
 
-  // Optional one-line description underneath the title.
   const desc = h.description
     ? `<div style="
         font-size:${MARKER_DAY_HEADER_FS};
@@ -212,7 +205,6 @@ function renderHitoRow(h: TripEventBase, cityColor: string): string {
       ">${escapeHtml(h.description)}</div>`
     : '';
 
-  // Optional notes (shorter, even dimmer).
   const notes = h.notes
     ? `<div style="font-size:${MARKER_SMALL_FS};color:#999;font-style:italic;line-height:1.3;margin-top:1px">${iconHtml('pi-info-circle', { size: '8px', extraStyle: 'margin-right:2px' })}${escapeHtml(h.notes)}</div>`
     : '';

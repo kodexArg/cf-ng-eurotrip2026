@@ -121,9 +121,6 @@ export class CalendarPage {
       let tipo: ActivityTipo;
       if (isHito(e)) {
         tipo = HITO_SUBTYPE_TO_TIPO[e.subtype] ?? 'visit';
-      // traslados ocultos en calendario
-      // } else if (isTraslado(e)) {
-      //   tipo = 'transport';
       } else if (isEstadia(e)) {
         tipo = 'hotel';
       } else {

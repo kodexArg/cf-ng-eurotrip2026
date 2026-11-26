@@ -15,11 +15,8 @@ interface LinkedEntry {
  * Modal that shows the events of a single day for one city, plus
  * any informational cards linked to those events via `event.cardId`.
  *
- * Previously this component accepted a legacy `Day { activities }`
- * shape. It now receives a flat `events` list (already scoped to a
- * given day + city by the caller), which matches the unified event
- * model. `filterEventId` keeps the pre-existing behaviour of
- * highlighting just one row when the user taps its card link.
+ * Receives a flat `events` list already scoped to a day + city by the caller.
+ * `filterEventId` highlights just one row when the user taps its card link.
  */
 @Component({
   selector: 'app-site-info-modal',

@@ -30,11 +30,9 @@ export function iconHtml(
   }
 
   if (name.startsWith('pi-')) {
-    // AppIcon renders `pi pi-xxx` from `pi-xxx` input: prepend "pi " class.
     const piClass = `pi ${name}`;
     return `<i class="${piClass}" style="${style}"></i>`;
   }
 
-  // Fallback: treat as raw pi icon class (e.g. "pi-map-marker" already includes prefix).
   return `<i class="pi ${name}" style="${style}"></i>`;
 }

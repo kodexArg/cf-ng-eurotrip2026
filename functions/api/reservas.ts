@@ -56,14 +56,12 @@ interface EventRow {
   originLabel: string | null;
   destinationLabel: string | null;
 
-  // events_traslado (nullable via LEFT JOIN)
   company: string | null;
   fare: string | null;
   vehicleCode: string | null;
   seat: string | null;
   durationMin: number | null;
 
-  // events_estadia (nullable via LEFT JOIN)
   accommodation: string | null;
   address: string | null;
   checkinTime: string | null;

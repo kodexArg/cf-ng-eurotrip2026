@@ -13,7 +13,6 @@ export interface IconEntry {
 }
 
 export const ICON_REGISTRY: Record<string, IconEntry> = {
-  // Transporte
   avion:        { icon: 'ms-flight_takeoff',    color: '#60a5fa' },
   aterriza:     { icon: 'ms-flight_land',       color: '#60a5fa' },
   tren:         { icon: 'ms-train',             color: '#16a34a' },
@@ -28,7 +27,6 @@ export const ICON_REGISTRY: Record<string, IconEntry> = {
   ferry:        { icon: 'ms-sailing',           color: '#22d3ee' },
   tranvia:      { icon: 'ms-tram',              color: '#c084fc' },
   bus_turistico: { icon: 'ms-tour',             color: '#dc2626' },
-  // Hitos / actividades
   comida:       { icon: 'ms-lunch_dining',      color: '#f97316' },
   cafe:         { icon: 'ms-local_cafe',        color: '#8b6f47' },
   museo:        { icon: 'ms-museum',            color: '#722F37' },
@@ -39,7 +37,6 @@ export const ICON_REGISTRY: Record<string, IconEntry> = {
   show:         { icon: 'ms-theater_comedy',    color: '#a855f7' },
   corazon:      { icon: 'pi-heart',             color: '#ef4444' },
   marcador:     { icon: 'pi-map-marker',        color: '#0ea5e9' },
-  // New semantic icons
   tapas:        { icon: 'ms-tapas',             color: '#f97316' },
   paseo:        { icon: 'ms-near_me',           color: '#84cc16' },
   mirador:      { icon: 'ms-landscape',         color: '#059669' },
@@ -56,7 +53,6 @@ export const ICON_REGISTRY: Record<string, IconEntry> = {
   mercado:      { icon: 'ms-store',             color: '#ea580c' },
   barrio:       { icon: 'ms-location_city',     color: '#6366f1' },
   excursion:    { icon: 'ms-hiking',            color: '#059669' },
-  // Paisajes y actividades
   playa:        { icon: 'ms-umbrella',          color: '#0ea5e9' },
   agua:         { icon: 'ms-water_drop',        color: '#22d3ee' },
   noche:        { icon: 'ms-dark_mode',         color: '#6366f1' },
@@ -65,10 +61,8 @@ export const ICON_REGISTRY: Record<string, IconEntry> = {
   basílica:     { icon: 'ms-church',            color: '#4338ca' },
   puente:       { icon: 'ms-landscape',         color: '#78716c'},
   jardín:       { icon: 'ms-park',              color: '#16a34a' },
-  // Estadías
   hotel:        { icon: 'ms-hotel',             color: '#ea580c' },
   airbnb:       { icon: 'ms-home',              color: '#ef4444' },
-  // Default
   generico:     { icon: 'ms-stars',             color: '#6b7280' },
 };
 
