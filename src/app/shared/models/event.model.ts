@@ -15,8 +15,8 @@ export interface TripEventBase {
   slug: string;
   title: string;
   description: string | null;
-  date: string;                 // YYYY-MM-DD
-  timestampIn: string;          // YYYY-MM-DDTHH:MM:SS (naive local)
+  date: string;
+  timestampIn: string;
   timestampOut: string | null;
   cityIn: string;
   cityOut: string | null;
@@ -28,14 +28,10 @@ export interface TripEventBase {
   variant: EventVariant;
   cardId: string | null;
   notes: string | null;
-  // Geographic coordinates (nullable — not all events have location data)
   originLat?: number;
   originLon?: number;
   destinationLat?: number;
   destinationLon?: number;
-  // Human-readable station / airport / point-of-interest label for origin
-  // and destination. Used in the Reservas card to show exact departure and
-  // arrival points (e.g. "London St Pancras International").
   originLabel?: string;
   destinationLabel?: string;
   // Optional explicit route waypoints between origin and destination

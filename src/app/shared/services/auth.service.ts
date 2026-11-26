@@ -1,57 +1,35 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-interface AuthResponse {
-  authenticated: boolean;
-  name?: string;
-  role?: string;
+interface WhoAmI {
+  email: string;
+  editor: boolean;
 }
 
+/**
+ * Cloudflare Access identity. Loaded once at startup from `/api/auth/whoami`;
+ * `isOwner` is true only for allowlisted editor emails.
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
 
-  readonly isAuthenticated = signal(false);
-  readonly userName = signal<string | null>(null);
-  readonly role = signal<'owner' | 'visitor' | null>(null);
-  readonly isOwner = computed(() => this.role() === 'owner');
+  readonly email = signal<string | null>(null);
+  readonly editor = signal(false);
+  readonly checked = signal(false);
+  readonly isOwner = computed(() => this.editor());
 
   async checkAuth(): Promise<void> {
     try {
-      const res = await firstValueFrom(
-        this.http.get<AuthResponse>('/api/auth/me')
-      );
-      this.isAuthenticated.set(res.authenticated);
-      this.userName.set(res.name ?? null);
-      this.role.set(res.role as 'owner' | 'visitor' ?? null);
+      const res = await firstValueFrom(this.http.get<WhoAmI>('/api/auth/whoami'));
+      this.email.set(res.email);
+      this.editor.set(res.editor === true);
     } catch {
-      this.isAuthenticated.set(false);
-      this.userName.set(null);
-      this.role.set(null);
+      this.email.set(null);
+      this.editor.set(false);
+    } finally {
+      this.checked.set(true);
     }
-  }
-
-  async login(passphrase: string, name?: string): Promise<boolean> {
-    try {
-      const res = await firstValueFrom(
-        this.http.post<AuthResponse>('/api/auth/login', { passphrase, name })
-      );
-      this.isAuthenticated.set(res.authenticated);
-      this.userName.set(res.name ?? null);
-      this.role.set(res.role as 'owner' | 'visitor' ?? null);
-      return res.authenticated;
-    } catch {
-      this.role.set(null);
-      return false;
-    }
-  }
-
-  async logout(): Promise<void> {
-    await firstValueFrom(this.http.post('/api/auth/logout', {}));
-    this.isAuthenticated.set(false);
-    this.userName.set(null);
-    this.role.set(null);
   }
 }

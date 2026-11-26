@@ -32,7 +32,6 @@ import { Panel } from 'primeng/panel';
         class="flex flex-col gap-4 px-1 pt-1 pb-2"
         (submit)="submit($event)"
       >
-        <!-- Lugar -->
         <div class="flex flex-col gap-1.5">
           <label
             class="text-xs font-semibold uppercase tracking-wide"
@@ -52,7 +51,6 @@ import { Panel } from 'primeng/panel';
           </select>
         </div>
 
-        <!-- Archivos (multi, foto o video) -->
         <div class="flex flex-col gap-1.5">
           <label
             class="text-xs font-semibold uppercase tracking-wide"
@@ -104,7 +102,6 @@ import { Panel } from 'primeng/panel';
           }
         </div>
 
-        <!-- Epígrafe (solo a la primera) -->
         <div class="flex flex-col gap-1.5">
           <label
             class="text-xs font-semibold uppercase tracking-wide"
@@ -126,7 +123,6 @@ import { Panel } from 'primeng/panel';
           />
         </div>
 
-        <!-- Fecha (compartida por todo el lote) -->
         <div class="flex flex-col gap-1.5">
           <div class="flex items-center justify-between gap-2 flex-wrap">
             <label
@@ -189,7 +185,6 @@ export class UploadForm {
 
   readonly cityId = signal('');
   readonly caption = signal('');
-  /** Accumulated batch; first item gets the caption. */
   readonly files = signal<{ key: string; file: File; kind: 'photo' | 'video' }[]>([]);
   readonly dateTaken = signal<Date | null>(null);
   readonly noDate = signal(false);

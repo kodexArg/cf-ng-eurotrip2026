@@ -141,8 +141,6 @@ export class EventSlot {
     return isEstadia(e) ? e : null;
   });
 
-  // A "cerrado" hito (e.g. an attraction we found closed) renders the title
-  // in red with a strikethrough — a record of what didn't happen.
   protected readonly isHitoCerrado = computed((): boolean => {
     const h = this.asHito();
     return h?.subtype === 'cerrado';
@@ -167,9 +165,6 @@ export class EventSlot {
     return resolveEventColor(e);
   });
 
-  // When the itinerary splits a cross-city traslado into two halves it
-  // tags each with `renderMode`. An un-tagged traslado is intra-city and
-  // still shows both rows.
   protected readonly showPartida = computed(() => {
     const m = this.asTraslado()?.renderMode;
     return m === 'partida' || m === undefined;
@@ -196,8 +191,6 @@ export class EventSlot {
 
   protected readonly trasladoArriboIcon = computed((): string => {
     const t = this.asTraslado();
-    // Arribo: use event.icon as a semantic key (aterriza, tren_llega, ...) resolved via registry.
-    // Fallback to subtype-specific arrival glyphs, then generic transport.
     const resolved = resolveEventIcon({ icon: t?.icon, subtype: t?.subtype });
     if (t?.icon?.trim()) return resolved;
     if (t?.subtype === 'flight') return 'ms-flight_land';
@@ -214,8 +207,6 @@ export class EventSlot {
     const vehicle = t.vehicleCode?.trim() || '';
     const service = [company, vehicle].filter(Boolean).join(' ');
     const verb = t.subtype === 'flight' ? 'Despega desde' : 'Sale de';
-    // When the carrier/service is unknown, omit the "por …" tail entirely
-    // instead of rendering a meaningless "por —".
     return service
       ? `${verb} ${origin} a las ${departTime} por ${service}`
       : `${verb} ${origin} a las ${departTime}`;
@@ -249,7 +240,6 @@ export class EventSlot {
     const isWalk = t.subtype === 'walking' || t.subtype === 'walk' || t.subtype === 'scooter';
     const company = t.company?.trim() || '';
     const vehicle = t.vehicleCode?.trim() || '';
-    // For walking the icon already conveys the mode; suppress the "walking" word.
     const service = isWalk
       ? ''
       : [company, vehicle].filter(Boolean).join(' ') || t.title;

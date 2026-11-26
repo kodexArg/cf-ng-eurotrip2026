@@ -12,7 +12,7 @@
   ],
   "r2_buckets": [
     {
-      // Media gallery bucket — public read enabled at https://pub-4e8704ed679f45a5b559610c7fc328b2.r2.dev
+      // Media gallery bucket — private; served behind Access by functions/media/[[path]].ts
       "binding": "MEDIA",
       "bucket_name": "eurotrip2026-media"
     }

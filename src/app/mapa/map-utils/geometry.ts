@@ -31,8 +31,6 @@ export function makeArrowIcon(Leaflet: typeof L, deg: number, color: string): L.
 /** Creates a circular icon badge DivIcon with the given background color and icon name. */
 export function makeIconBadge(Leaflet: typeof L, color: string, iconClass: string, size = 22): L.DivIcon {
   const glyph = size * 0.55;
-  // iconClass may be a full app-icon name (ms-train, pi-map-marker) or a bare pi class (pi-map-marker).
-  // Normalize: if no prefix, treat as pi- icon.
   const iconName = iconClass.startsWith('ms-') || iconClass.startsWith('pi-') ? iconClass : `pi-${iconClass}`;
   return Leaflet.divIcon({
     html: `<div style="

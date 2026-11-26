@@ -95,15 +95,15 @@ CREATE TABLE IF NOT EXISTS card_links (
 );
 
 CREATE TABLE IF NOT EXISTS photos (
-  id          TEXT PRIMARY KEY,
-  r2_key      TEXT NOT NULL,
-  city_id     TEXT,
-  event_id    TEXT,
-  caption     TEXT,
-  taken_at    TEXT,
-  uploaded_at TEXT NOT NULL DEFAULT (datetime('now')),
-  media_type  TEXT NOT NULL DEFAULT 'photo' CHECK (media_type IN ('photo', 'video')),
-  mime        TEXT
+  id            TEXT PRIMARY KEY,
+  city_id       TEXT NOT NULL,
+  r2_key        TEXT NOT NULL,
+  caption       TEXT,
+  date_taken    DATE,
+  uploader_note TEXT,
+  created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  media_type    TEXT NOT NULL DEFAULT 'photo' CHECK (media_type IN ('photo', 'video')),
+  mime          TEXT
 );
 
 CREATE TABLE IF NOT EXISTS sessions (

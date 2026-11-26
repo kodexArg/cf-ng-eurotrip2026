@@ -5,7 +5,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ConfirmationService } from 'primeng/api';
 import { EventForm } from './event-form';
 import { HitoEvent } from '../../shared/models/event.model';
@@ -14,7 +14,7 @@ const mockEvent: HitoEvent = {
   id: 'ev-1', type: 'hito', subtype: 'hito', slug: 'ev-1', title: 'Test Hito',
   description: 'Descripción test', date: '2026-05-01', timestampIn: '2026-05-01T10:00:00',
   timestampOut: null, cityIn: 'lon', cityOut: null, usd: 100, icon: 'pi pi-flag',
-  confirmed: true, variant: 'both', cardId: null, notes: null,
+  confirmed: true, done: false, mandatory: false, variant: 'both', cardId: null, notes: null,
 };
 
 describe('EventForm', () => {

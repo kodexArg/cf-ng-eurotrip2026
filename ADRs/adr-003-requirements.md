@@ -21,8 +21,9 @@ This ADR declares the product requirements that are already decided and binding.
 - Deployment: Cloudflare Pages, `prod` branch, auto-deployed via GitHub Actions on every push.
 
 **Access and security:**
-- The site is public — no authentication, no accounts, no login.
-- Write access (adding cards, uploading photos) is internal only. No public write surface.
+- The site sits behind Cloudflare Access: any Google account can sign in and read the whole trip. No other identity provider, no local accounts or passwords.
+- Write and configuration access (events, cards, photo/video upload, the visit log) is limited to the editor allowlist (`gcavedal@gmail.com`, `vanybou@gmail.com`). `functions/_middleware.ts` enforces it server-side by verifying the `Cf-Access-Jwt-Assertion` JWT on every request; the UI only hides what the server already refuses.
+- Media is served from R2 through `/media/*` behind the same gate. The bucket has no public URL.
 
 **Language:**
 - All code, documentation, variable names, routes, and comments are in English.

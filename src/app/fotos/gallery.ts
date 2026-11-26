@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal, HostListener, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, OnDestroy } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Message } from 'primeng/message';
 import { Skeleton } from 'primeng/skeleton';
@@ -8,12 +8,7 @@ import { CarouselScrollFix } from './carousel-scroll-fix';
 import { MediaLightbox } from './media-lightbox/media-lightbox';
 import { City, Photo } from '../shared/models';
 import { environment } from '../../environments/environment';
-
-interface WhoAmI {
-  accessActive: boolean;
-  email: string | null;
-  editor: boolean;
-}
+import { AuthService } from '../shared/services/auth.service';
 
 interface DateGroup {
   /** ISO date string, or null for generic (no-date) photos. */
@@ -40,7 +35,6 @@ interface CityGroup {
   imports: [Message, Skeleton, Carousel, UploadForm, CarouselScrollFix, MediaLightbox],
   template: `
     <div class="max-w-5xl mx-auto px-3 py-4 sm:px-4">
-      <!-- Page title — mirrors calendar's day-detail header weight/size -->
       <div class="mb-4 flex items-center gap-2">
         <h1
           class="text-base font-bold leading-tight m-0 select-none"
@@ -53,7 +47,6 @@ interface CityGroup {
       }
 
       @if (photosResource.isLoading()) {
-        <!-- Skeleton grid: 1 col mobile, 2 col sm, 3 col md -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           @for (i of [1,2,3,4,5,6]; track i) {
             <p-skeleton height="200px" styleClass="rounded-lg" />
@@ -67,15 +60,10 @@ interface CityGroup {
         </div>
       } @else {
         @for (g of groups(); track g.cityId) {
-          <!--
-            City section — same surface/card pattern as day-detail-dialog rows:
-            rounded-lg border border-surface-200, colored left border + tinted header.
-          -->
           <section
             class="mb-6 rounded-lg overflow-hidden"
             style="border: 1px solid var(--p-surface-200)"
           >
-            <!-- City header: 4px left border accent, tinted bg, matches dialog header -->
             <div
               class="px-4 pt-4 pb-3 select-none"
               [style.borderLeft]="'4px solid ' + g.color"
@@ -87,15 +75,10 @@ interface CityGroup {
               >{{ g.cityName }}</div>
             </div>
 
-            <!-- Date groups inside the city card -->
             <div class="px-3 py-3 sm:px-4 flex flex-col gap-4" style="background: var(--p-surface-0)">
               @for (dg of g.dateGroups; track dg.date) {
                 <div class="flex flex-col gap-2">
                   @if (dg.label) {
-                    <!--
-                      Date sub-header — mirrors "text-xs mt-1 flex items-center"
-                      subtitle style from day-detail-dialog.
-                    -->
                     <div
                       class="text-xs flex items-center gap-1.5"
                       style="color: var(--p-surface-600)"
@@ -134,10 +117,6 @@ interface CityGroup {
                           />
                         }
                         @if (photo.caption) {
-                          <!--
-                            Caption: mirrors event description style —
-                            text-xs leading-snug surface-600
-                          -->
                           <p
                             class="text-xs leading-snug mt-1.5 m-0 text-center w-full"
                             style="color: var(--p-surface-600)"
@@ -155,7 +134,6 @@ interface CityGroup {
         }
       }
 
-      <!-- Full-screen viewer with working mobile zoom / rotate (replaces p-image preview) -->
       @if (lightbox(); as lb) {
         <app-media-lightbox
           [visible]="true"
@@ -233,9 +211,7 @@ export class GalleryPage implements OnDestroy {
     }
   }
 
-  /** Cloudflare Access identity; editor flag drives the upload surface. */
-  private readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
-  readonly canEdit = computed(() => this.who.value()?.editor === true);
+  readonly canEdit = inject(AuthService).isOwner;
 
   readonly photosResource = httpResource<Photo[]>(() => `/api/photos?r=${this.refresh()}`);
   readonly citiesResource = httpResource<City[]>(() => '/api/cities');
@@ -249,13 +225,11 @@ export class GalleryPage implements OnDestroy {
   readonly groups = computed((): CityGroup[] => {
     const photos = this.photosResource.value() ?? [];
     const cities = this.citiesResource.value() ?? [];
-    // Cities arrive already sorted by arrival ASC from the API; preserve that order.
     const cityById = new Map(cities.map((c) => [c.id, c]));
     const byCity = new Map<string, Photo[]>();
     for (const p of photos) {
       (byCity.get(p.cityId) ?? byCity.set(p.cityId, []).get(p.cityId)!).push(p);
     }
-    // Build groups in itinerary order (cities list order); append unknown cities last.
     const knownOrder: CityGroup[] = cities
       .filter((c) => byCity.has(c.id))
       .map((c) => ({

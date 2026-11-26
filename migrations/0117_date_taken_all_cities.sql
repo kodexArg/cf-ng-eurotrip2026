@@ -10,7 +10,7 @@ UPDATE photos SET date_taken = CASE
   WHEN (SELECT rn FROM ordered_bcn WHERE ordered_bcn.id = photos.id) <= 26 THEN '2026-04-26'
   ELSE '2026-04-27'
 END
-WHERE city_id='bcn' AND id != 'ph-seed-bcn';
+WHERE city_id='bcn' AND id != 'ph-seed-bcn' AND date_taken IS NULL;
 
 -- Palma (2026-04-28 to 2026-05-01)
 WITH ordered_pmi AS (
@@ -23,7 +23,7 @@ UPDATE photos SET date_taken = CASE
   WHEN (SELECT rn FROM ordered_pmi WHERE ordered_pmi.id = photos.id) <= 45 THEN '2026-04-30'
   ELSE '2026-05-01'
 END
-WHERE city_id='pmi' AND id != 'ph-seed-pmi';
+WHERE city_id='pmi' AND id != 'ph-seed-pmi' AND date_taken IS NULL;
 
 -- Londres (2026-05-02 to 2026-05-05)
 WITH ordered_lon AS (
@@ -36,7 +36,7 @@ UPDATE photos SET date_taken = CASE
   WHEN (SELECT rn FROM ordered_lon WHERE ordered_lon.id = photos.id) <= 90 THEN '2026-05-04'
   ELSE '2026-05-05'
 END
-WHERE city_id='lon' AND id != 'ph-seed-lon';
+WHERE city_id='lon' AND id != 'ph-seed-lon' AND date_taken IS NULL;
 
 -- Paris (2026-05-05 to 2026-05-06)
 WITH ordered_par AS (
@@ -47,7 +47,7 @@ UPDATE photos SET date_taken = CASE
   WHEN (SELECT rn FROM ordered_par WHERE ordered_par.id = photos.id) <= 44 THEN '2026-05-05'
   ELSE '2026-05-06'
 END
-WHERE city_id='par' AND id != 'ph-seed-par';
+WHERE city_id='par' AND id != 'ph-seed-par' AND date_taken IS NULL;
 
 -- Roma (2026-05-06 to 2026-05-09)
 WITH ordered_rom AS (
@@ -60,4 +60,4 @@ UPDATE photos SET date_taken = CASE
   WHEN (SELECT rn FROM ordered_rom WHERE ordered_rom.id = photos.id) <= 54 THEN '2026-05-08'
   ELSE '2026-05-09'
 END
-WHERE city_id='rom' AND id != 'ph-seed-rom';
+WHERE city_id='rom' AND id != 'ph-seed-rom' AND date_taken IS NULL;

@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './shared/guards/auth.guard';
-import { ownerGuard } from './shared/guards/owner.guard';
 import { CITY_SLUGS } from './shared/constants/cities';
 
 export const routes: Routes = [
@@ -12,32 +10,26 @@ export const routes: Routes = [
   {
     path: 'mapa',
     loadComponent: () => import('./mapa/map').then((m) => m.MapPage),
-    canActivate: [authGuard],
   },
   {
     path: 'calendario',
     loadComponent: () => import('./calendario/calendar').then((m) => m.CalendarPage),
-    canActivate: [authGuard],
   },
   {
     path: 'itinerario',
     loadComponent: () => import('./itinerario/itinerary').then((m) => m.ItineraryPage),
-    canActivate: [authGuard],
   },
   {
     path: 'sitios',
     loadComponent: () => import('./sitios/sitios-page').then((m) => m.SitiosPage),
-    canActivate: [authGuard],
   },
   {
     path: 'fotos',
     loadComponent: () => import('./fotos/gallery').then((m) => m.GalleryPage),
-    canActivate: [authGuard],
   },
   {
     path: 'reservas',
     loadComponent: () => import('./reservas/reservas').then((m) => m.ReservasPage),
-    canActivate: [authGuard],
   },
   {
     path: 'modificaciones',
@@ -46,15 +38,6 @@ export const routes: Routes = [
   {
     path: 'bienvenida',
     loadComponent: () => import('./bienvenida/bienvenida').then((m) => m.BienvenidaPage),
-  },
-  {
-    path: 'access',
-    loadComponent: () => import('./access/access-request').then((m) => m.AccessRequestPage),
-  },
-  {
-    path: 'admin',
-    loadComponent: () => import('./admin/admin').then((m) => m.AdminPage),
-    canActivate: [ownerGuard],
   },
   { path: CITY_SLUGS.MADRID,    redirectTo: `/sitios?c=${CITY_SLUGS.MADRID}` },
   { path: CITY_SLUGS.BARCELONA, redirectTo: `/sitios?c=${CITY_SLUGS.BARCELONA}` },

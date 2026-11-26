@@ -7,6 +7,19 @@ The project does not use semantic versioning — entries are grouped by deploy d
 
 ## [Unreleased]
 
+## 2026-11-26 — Security chore: Access-only auth
+
+- group: security-access-only
+  priority: high
+  changes:
+    - fix(auth): every request needs a valid Cloudflare Access JWT (iss/aud/exp/nbf checked); fails closed without Access config
+    - fix(auth): mutations and /api/access-log restricted to gcavedal@gmail.com and vanybou@gmail.com server-side
+    - fix(access): Access app now also covers eurotrip2026.pages.dev and previews; Google is the only IdP
+    - feat(media): photos and videos served via /media/* behind Access instead of the public r2.dev URL
+    - chore(auth): removed passphrase login, site-gate password, magic links, access requests and admin page
+    - fix(db): migration 0117 only fills NULL date_taken instead of overwriting real dates
+    - ci: tests gate deploy; smoke now asserts every host and path is gated
+
 ## 2026-06-05 — Gallery UX Upgrades & Map Route Enhancements
 
 - group: fotos-ux-overhaul

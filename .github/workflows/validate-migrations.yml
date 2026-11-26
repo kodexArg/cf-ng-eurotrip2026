@@ -91,7 +91,9 @@ jobs:
           # Known duplicate-prefix files to skip in replay (pre-existing conflict).
           # These are the alphabetically-later duplicates; the earlier file in each
           # pair is applied, matching the logical order used in production.
-          SKIP_FILES="migrations/0014_routing_london_paris_rome_may2to5.sql migrations/0020_traslado_labels_and_precise_coords.sql"
+          # 0105 only adds media_type/mime, already part of the baseline photos table (production schema).
+          # 0109 inserts events that the replay already holds from earlier migrations (prod had them removed by hand).
+          SKIP_FILES="migrations/0014_routing_london_paris_rome_may2to5.sql migrations/0020_traslado_labels_and_precise_coords.sql migrations/0105_photos_formalize_media.sql migrations/0109_mark_done_complete_may3to6.sql"
 
           echo "Applying migrations in order (skipping known duplicate-prefix conflicts)..."
           for file in $(ls migrations/*.sql | sort); do
