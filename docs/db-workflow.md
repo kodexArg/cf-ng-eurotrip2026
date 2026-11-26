@@ -44,7 +44,7 @@ Current tables queried by the app (see `functions/api/*`):
 | `photos` | R2 key + metadata per photo |
 | `access_log` | One row per page view / API call: Google email, editor flag, IP, geo, path |
 
-Also present but unused by the app today: `sessions` and `access_requests` (passphrase / magic-link auth, removed when Cloudflare Access became the only gate), `_legacy_*` tables (historical snapshots from before the unified `events` refactor) and `d1_migrations` (orphaned metadata from when migrations were used). Both are dormant; leave them unless you need the disk space.
+Also present but unused by the app today: `d1_migrations` (orphaned metadata from when migrations were used). The legacy auth tables (`sessions`, `access_requests`) and the `_legacy_*` snapshots were dropped on 2026-11-26; their SQL dumps live outside the repo in `~/Dev/kodexArg/cf-ng-eurotrip2026-backups/`.
 
 ## D1 limits that matter here
 
