@@ -1,15 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
-import { httpResource } from '@angular/common/http';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Menubar } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { AppIcon } from '../../shared/icon/icon';
-
-interface WhoAmI {
-  accessActive: boolean;
-  email: string | null;
-  editor: boolean;
-}
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -18,11 +12,6 @@ interface WhoAmI {
     <nav class="hidden md:block">
       <div class="flex items-center">
         <p-menubar [model]="menuItems()" styleClass="flex-1" />
-        <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
-        <a routerLink="/admin" routerLinkActive="text-primary" class="no-underline">
-          <p-button icon="pi pi-cog" [text]="true" size="small" />
-        </a>
-        -->
       </div>
     </nav>
 
@@ -88,26 +77,16 @@ interface WhoAmI {
           </a>
         }
         -->
-        <!-- TODO: re-enable when auth system is ready — disabled 2026-04-12
-        <a routerLink="/admin" routerLinkActive #rlaAdmin="routerLinkActive" aria-label="Admin"
-           class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-sm no-underline transition-colors"
-           [style.color]="rlaAdmin.isActive ? 'var(--p-primary-contrast-color)' : 'var(--p-surface-700)'"
-           [style.background]="rlaAdmin.isActive ? 'var(--p-primary-color)' : 'transparent'"
-           [style.borderColor]="rlaAdmin.isActive ? 'var(--p-primary-color)' : 'var(--p-surface-200)'">
-          <app-icon icon="pi-cog" size="0.75rem" /><span>Admin</span>
-        </a>
-        -->
       </div>
     </nav>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Nav {
-  /** Cloudflare Access identity; `editor` is true only for allowlisted emails. */
-  private readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
+  private readonly auth = inject(AuthService);
 
   /** Only allowlisted editor emails (gcavedal / vanybou) see the edit surface. */
-  readonly canEdit = computed(() => this.who.value()?.editor === true);
+  readonly canEdit = this.auth.isOwner;
 
   readonly menuItems = computed<MenuItem[]>(() => {
     const items: MenuItem[] = [

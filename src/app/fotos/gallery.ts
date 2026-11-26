@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, signal, HostListener, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, HostListener, OnDestroy } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Message } from 'primeng/message';
 import { Skeleton } from 'primeng/skeleton';
@@ -8,12 +8,7 @@ import { CarouselScrollFix } from './carousel-scroll-fix';
 import { MediaLightbox } from './media-lightbox/media-lightbox';
 import { City, Photo } from '../shared/models';
 import { environment } from '../../environments/environment';
-
-interface WhoAmI {
-  accessActive: boolean;
-  email: string | null;
-  editor: boolean;
-}
+import { AuthService } from '../shared/services/auth.service';
 
 interface DateGroup {
   /** ISO date string, or null for generic (no-date) photos. */
@@ -233,9 +228,7 @@ export class GalleryPage implements OnDestroy {
     }
   }
 
-  /** Cloudflare Access identity; editor flag drives the upload surface. */
-  private readonly who = httpResource<WhoAmI>(() => '/api/auth/whoami');
-  readonly canEdit = computed(() => this.who.value()?.editor === true);
+  readonly canEdit = inject(AuthService).isOwner;
 
   readonly photosResource = httpResource<Photo[]>(() => `/api/photos?r=${this.refresh()}`);
   readonly citiesResource = httpResource<City[]>(() => '/api/cities');

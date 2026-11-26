@@ -29,6 +29,6 @@ describe('ConfirmedBadge', () => {
     const fixture = TestBed.createComponent(ConfirmedBadge);
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(fixture.nativeElement.textContent).toContain('\u2713');
+    expect(fixture.nativeElement.querySelector('i.pi-check')).toBeTruthy();
   });
 });

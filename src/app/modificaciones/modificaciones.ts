@@ -10,7 +10,6 @@ import { LoadingState } from '../shared/loading-state/loading-state';
 import { ErrorState } from '../shared/error-state/error-state';
 import { BookingCard } from '../reservas/booking-card/booking-card';
 import { AuthService } from '../shared/services/auth.service';
-import { LoginPanel } from '../shared/login-panel/login-panel';
 import { EventForm } from './event-form/event-form';
 import {
   DIALOG_WIDTH,
@@ -27,7 +26,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
  * Owner-only event management page for creating, editing, and deleting trip events.
  *
  * @remarks
- * Guarded by AuthService; shows LoginPanel when the user is not the owner.
+ * Guarded by AuthService; shows a read-only notice when the user is not an editor.
  * Clicking a BookingCard opens a modal dialog with EventForm for editing.
  * The "+" button opens the dialog in add-new mode (no event pre-selected).
  * On save or delete the resource is reloaded and the dialog is closed.
@@ -35,7 +34,7 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
 @Component({
   selector: 'app-modificaciones',
   standalone: true,
-  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, LoginPanel, EventForm, AppIcon],
+  imports: [FormsModule, SelectButton, Dialog, Button, LoadingState, ErrorState, BookingCard, EventForm, AppIcon],
   template: `
     @if (auth.isOwner()) {
       <div class="max-w-2xl mx-auto p-4">
@@ -84,7 +83,9 @@ type ConfirmedFilterValue = 'all' | 'confirmed' | 'unconfirmed';
         }
       </div>
     } @else {
-      <app-login-panel />
+      <p class="max-w-2xl mx-auto p-4 text-center text-sm" style="color: var(--p-surface-600)">
+        Solo los organizadores pueden modificar el viaje.
+      </p>
     }
 
     <p-dialog

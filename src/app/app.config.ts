@@ -11,7 +11,6 @@ import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
 import { AuthService } from './shared/services/auth.service';
-import { SiteGateService } from './shared/services/site-gate.service';
 import { VersionCheckService } from './shared/services/version-check.service';
 
 export const appConfig: ApplicationConfig = {
@@ -33,12 +32,6 @@ export const appConfig: ApplicationConfig = {
         options: { darkModeSelector: false },
       },
     }),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (gate: SiteGateService) => () => gate.check(),
-      deps: [SiteGateService],
-      multi: true,
-    },
     {
       provide: APP_INITIALIZER,
       useFactory: (auth: AuthService) => () => auth.checkAuth(),

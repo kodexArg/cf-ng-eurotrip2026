@@ -9,7 +9,8 @@
     "watch": "ng build --watch --configuration development",
     "lint": "eslint \"src/**/*.{ts,html}\"",
     "test": "ng test",
-    "db": "wrangler d1 execute eurotrip2026 --remote"
+    "db": "wrangler d1 execute eurotrip2026 --remote",
+    "test:functions": "vitest run --config vitest.functions.config.ts"
   },
   "private": true,
   "packageManager": "npm@10.8.2",
